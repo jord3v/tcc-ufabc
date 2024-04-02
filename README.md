@@ -15,7 +15,7 @@ Tabler é um kit de interface de usuário de aplicativo da web gratuito e de có
 
 1. Clone o repositório:
 ```
-$ git clone https://github.com/jord3v/boilerplate-laravel.git
+$ git clone https://github.com/jord3v/laravel-tabler.git
 ```
 
 2. Instale as dependências do Composer:

@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
+use Illuminate\Http\{JsonResponse,RedirectResponse};
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
 
@@ -46,7 +43,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(UserRequest $request)
+    public function store(UserRequest $request): RedirectResponse
     {
         $user = $this->user->create($request->all());
         $user->syncRoles($request->role);
@@ -73,7 +70,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserRequest $request, string $id)
+    public function update(UserRequest $request, string $id): RedirectResponse
     {
         $user = $this->user->findOrFail($id);
         $input = $request->all();

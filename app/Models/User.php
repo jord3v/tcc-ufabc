@@ -45,4 +45,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    
+    public static function avatar()
+    {
+        return 'https://picsum.photos/300/300';
+    }
 }

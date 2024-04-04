@@ -9,7 +9,7 @@
                page-pretitle
             </div>
             <h2 class="page-title">
-               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-settings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg> Funções e permissões
+               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>Usuarios
             </h2>
          </div>
          <div class="col-auto ms-auto d-print-none">
@@ -17,9 +17,9 @@
                <a href="{{route('dashboard')}}" class="btn">
                Voltar
                </a>
-               @can('role-create')
-               <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#role-create">
-               Nova função
+               @can('user-create')
+               <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#user-create">
+               Novo usuário
                </a>
                @endcan
             </div>
@@ -38,24 +38,39 @@
             <table class="table card-table table-vcenter text-nowrap datatable">
                <thead>
                   <tr>
-                     <th class="w-75">Nome da função</th>
-                     <th class="w-10">Permissões</th>
+                     <th class="w-75">Usuário</th>
+                     <th class="w-25">Função</th>
                      <th>Ação</th>
                   </tr>
                </thead>
                <tbody>
-                  @forelse ($roles as $role)
+                  @forelse ($users as $user)
                   <tr>
-                     <td>{{$role->name}}</td>
-                     <td>{{$role->permissions->count()}}</td>
                      <td>
-                        @can('role-edit')
-                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#role-edit" data-bs-id="{{$role->id}}">
+                        <div class="d-flex py-1 align-items-center">
+                          <span class="avatar me-2" style="background-image: url({{avatar($user)}})"></span>
+                          <div class="flex-fill">
+                            <div class="font-weight-medium">{{$user->name}}</div>
+                            <div class="text-secondary"><a href="mailto:{{$user->email}}" class="text-reset">{{$user->email}}</a></div>
+                          </div>
+                        </div>
+                     </td>
+                     <td>
+                        @foreach ($user->roles as $role)
+                           <span class="status status-blue">
+                              <span class="status-dot"></span>
+                              {{$role->name}}
+                           </span>
+                        @endforeach
+                     </td>
+                     <td>
+                        @can('user-edit')
+                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#user-edit" data-bs-id="{{$user->id}}">
                         Editar
                         </a>
                         @endcan
-                        @can('role-delete')
-                        <a href="#" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#role-delete" data-bs-id="{{$role->id}}">
+                        @can('user-delete')
+                        <a href="#" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#user-delete" data-bs-id="{{$user->id}}">
                         Excluir
                         </a>
                         @endcan
@@ -67,22 +82,22 @@
             </table>
          </div>
          <div class="card-footer">
-            {{ $roles->withQueryString()->links() }}
+            {{ $users->withQueryString()->links() }}
          </div>
       </div>
    </div>
 </div>
 @endsection
 @push('modals')
-@can('role-create')
-{{--! modal role-create--}}
-<div class="modal modal-blur fade" id="role-create" tabindex="-1" role="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+@can('user-create')
+{{--! modal user-create--}}
+<div class="modal modal-blur fade" id="user-create" tabindex="-1" user="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
       <div class="modal-content">
-         <form action="{{route('roles-and-permissions.store')}}" method="POST"  class="needs-validation" novalidate>
+         <form action="{{route('users.store')}}" method="POST" class="needs-validation" novalidate>
             @csrf
             <div class="modal-header">
-               <h5 class="modal-title">Nova função</h5>
+               <h5 class="modal-title">Novo usuário</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -90,21 +105,38 @@
                   <label class="form-label">Nome</label>
                   <input type="text" class="form-control" name="name" placeholder="Administrator" required>
                </div>
+               <div class="mb-3">
+                  <label class="form-label">Endereço de e-mail</label>
+                  <input type="email" class="form-control" name="email" placeholder="admin@admin.com" required>
+               </div>
             </div>
             <div class="modal-body">
                <div class="row">
+                 <div class="col-lg-6">
+                   <div class="mb-3">
+                     <label class="form-label">{{ __('Password') }}</label>
+                     <input type="password" class="form-control" name="password" placeholder="password" required>
+                   </div>
+                 </div>
+                 <div class="col-lg-6">
+                   <div class="mb-3">
+                     <label class="form-label">{{ __('Confirm Password') }}</label>
+                     <input type="password" class="form-control" name="password_confirmation" placeholder="password" required>
+                   </div>
+                 </div>
+               </div>
+             </div>
+            <div class="modal-body">
+               <div class="row">
                   <div class="col-lg-12">
-                     <label class="form-label">Permissões</label>
+                     <label class="form-label">Função</label>
                   </div>
-                  @foreach ($permissions as $key => $permission)
+                  @foreach ($roles as $role)
                   <div class="col-lg-3 mb-3">
-                     <label class="form-label">{{$key}}</label>
-                     @foreach ($permission as $item)
-                     <label class="form-check">
-                     <input type="checkbox" name="permissions[]" class="form-check-input" value="{{$item->name}}">
-                     <span class="form-check-label">{{$item->name}}</span>
+                     <label class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="role" value="{{$role->name}}" required>
+                        <span class="form-check-label">{{$role->name}}</span>
                      </label>
-                     @endforeach
                   </div>
                   @endforeach
                </div>
@@ -114,7 +146,7 @@
                Cancelar
                </a>
                <button type="submit" class="btn btn-primary ms-auto">
-               Nova função
+               Novo usuário
                </button>
             </div>
          </form>
@@ -122,16 +154,16 @@
    </div>
 </div>
 @endcan
-@can('role-edit')
-{{--! modal role-edit--}}
-<div class="modal modal-blur fade" id="role-edit" tabindex="-1" role="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+@can('user-edit')
+{{--! modal user-edit--}}
+<div class="modal modal-blur fade" id="user-edit" tabindex="-1" user="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
       <div class="modal-content">
          <form method="POST" class="needs-validation" novalidate>
             @csrf
             @method('PUT')
             <div class="modal-header">
-               <h5 class="modal-title">Editar função</h5>
+               <h5 class="modal-title">Editar usuário</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -139,21 +171,38 @@
                   <label class="form-label">Nome</label>
                   <input type="text" class="form-control" name="name" placeholder="Administrator" required>
                </div>
+               <div class="mb-3">
+                  <label class="form-label">Endereço de e-mail</label>
+                  <input type="email" class="form-control" name="email" placeholder="admin@admin.com" required>
+               </div>
             </div>
             <div class="modal-body">
                <div class="row">
+                 <div class="col-lg-6">
+                   <div class="mb-3">
+                     <label class="form-label">{{ __('Password') }}</label>
+                     <input type="password" class="form-control" name="password" placeholder="password">
+                   </div>
+                 </div>
+                 <div class="col-lg-6">
+                   <div class="mb-3">
+                     <label class="form-label">{{ __('Confirm Password') }}</label>
+                     <input type="password" class="form-control" name="password_confirmation" placeholder="password">
+                   </div>
+                 </div>
+               </div>
+             </div>
+            <div class="modal-body">
+               <div class="row">
                   <div class="col-lg-12">
-                     <label class="form-label">Permissões</label>
+                     <label class="form-label">Função</label>
                   </div>
-                  @foreach ($permissions as $key => $permission)
+                  @foreach ($roles as $role)
                   <div class="col-lg-3 mb-3">
-                     <label class="form-label">{{$key}}</label>
-                     @foreach ($permission as $item)
-                     <label class="form-check">
-                     <input type="checkbox" name="permissions[]" class="form-check-input" value="{{$item->name}}">
-                     <span class="form-check-label">{{$item->name}}</span>
+                     <label class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="role" value="{{$role->name}}" required>
+                        <span class="form-check-label">{{$role->name}}</span>
                      </label>
-                     @endforeach
                   </div>
                   @endforeach
                </div>
@@ -163,7 +212,7 @@
                Cancelar
                </a>
                <button type="submit" class="btn btn-primary ms-auto">
-               Editar função
+               Editar usuário
                </button>
             </div>
          </form>
@@ -171,9 +220,9 @@
    </div>
 </div>
 @endcan
-@can('role-delete')
-<div class="modal modal-blur fade" id="role-delete" tabindex="-1" role="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+@can('user-delete')
+<div class="modal modal-blur fade" id="user-delete" tabindex="-1" user="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-sm modal-dialog-centered" user="document">
       <div class="modal-content">
          <form method="POST">
             @method('DELETE')
@@ -189,7 +238,7 @@
                   <path d="M12 16h.01" />
                </svg>
                <h3>Tem certeza?</h3>
-               <div class="text-secondary">Você realmente deseja excluir essa função? O que você fizer não poderá ser desfeito.</div>
+               <div class="text-secondary">Você realmente deseja excluir esse usuário? O que você fizer não poderá ser desfeito.</div>
             </div>
             <div class="modal-footer">
                <div class="w-100">
@@ -214,14 +263,14 @@
 @endpush
 @push('scripts')
 <script>
-   const roleEdit = document.getElementById('role-edit')
+   const roleEdit = document.getElementById('user-edit')
    const roleEditForm = roleEdit.querySelector('form');
    
    if (roleEdit) {
       roleEdit.addEventListener('show.bs.modal', event => {
        const button = event.relatedTarget
        const id = button.getAttribute('data-bs-id')
-       var route = "{{route('roles-and-permissions.index')}}/" +id
+       var route = "{{route('users.index')}}/" +id
        fetch(route)
        .then(response => {
            if (!response.ok) {
@@ -232,8 +281,9 @@
        .then(data => {
          roleEditForm.action = route;
             roleEdit.querySelector('input[name="name"]').value = data.name;
-            data.permissions.forEach(permission => {
-                const checkbox = document.querySelector(`#role-edit input[value="${permission.name}"]`);
+            roleEdit.querySelector('input[name="email"]').value = data.email;
+            data.roles.forEach(role => {
+                const checkbox = document.querySelector(`#user-edit input[value="${role.name}"]`);
                 if (checkbox) {
                     checkbox.checked = true;
                 }
@@ -246,13 +296,13 @@
    }
 </script>
 <script>
-   const roleDelete = document.getElementById('role-delete')
+   const roleDelete = document.getElementById('user-delete')
    const roleDeleteForm = roleDelete.querySelector('form');
    if (roleDelete) {
       roleDelete.addEventListener('show.bs.modal', event => {
          const button = event.relatedTarget
          const id = button.getAttribute('data-bs-id')
-         var route = "{{route('roles-and-permissions.index')}}/" +id
+         var route = "{{route('users.index')}}/" +id
          roleDeleteForm.action = route;
       });
    }

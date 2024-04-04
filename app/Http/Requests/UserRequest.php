@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRoleAndPermissionRequest extends FormRequest
+class UserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,20 +22,10 @@ class StoreRoleAndPermissionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => $this->getMethod() == 'POST' ? 'required|unique:roles':'required|unique:roles,id,'.$this->id,
-            'permissions' => 'required|array|min:1',
-        ];
-    }
-
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array<string, string>
-     */
-    public function messages(): array
-    {
-        return [
-            
+            'name' => 'required|string|max:255',
+            'email' => $this->getMethod() == 'POST' ? 'required|email|unique:users' : 'required|email|unique:users,id,' . $this->id,
+            'password' => 'sometimes|nullable|confirmed|min:8',
+            'role' => 'required'
         ];
     }
 }

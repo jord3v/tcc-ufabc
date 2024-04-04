@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $this->user->create([
-            'name'  => 'admin',
+            'name'  => 'Administrador',
             'email' => 'admin@admin.com',
             'password' => bcrypt('123456') 
         ]);

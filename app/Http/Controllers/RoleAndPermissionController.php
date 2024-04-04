@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRoleAndPermissionRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use App\Http\Requests\RoleAndPermissionRequest;
 use Illuminate\View\View;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Illuminate\Http\{JsonResponse,RedirectResponse};
+use Spatie\Permission\Models\{Permission,Role};
 
 class RoleAndPermissionController extends Controller
 {
@@ -45,20 +43,19 @@ class RoleAndPermissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoleAndPermissionRequest $request)
+    public function store(RoleAndPermissionRequest $request): RedirectResponse
     {
         $role = $this->role->create(['name' => $request->name]);
-        $permissions = array_map('intval', $request->permissions);
-        $role->syncPermissions($permissions);
-        return redirect()->back();
+        $role->syncPermissions($request->permissions);
+        return back()->with('success', 'Função adicionada com sucesso!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
-        $role = $this->role->with('permissions')->find($id);
+        $role = $this->role->with('permissions')->findOrFail($id);
         return response()->json($role);
     }
 
@@ -73,13 +70,12 @@ class RoleAndPermissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreRoleAndPermissionRequest $request, string $id): RedirectResponse
+    public function update(RoleAndPermissionRequest $request, string $id): RedirectResponse
     {
-        $role = $this->role->find($id);
+        $role = $this->role->findOrFail($id);
         $role->update($request->all());
-        $permissions = array_map('intval', $request->permissions);
-        $role->syncPermissions($permissions);
-        return redirect()->back();
+        $role->syncPermissions($request->permissions);
+        return back()->with('success', 'Função atualizada com sucesso!');
     }
 
     /**
@@ -87,9 +83,8 @@ class RoleAndPermissionController extends Controller
      */
     public function destroy(string $id): RedirectResponse
     {
-        if(!$role = $this->role->find($id))
-            return redirect()->back();
+        $role = $this->role->findOrFail($id);
         $role->delete();
-        return redirect()->back();
+        return back()->with('success', 'Função removída com sucesso!');
     }
 }

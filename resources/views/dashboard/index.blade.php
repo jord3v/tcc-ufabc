@@ -9,7 +9,7 @@
                page-pretitle
             </div>
             <h2 class="page-title">
-               {{ __('Dashboard') }}
+               Painel administrativo
             </h2>
          </div>
       </div>

@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\{
+    DashboardController,
+    RoleAndPermissionController
+};
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -10,5 +13,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
-    Route::get('/', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('/roles-and-permissions', RoleAndPermissionController::class);
 });

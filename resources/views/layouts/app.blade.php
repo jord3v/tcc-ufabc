@@ -73,6 +73,38 @@
                            </span>
                         </a>
                      </li>
+                     <li class="nav-item {{request()->routeIs('companies.index') ? 'active': ''}}">
+                        <a class="nav-link" href="{{route('companies.index')}}">
+                           <span class="nav-link-title">
+                              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M5 21v-14l8 -4v18" /><path d="M19 21v-10l-6 -4" /><path d="M9 9l0 .01" /><path d="M9 12l0 .01" /><path d="M9 15l0 .01" /><path d="M9 18l0 .01" /></svg>
+                              Prestadores de serviços
+                           </span>
+                        </a>
+                     </li>
+                     <li class="nav-item {{request()->routeIs('reports.index') ? 'active': ''}}">
+                        <a class="nav-link" href="{{route('reports.index')}}">
+                           <span class="nav-link-title">
+                              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 17h6" /><path d="M9 13h6" /></svg>
+                              Relatórios
+                           </span>
+                        </a>
+                     </li>
+                     <li class="nav-item {{request()->routeIs('notes.index') ? 'active': ''}}">
+                        <a class="nav-link" href="{{route('notes.index')}}">
+                           <span class="nav-link-title">
+                              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-receipt"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2m4 -14h6m-6 4h6m-2 4h2" /></svg>
+                              Notas de empenho
+                           </span>
+                        </a>
+                     </li>
+                     <li class="nav-item {{request()->routeIs('payments.index') ? 'active': ''}}">
+                        <a class="nav-link" href="{{route('payments.index')}}">
+                           <span class="nav-link-title">
+                              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-wallet"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12" /><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" /></svg>
+                              Pagamentos
+                           </span>
+                        </a>
+                     </li>
                      @can('user-list')
                      <li class="nav-item {{request()->routeIs('users.index') ? 'active': ''}}">
                         <a class="nav-link" href="{{route('users.index')}}">

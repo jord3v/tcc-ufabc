@@ -1,14 +1,9 @@
+# UNIVERSIDADE FEDERAL DO ABC
+## Especialização em Tecnologias e Sistemas de Informação
 
-# laravel-tabler
+---
 
-  
-
-Criei esse repositório, porque não estou muito familiarizado com o tailwind que está vindo por padrão nas aplicações laravel.
-
-  
-
-Tabler é um kit de interface de usuário de aplicativo da web gratuito e de código aberto baseado no Bootstrap 5, com centenas de componentes responsivos e vários layouts.
-
+# DESENVOLVIMENTO DE UMA FERRAMENTA PARA PADRONIZAÇÃO DE RELATÓRIOS CIRCUNSTANCIADOS UTILIZANDO O FRAMEWORK LARAVEL
   
 
 ## Requisitos
@@ -33,7 +28,7 @@ Tabler é um kit de interface de usuário de aplicativo da web gratuito e de có
 
 ```
 
-$ git clone https://github.com/jord3v/laravel-tabler.git
+$ git clone https://github.com/jord3v/tcc-ufabc.git
 
 ```
 

@@ -2,7 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
+    CompanyController,
     DashboardController,
+    LocationController,
+    NoteController,
+    PaymentController,
+    ReportController,
     UserController,
     RoleAndPermissionController
 };
@@ -16,7 +21,12 @@ Auth::routes();
 Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resources([
-        '/users' => UserController::class,
-        '/roles-and-permissions' => RoleAndPermissionController::class
+        'companies' => CompanyController::class,
+        'locations' => LocationController::class,
+        'notes' => NoteController::class,
+        'payments' => PaymentController::class,
+        'reports' => ReportController::class,
+        'roles-and-permissions' => RoleAndPermissionController::class,
+        'users' => UserController::class,
     ]);
 });

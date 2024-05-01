@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid');
+            $table->foreignId('report_id')->constrained();
+            $table->string('invoice');
+            $table->string('process')->nullable();
+            $table->date('reference');
+            $table->decimal('price', 10, 2);
+            $table->date('due_date');
+            $table->date('signature_date');
             $table->timestamps();
         });
     }

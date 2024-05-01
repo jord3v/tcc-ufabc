@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained();
+            $table->foreignId('location_id')->constrained();
+            $table->foreignId('note_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->string('manager');
+            $table->string('department');
             $table->timestamps();
         });
     }

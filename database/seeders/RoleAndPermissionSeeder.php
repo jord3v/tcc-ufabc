@@ -126,6 +126,18 @@ class RoleAndPermissionSeeder extends Seeder
             [
                 'name' => 'location-delete',
                 'module' => 'location'
+            ],
+            [
+                'name' => 'file-list',
+                'module' => 'file'
+            ],
+            [
+                'name' => 'file-create',
+                'module' => 'file'
+            ],
+            [
+                'name' => 'file-edit',
+                'module' => 'file'
             ]
         ];
         foreach ($permissions as $permission) {

@@ -32,7 +32,7 @@
       @include('layouts.flash-message')
       <div class="card">
          <div class="card-header">
-            <h3 class="card-title">Funções</h3>
+            <h3 class="card-title">Usuários do sistema</h3>
          </div>
          <div class="table-responsive">
             <table class="table card-table table-vcenter text-nowrap datatable">

@@ -105,26 +105,35 @@
                            </span>
                         </a>
                      </li>
-                     @can('user-list')
-                     <li class="nav-item {{request()->routeIs('users.index') ? 'active': ''}}">
-                        <a class="nav-link" href="{{route('users.index')}}">
-                           <span class="nav-link-title">
-                              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
-                              Usuários
-                           </span>
+                     @canany(['user-list', 'role-list', 'files-list'])
+                     <li class="nav-item {{request()->routeIs(['users.index', 'roles-and-permissions.index', 'files.index']) ? 'active': ''}} dropdown">
+                        <a class="nav-link dropdown-toggle" href="#settings" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/lifebuoy -->
+                              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-tool"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5" /></svg>
+                          </span>
+                          <span class="nav-link-title">
+                            Ajustes
+                          </span>
                         </a>
+                        <div class="dropdown-menu {{request()->routeIs(['users.index', 'roles-and-permissions.index', 'files.index']) ? 'show': ''}}">
+                          @can('user-list')
+                          <a class="dropdown-item {{request()->routeIs('users.index') ? 'active': ''}}" href="{{route('users.index')}}">
+                            Usuários
+                          </a>
+                          @endcan     
+                          @can('role-list')
+                          <a class="dropdown-item {{request()->routeIs('roles-and-permissions.index') ? 'active': ''}}" href="{{route('roles-and-permissions.index')}}">
+                            Funções e permissões
+                          </a>
+                          @endcan
+                          @can('file-list')
+                          <a class="dropdown-item {{request()->routeIs('files.index') ? 'active': ''}}" href="{{route('files.index')}}">
+                            Modelos Word
+                          </a>
+                          @endcan
+                        </div>
                      </li>
-                     @endcan
-                     @can('role-list')
-                     <li class="nav-item {{request()->routeIs('roles-and-permissions.index') ? 'active': ''}}">
-                        <a class="nav-link" href="{{route('roles-and-permissions.index')}}">
-                           <span class="nav-link-title">
-                              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-settings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
-                              Funções e permissões
-                           </span>
-                        </a>
-                     </li>
-                     @endcan
+                     @endcanany
                   </ul>
                </div>
             </div>

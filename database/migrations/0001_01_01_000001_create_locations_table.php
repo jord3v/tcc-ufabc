@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('active')->default(true);
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }

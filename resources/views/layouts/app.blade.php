@@ -105,8 +105,8 @@
                            </span>
                         </a>
                      </li>
-                     @canany(['user-list', 'role-list', 'files-list'])
-                     <li class="nav-item {{request()->routeIs(['users.index', 'roles-and-permissions.index', 'files.index']) ? 'active': ''}} dropdown">
+                     @canany(['user-list', 'role-list', 'location-list', 'file-list'])
+                     <li class="nav-item {{request()->routeIs(['users.index', 'roles-and-permissions.index', 'locations.index', 'files.index']) ? 'active': ''}} dropdown">
                         <a class="nav-link dropdown-toggle" href="#settings" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
                           <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/lifebuoy -->
                               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-tool"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5" /></svg>
@@ -115,7 +115,7 @@
                             Ajustes
                           </span>
                         </a>
-                        <div class="dropdown-menu {{request()->routeIs(['users.index', 'roles-and-permissions.index', 'files.index']) ? 'show': ''}}">
+                        <div class="dropdown-menu {{request()->routeIs(['users.index', 'roles-and-permissions.index', 'locations.index', 'files.index']) ? 'show': ''}}">
                           @can('user-list')
                           <a class="dropdown-item {{request()->routeIs('users.index') ? 'active': ''}}" href="{{route('users.index')}}">
                             Usuários
@@ -124,6 +124,11 @@
                           @can('role-list')
                           <a class="dropdown-item {{request()->routeIs('roles-and-permissions.index') ? 'active': ''}}" href="{{route('roles-and-permissions.index')}}">
                             Funções e permissões
+                          </a>
+                          @endcan
+                          @can('location-list')
+                          <a class="dropdown-item {{request()->routeIs('locations.index') ? 'active': ''}}" href="{{route('locations.index')}}">
+                           Unidades operacionais
                           </a>
                           @endcan
                           @can('file-list')

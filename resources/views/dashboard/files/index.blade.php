@@ -13,26 +13,183 @@
                Modelos Word
             </h2>
          </div>
+         <div class="col-auto ms-auto d-print-none">
+            <div class="btn-list">
+               <a href="{{route('dashboard')}}" class="btn">
+               Voltar
+               </a>
+               @can('file-create')
+               <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#file-create">
+               Novo template
+               </a>
+               @endcan
+            </div>
+         </div>
       </div>
    </div>
 </div>
 <div class="page-body">
    <div class="container-xl">
       @include('layouts.flash-message')
-      <div class="card card-lg">
-         <div class="card-body ">
-            <div class="row g-4">
-               <div class="col-12">
-                  @if (session('status'))
-                  <div class="alert alert-success" role="alert">
-                     {{ session('status') }}
-                  </div>
-                  @endif
-                  {{ __('You are logged in!') }}
-               </div>
-            </div>
+      <div class="card">
+         <div class="card-header">
+            <h3 class="card-title">Lista de templates</h3>
+         </div>
+         <div class="table-responsive">
+            <table class="table card-table table-vcenter text-nowrap datatable">
+               <thead>
+                  <tr>
+                     <th class="w-75">Nome do arquivo</th>
+                     <th class="w-25">Responsável</th>
+                     <th class="w-25">Situação</th>
+                     <th>Ação</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  @forelse ($files as $file)
+                  <tr>
+                     <td>
+                        {{$file->filename}}
+                     </td>
+                     <td>
+                        {{$file->user->name}}
+                     </td>
+                     <td>
+                        @if ($file->active)
+                           <span class="status status-primary">
+                              <span class="status-dot"></span>
+                              Ativo
+                           </span>
+                        @else
+                           <span class="status status-default">
+                              <span class="status-dot"></span>
+                              Inativo
+                           </span>
+                        @endif
+                     </td>
+                     <td>
+                        @can('file-edit')
+                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#file-edit" data-bs-id="{{$file->id}}">
+                        Editar
+                        </a>
+                        @endcan
+                        @can('file-delete')
+                        <a href="#" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#file-delete" data-bs-id="{{$file->id}}">
+                        Excluir
+                        </a>
+                        @endcan
+                     </td>
+                  </tr>
+                  @empty
+                  @endforelse
+               </tbody>
+            </table>
+         </div>
+         <div class="card-footer">
+            {{ $files->withQueryString()->links() }}
          </div>
       </div>
    </div>
 </div>
 @endsection
+@push('modals')
+@can('file-create')
+{{--! modal file-create--}}
+<div class="modal modal-blur fade" id="file-create" tabindex="-1" user="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
+      <div class="modal-content">
+         <form action="{{route('files.store')}}" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
+            @csrf
+            <div class="modal-header">
+               <h5 class="modal-title">Novo template</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               <div class="mb-3">
+                  <div class="form-label">Arquivo</div>
+                  <input type="file" class="form-control" name="file" accept=".doc, .docx" required/>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+               Cancelar
+               </a>
+               <button type="submit" class="btn btn-primary ms-auto">
+               Novo template
+               </button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+@endcan
+@can('file-edit')
+{{--! modal file-edit--}}
+<div class="modal modal-blur fade" id="file-edit" tabindex="-1" user="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
+      <div class="modal-content">
+         <form method="POST" class="needs-validation" novalidate>
+            @csrf
+            @method('PUT')
+            <div class="modal-header">
+               <h5 class="modal-title">Editar template</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               <div class="mb-3">
+                  <label class="form-label">Nome</label>
+                  <input type="text" class="form-control" name="filename" disabled>
+               </div>
+               <div class="mb-3">
+                  <div class="form-label">Ativo</div>
+                  <label class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" name="active" checked>
+                  <span class="form-check-label"></span>
+                  </label>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+               Cancelar
+               </a>
+               <button type="submit" class="btn btn-primary ms-auto">
+               Editar template
+               </button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+@endcan
+@endpush
+@push('scripts')
+<script>
+   const fileEdit = document.getElementById('file-edit')
+   const fileEditForm = fileEdit.querySelector('form');
+   if (fileEdit) {
+      fileEdit.addEventListener('show.bs.modal', event => {
+       const button = event.relatedTarget
+       const id = button.getAttribute('data-bs-id')
+       var route = "{{route('files.index')}}/" +id
+       fetch(route)
+       .then(response => {
+           if (!response.ok) {
+               throw new Error('Erro ao carregar dados do servidor');
+           }
+           return response.json();
+       })
+       .then(data => {
+         fileEditForm.action = route;
+            fileEdit.querySelector('input[name="filename"]').value = data.filename;
+            const checkbox = document.querySelector('input[name="active"]');
+            if (checkbox) {
+               checkbox.checked = data.active;
+            }
+       })
+       .catch(error => {
+           console.error('Erro:', error);
+       });
+     })
+   }
+</script>
+@endpush

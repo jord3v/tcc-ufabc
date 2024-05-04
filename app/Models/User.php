@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
        return $this->hasMany(Location::class);
     }
+
+    public function companies()
+    {
+       return $this->hasMany(Company::class);
+    }
 }

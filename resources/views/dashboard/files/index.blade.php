@@ -95,8 +95,8 @@
 @push('modals')
 @can('file-create')
 {{--! modal file-create--}}
-<div class="modal modal-blur fade" id="file-create" tabindex="-1" user="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
+<div class="modal modal-blur fade" id="file-create" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
          <form action="{{route('files.store')}}" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
             @csrf
@@ -125,8 +125,8 @@
 @endcan
 @can('file-edit')
 {{--! modal file-edit--}}
-<div class="modal modal-blur fade" id="file-edit" tabindex="-1" user="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
+<div class="modal modal-blur fade" id="file-edit" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
          <form method="POST" class="needs-validation" novalidate>
             @csrf

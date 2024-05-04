@@ -87,8 +87,8 @@
 @push('modals')
 @can('location-create')
 {{--! modal location-create--}}
-<div class="modal modal-blur fade" id="location-create" tabindex="-1" user="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
+<div class="modal modal-blur fade" id="location-create" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
          <form action="{{route('locations.store')}}" method="POST" class="needs-validation" novalidate>
             @csrf
@@ -117,8 +117,8 @@
 @endcan
 @can('location-edit')
 {{--! modal location-edit--}}
-<div class="modal modal-blur fade" id="location-edit" tabindex="-1" user="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
+<div class="modal modal-blur fade" id="location-edit" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
          <form method="POST" class="needs-validation" novalidate>
             @csrf
@@ -154,7 +154,7 @@
 </div>
 @endcan
 @can('location-delete')
-<div class="modal modal-blur fade" id="location-delete" tabindex="-1" user="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="location-delete" tabindex="-1" role="dialog" aria-hidden="true">
    <div class="modal-dialog modal-sm modal-dialog-centered" user="document">
       <div class="modal-content">
          <form method="POST">

@@ -91,8 +91,8 @@
 @push('modals')
 @can('user-create')
 {{--! modal user-create--}}
-<div class="modal modal-blur fade" id="user-create" tabindex="-1" user="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
+<div class="modal modal-blur fade" id="user-create" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
          <form action="{{route('users.store')}}" method="POST" class="needs-validation" novalidate>
             @csrf
@@ -156,8 +156,8 @@
 @endcan
 @can('user-edit')
 {{--! modal user-edit--}}
-<div class="modal modal-blur fade" id="user-edit" tabindex="-1" user="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
+<div class="modal modal-blur fade" id="user-edit" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
          <form method="POST" class="needs-validation" novalidate>
             @csrf
@@ -221,7 +221,7 @@
 </div>
 @endcan
 @can('user-delete')
-<div class="modal modal-blur fade" id="user-delete" tabindex="-1" user="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="user-delete" tabindex="-1" role="dialog" aria-hidden="true">
    <div class="modal-dialog modal-sm modal-dialog-centered" user="document">
       <div class="modal-content">
          <form method="POST">

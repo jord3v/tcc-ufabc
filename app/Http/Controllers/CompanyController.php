@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -40,17 +42,19 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $company = auth()->user()->companies()->create($request->all());
+        return back()->with('success', 'Prestador de serviço adicionado com sucesso!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Company $company)
+    public function show(string $id): JsonResponse
     {
-        //
+        $company = $this->company->with('user')->findOrFail($id);
+        return response()->json($company);
     }
 
     /**
@@ -64,9 +68,11 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Company $company)
+    public function update(Request $request, $id)
     {
-        //
+        $company = $this->company->find($id);
+        $company->update($request->all());
+        return back()->with('success', 'Prestador de serviço atualizado com sucesso!');
     }
 
     /**

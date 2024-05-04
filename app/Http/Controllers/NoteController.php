@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -35,17 +37,19 @@ class NoteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $this->note->create($request->all());
+        return back()->with('success', 'Nota de empenho adicionada com sucesso!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Note $note)
+    public function show(string $id): JsonResponse
     {
-        //
+        $note = $this->note->findOrFail($id);
+        return response()->json($note);
     }
 
     /**

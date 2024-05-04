@@ -39,7 +39,7 @@
                <thead>
                   <tr>
                      <th class="w-75">Usuário</th>
-                     <th class="w-25">Função</th>
+                     <th class="w-25">Funções</th>
                      <th>Ação</th>
                   </tr>
                </thead>
@@ -65,12 +65,12 @@
                      </td>
                      <td>
                         @can('user-edit')
-                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#user-edit" data-bs-id="{{$user->id}}">
+                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#edit" data-bs-id="{{$user->id}}">
                         Editar
                         </a>
                         @endcan
                         @can('user-delete')
-                        <a href="#" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#user-delete" data-bs-id="{{$user->id}}">
+                        <a href="#" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete" data-bs-id="{{$user->id}}">
                         Excluir
                         </a>
                         @endcan
@@ -129,12 +129,12 @@
             <div class="modal-body">
                <div class="row">
                   <div class="col-lg-12">
-                     <label class="form-label">Função</label>
+                     <label class="form-label">Funções</label>
                   </div>
                   @foreach ($roles as $role)
                   <div class="col-lg-3 mb-3">
-                     <label class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="role" value="{{$role->name}}" required>
+                     <label class="form-check">
+                        <input type="checkbox" name="roles[]" class="form-check-input" value="{{$role->name}}">
                         <span class="form-check-label">{{$role->name}}</span>
                      </label>
                   </div>
@@ -156,7 +156,7 @@
 @endcan
 @can('user-edit')
 {{--! modal user-edit--}}
-<div class="modal modal-blur fade" id="user-edit" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="edit" tabindex="-1" role="dialog" aria-hidden="true">
    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
          <form method="POST" class="needs-validation" novalidate>
@@ -195,12 +195,12 @@
             <div class="modal-body">
                <div class="row">
                   <div class="col-lg-12">
-                     <label class="form-label">Função</label>
+                     <label class="form-label">Funções</label>
                   </div>
                   @foreach ($roles as $role)
                   <div class="col-lg-3 mb-3">
-                     <label class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="role" value="{{$role->name}}" required>
+                     <label class="form-check">
+                        <input type="checkbox" name="roles[]" class="form-check-input" value="{{$role->name}}">
                         <span class="form-check-label">{{$role->name}}</span>
                      </label>
                   </div>
@@ -221,7 +221,7 @@
 </div>
 @endcan
 @can('user-delete')
-<div class="modal modal-blur fade" id="user-delete" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="delete" tabindex="-1" role="dialog" aria-hidden="true">
    <div class="modal-dialog modal-sm modal-dialog-centered" user="document">
       <div class="modal-content">
          <form method="POST">
@@ -260,51 +260,4 @@
    </div>
 </div>
 @endcan
-@endpush
-@push('scripts')
-<script>
-   const roleEdit = document.getElementById('user-edit')
-   const roleEditForm = roleEdit.querySelector('form');
-   
-   if (roleEdit) {
-      roleEdit.addEventListener('show.bs.modal', event => {
-       const button = event.relatedTarget
-       const id = button.getAttribute('data-bs-id')
-       var route = "{{route('users.index')}}/" +id
-       fetch(route)
-       .then(response => {
-           if (!response.ok) {
-               throw new Error('Erro ao carregar dados do servidor');
-           }
-           return response.json();
-       })
-       .then(data => {
-         roleEditForm.action = route;
-            roleEdit.querySelector('input[name="name"]').value = data.name;
-            roleEdit.querySelector('input[name="email"]').value = data.email;
-            data.roles.forEach(role => {
-                const checkbox = document.querySelector(`#user-edit input[value="${role.name}"]`);
-                if (checkbox) {
-                    checkbox.checked = true;
-                }
-            });
-       })
-       .catch(error => {
-           console.error('Erro:', error);
-       });
-     })
-   }
-</script>
-<script>
-   const roleDelete = document.getElementById('user-delete')
-   const roleDeleteForm = roleDelete.querySelector('form');
-   if (roleDelete) {
-      roleDelete.addEventListener('show.bs.modal', event => {
-         const button = event.relatedTarget
-         const id = button.getAttribute('data-bs-id')
-         var route = "{{route('users.index')}}/" +id
-         roleDeleteForm.action = route;
-      });
-   }
-</script>
 @endpush

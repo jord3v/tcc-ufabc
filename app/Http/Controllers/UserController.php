@@ -27,7 +27,7 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        $users = $this->user->paginate(10);
+        $users = $this->user->with('roles')->paginate(10);
         $roles = $this->role->get();
         return view('dashboard.users.index', compact('users', 'roles'));
     }
@@ -46,7 +46,7 @@ class UserController extends Controller
     public function store(UserRequest $request): RedirectResponse
     {
         $user = $this->user->create($request->all());
-        $user->syncRoles($request->role);
+        $user->syncRoles($request->roles);
         return back()->with('success', 'Usuário adicionado com sucesso!');
     }
 
@@ -76,7 +76,7 @@ class UserController extends Controller
         $input = $request->all();
         if (empty($input['password'])) {unset($input['password']);}
         $user->update($input);
-        $user->syncRoles($request->role);
+        $user->syncRoles($request->roles);
         return back()->with('success', 'Usuário atualizado com sucesso!');
     }
 

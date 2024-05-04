@@ -59,7 +59,7 @@
                      <td>{{$company->user->name}}</td>
                      <td>
                         @can('company-edit')
-                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#company-edit" data-bs-id="{{$company->id}}">
+                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#edit" data-bs-id="{{$company->id}}">
                         Editar
                         </a>
                         @endcan
@@ -120,7 +120,7 @@
 @endcan
 @can('company-edit')
 {{--! modal company-edit--}}
-<div class="modal modal-blur fade" id="company-edit" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="edit" tabindex="-1" role="dialog" aria-hidden="true">
    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
          <form method="POST" class="needs-validation" novalidate>
@@ -199,34 +199,4 @@
    </div>
 </div>
 @endcan
-@endpush
-@push('scripts')
-<script>
-   const companyEdit = document.getElementById('company-edit')
-   const companyEditForm = companyEdit.querySelector('form');
-   
-   if (companyEdit) {
-      companyEdit.addEventListener('show.bs.modal', event => {
-       const button = event.relatedTarget
-       const id = button.getAttribute('data-bs-id')
-       var route = "{{route('companies.index')}}/" +id
-       fetch(route)
-       .then(response => {
-           if (!response.ok) {
-               throw new Error('Erro ao carregar dados do servidor');
-           }
-           return response.json();
-       })
-       .then(data => {
-         companyEditForm.action = route;
-            companyEdit.querySelector('input[name="name"]').value = data.name;
-            companyEdit.querySelector('input[name="commercial_name"]').value = data.commercial_name;
-            companyEdit.querySelector('input[name="cnpj"]').value = data.cnpj;
-       })
-       .catch(error => {
-           console.error('Erro:', error);
-       });
-     })
-   }
-</script>
 @endpush

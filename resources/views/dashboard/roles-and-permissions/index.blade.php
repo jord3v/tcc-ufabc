@@ -50,12 +50,12 @@
                      <td>{{$role->permissions->count()}}</td>
                      <td>
                         @can('role-edit')
-                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#role-edit" data-bs-id="{{$role->id}}">
+                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#edit" data-bs-id="{{$role->id}}">
                         Editar
                         </a>
                         @endcan
                         @can('role-delete')
-                        <a href="#" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#role-delete" data-bs-id="{{$role->id}}">
+                        <a href="#" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete" data-bs-id="{{$role->id}}">
                         Excluir
                         </a>
                         @endcan
@@ -124,7 +124,7 @@
 @endcan
 @can('role-edit')
 {{--! modal role-edit--}}
-<div class="modal modal-blur fade" id="role-edit" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="edit" tabindex="-1" role="dialog" aria-hidden="true">
    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
          <form method="POST" class="needs-validation" novalidate>
@@ -172,7 +172,7 @@
 </div>
 @endcan
 @can('role-delete')
-<div class="modal modal-blur fade" id="role-delete" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="delete" tabindex="-1" role="dialog" aria-hidden="true">
    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
       <div class="modal-content">
          <form method="POST">
@@ -211,50 +211,4 @@
    </div>
 </div>
 @endcan
-@endpush
-@push('scripts')
-<script>
-   const roleEdit = document.getElementById('role-edit')
-   const roleEditForm = roleEdit.querySelector('form');
-   
-   if (roleEdit) {
-      roleEdit.addEventListener('show.bs.modal', event => {
-       const button = event.relatedTarget
-       const id = button.getAttribute('data-bs-id')
-       var route = "{{route('roles-and-permissions.index')}}/" +id
-       fetch(route)
-       .then(response => {
-           if (!response.ok) {
-               throw new Error('Erro ao carregar dados do servidor');
-           }
-           return response.json();
-       })
-       .then(data => {
-         roleEditForm.action = route;
-            roleEdit.querySelector('input[name="name"]').value = data.name;
-            data.permissions.forEach(permission => {
-                const checkbox = document.querySelector(`#role-edit input[value="${permission.name}"]`);
-                if (checkbox) {
-                    checkbox.checked = true;
-                }
-            });
-       })
-       .catch(error => {
-           console.error('Erro:', error);
-       });
-     })
-   }
-</script>
-<script>
-   const roleDelete = document.getElementById('role-delete')
-   const roleDeleteForm = roleDelete.querySelector('form');
-   if (roleDelete) {
-      roleDelete.addEventListener('show.bs.modal', event => {
-         const button = event.relatedTarget
-         const id = button.getAttribute('data-bs-id')
-         var route = "{{route('roles-and-permissions.index')}}/" +id
-         roleDeleteForm.action = route;
-      });
-   }
-</script>
 @endpush

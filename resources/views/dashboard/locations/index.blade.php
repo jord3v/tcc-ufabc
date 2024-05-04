@@ -66,7 +66,7 @@
                      </td>
                      <td>
                         @can('location-edit')
-                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#location-edit" data-bs-id="{{$location->id}}">
+                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#edit" data-bs-id="{{$location->id}}">
                         Editar
                         </a>
                         @endcan
@@ -87,8 +87,8 @@
 @push('modals')
 @can('location-create')
 {{--! modal location-create--}}
-<div class="modal modal-blur fade" id="location-create" tabindex="-1" role="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+<div class="modal modal-blur fade" id="location-create" tabindex="-1" user="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
       <div class="modal-content">
          <form action="{{route('locations.store')}}" method="POST" class="needs-validation" novalidate>
             @csrf
@@ -117,8 +117,8 @@
 @endcan
 @can('location-edit')
 {{--! modal location-edit--}}
-<div class="modal modal-blur fade" id="location-edit" tabindex="-1" role="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+<div class="modal modal-blur fade" id="edit" tabindex="-1" user="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
       <div class="modal-content">
          <form method="POST" class="needs-validation" novalidate>
             @csrf
@@ -154,7 +154,7 @@
 </div>
 @endcan
 @can('location-delete')
-<div class="modal modal-blur fade" id="location-delete" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="location-delete" tabindex="-1" user="dialog" aria-hidden="true">
    <div class="modal-dialog modal-sm modal-dialog-centered" user="document">
       <div class="modal-content">
          <form method="POST">
@@ -193,36 +193,4 @@
    </div>
 </div>
 @endcan
-@endpush
-@push('scripts')
-<script>
-   const locationEdit = document.getElementById('location-edit')
-   const locationEditForm = locationEdit.querySelector('form');
-   
-   if (locationEdit) {
-      locationEdit.addEventListener('show.bs.modal', event => {
-       const button = event.relatedTarget
-       const id = button.getAttribute('data-bs-id')
-       var route = "{{route('locations.index')}}/" +id
-       fetch(route)
-       .then(response => {
-           if (!response.ok) {
-               throw new Error('Erro ao carregar dados do servidor');
-           }
-           return response.json();
-       })
-       .then(data => {
-         locationEditForm.action = route;
-            locationEdit.querySelector('input[name="name"]').value = data.name;
-            const checkbox = document.querySelector('input[name="active"]');
-            if (checkbox) {
-               checkbox.checked = data.active;
-            }
-       })
-       .catch(error => {
-           console.error('Erro:', error);
-       });
-     })
-   }
-</script>
 @endpush

@@ -25,7 +25,7 @@ class UserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => $this->getMethod() == 'POST' ? 'required|email|unique:users' : 'required|email|unique:users,id,' . $this->id,
             'password' => 'sometimes|nullable|confirmed|min:8',
-            'role' => 'required'
+            'roles' => 'required'
         ];
     }
 }

@@ -199,31 +199,8 @@
          </main>
       </div>
       <script src="{{ mix('js/app.js') }}" defer></script>
-      <script>
-         function reloadPageOnClose(eventType) {
-            document.addEventListener(eventType, function (event) {
-               location.reload();
-            });
-         }
-         reloadPageOnClose('hidden.bs.modal');
-         reloadPageOnClose('hidden.bs.offcanvas');
-      </script>
       @stack('modals')
-      <script>
-         (() => {
-         'use strict'
-         const forms = document.querySelectorAll('.needs-validation')
-         Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-               if (!form.checkValidity()) {
-               event.preventDefault()
-               event.stopPropagation()
-               }
-               form.classList.add('was-validated')
-            }, false)
-         })
-         })()
-      </script>
       @stack('scripts')
+      <script src="{{asset('js/functions.js')}}"></script>
    </body>
 </html>

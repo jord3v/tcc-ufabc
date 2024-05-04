@@ -69,7 +69,7 @@
                      </td>
                      <td>
                         @can('file-edit')
-                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#file-edit" data-bs-id="{{$file->id}}">
+                        <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#edit" data-bs-id="{{$file->id}}">
                         Editar
                         </a>
                         @endcan
@@ -125,7 +125,7 @@
 @endcan
 @can('file-edit')
 {{--! modal file-edit--}}
-<div class="modal modal-blur fade" id="file-edit" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="edit" tabindex="-1" role="dialog" aria-hidden="true">
    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
          <form method="POST" class="needs-validation" novalidate>
@@ -161,35 +161,4 @@
    </div>
 </div>
 @endcan
-@endpush
-@push('scripts')
-<script>
-   const fileEdit = document.getElementById('file-edit')
-   const fileEditForm = fileEdit.querySelector('form');
-   if (fileEdit) {
-      fileEdit.addEventListener('show.bs.modal', event => {
-       const button = event.relatedTarget
-       const id = button.getAttribute('data-bs-id')
-       var route = "{{route('files.index')}}/" +id
-       fetch(route)
-       .then(response => {
-           if (!response.ok) {
-               throw new Error('Erro ao carregar dados do servidor');
-           }
-           return response.json();
-       })
-       .then(data => {
-         fileEditForm.action = route;
-            fileEdit.querySelector('input[name="filename"]').value = data.filename;
-            const checkbox = document.querySelector('input[name="active"]');
-            if (checkbox) {
-               checkbox.checked = data.active;
-            }
-       })
-       .catch(error => {
-           console.error('Erro:', error);
-       });
-     })
-   }
-</script>
 @endpush

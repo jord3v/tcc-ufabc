@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained();
             $table->foreignId('location_id')->constrained();
             $table->foreignId('note_id')->constrained();
+            $table->foreignId('file_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->string('manager');
             $table->string('department');

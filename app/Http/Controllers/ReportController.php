@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\File;
+use App\Models\Location;
+use App\Models\Note;
 use App\Models\Report;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ReportController extends Controller
 {
-    public function __construct(private Report $report)
+    public function __construct(private Report $report, private Location $location, private Company $company, private Note $note, private File $file)
     {
         $this->middleware('permission:report-list', ['only' => ['index','show']]);
         $this->middleware('permission:report-create', ['only' => ['create','store']]);
@@ -20,8 +25,11 @@ class ReportController extends Controller
      */
     public function index(): View
     {
-        $reports = $this->report->paginate(10);
-        return view('dashboard.reports.index', compact('reports'));
+        $companies = $this->company->with(['user', 'reports.location', 'reports.note','reports.file', 'reports.payments'])->get();
+        $locations = $this->location->get();
+        $notes = $this->note->get();
+        $files = $this->file->get();
+        return view('dashboard.reports.index', compact('locations', 'companies', 'notes', 'files'));
     }
 
     /**
@@ -35,9 +43,10 @@ class ReportController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $report = auth()->user()->reports()->create($request->all());
+        return back()->with('success', 'Relatório adicionado com sucesso!');
     }
 
     /**

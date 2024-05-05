@@ -31,4 +31,5 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         'roles-and-permissions' => RoleAndPermissionController::class,
         'users' => UserController::class,
     ]);
+    Route::post('/payments/fill', [PaymentController::class, 'fill'])->name('payments.fill');
 });

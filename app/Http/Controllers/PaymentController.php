@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PaymentController extends Controller
 {
-    public function __construct(private Payment $payment)
+    public function __construct(private Payment $payment, private Report $report)
     {
         $this->middleware('permission:payment-list', ['only' => ['index','show']]);
-        $this->middleware('permission:payment-create', ['only' => ['create','store']]);
+        $this->middleware('permission:payment-create', ['only' => ['create','store', 'fill']]);
         $this->middleware('permission:payment-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:payment-delete', ['only' => ['destroy']]);
     }
@@ -37,7 +38,7 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
@@ -70,5 +71,14 @@ class PaymentController extends Controller
     public function destroy(Payment $payment)
     {
         //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function fill(Request $request): View
+    {
+        $reports = $this->report->with(['company', 'location', 'note', 'file', 'user'])->whereIn('id', $request->reports)->get()->groupBy('company.name');
+        return view('dashboard.payments.fill', compact('reports'));
     }
 }

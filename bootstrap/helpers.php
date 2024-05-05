@@ -9,3 +9,9 @@ if (! function_exists('avatar')) {
         return 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=6c7a91&color=ffffff'; // Exemplo: adicione '&size=200' para definir o tamanho do avatar como 200x200 pixels
     }
 }
+
+if (! function_exists('friendly')) {
+    function friendly($var = null) {
+        return Str::slug($var, '-');
+    }
+}

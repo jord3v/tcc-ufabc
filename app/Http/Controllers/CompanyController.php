@@ -27,7 +27,7 @@ class CompanyController extends Controller
      */
     public function index(): View
     {
-        $companies = $this->company->paginate(10);
+        $companies = $this->company->with('user')->paginate(10);
         return view('dashboard.companies.index', compact('companies'));
     }
 

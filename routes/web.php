@@ -32,4 +32,6 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         'users' => UserController::class,
     ]);
     Route::post('/payments/fill', [PaymentController::class, 'fill'])->name('payments.fill');
+    Route::get('/payments/download/{zipname}', [PaymentController::class, 'download'])->name('payments.download');
+
 });

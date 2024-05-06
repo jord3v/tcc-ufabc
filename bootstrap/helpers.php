@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 if (! function_exists('avatar')) {
     function avatar($user = null) {
@@ -10,8 +12,59 @@ if (! function_exists('avatar')) {
     }
 }
 
-if (! function_exists('friendly')) {
-    function friendly($var = null) {
+if (! function_exists('tab_id')) {
+    function tab_id($var = null) {
         return Str::slug($var, '-');
+    }
+}
+
+if (!function_exists("friendly")) {
+    function friendly($payment, $object, $join)
+    {
+        if($join->count() > 1){
+            $id = 'x';
+        }else{
+            $id = $object->id;
+        }        
+        return $payment->reference->format('mY').'-'.Str::slug($object->report->company->name .'-'. $object->report->location->name.'-'.$id, '-'). ".docx";//$object->id . ".docx";
+    }
+}
+
+if (!function_exists("setMonthAndYear")) {
+    function setMonthAndYear($input)
+    {
+        return Carbon::createFromFormat('Y-m', $input)->firstOfMonth()->format('Y-m-d');
+    }
+}
+
+if (!function_exists("getPrice")) {
+    function getPrice($input)
+    {
+        $fmt = new NumberFormatter(app()->getLocale(), NumberFormatter::CURRENCY);
+        return $fmt->formatCurrency($input, "BRL");
+    }
+}
+
+if (!function_exists("reference")) {
+    function reference($input)
+    {
+        return Carbon::parse($input)->translatedFormat('F/Y'); 
+    }
+}
+
+if (!function_exists("convertFloat")) {
+    function convertFloat($input)
+    {
+        $value = preg_replace("/[^0-9,.]/", "", $input);
+        $value = str_replace(',', '.', $value);
+        $float = (float) $value;
+        return $float;
+    }
+}
+
+if (!function_exists("removeCurrency")) {
+    function removeCurrency($value)
+    {
+        return trim(str_replace("R$", "", getPrice($value)));
     }
 }

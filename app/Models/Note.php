@@ -28,4 +28,14 @@ class Note extends Model
         'start', 
         'end'
     ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'start' => 'datetime:Y-m-d',
+        'end'  => 'datetime:Y-m-d',
+    ];
 }

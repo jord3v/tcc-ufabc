@@ -20,6 +20,9 @@
             font-feature-settings: "cv03", "cv04", "cv11";
          }
       </style>
+      @if (session('download'))
+         <meta http-equiv="refresh" content="1;url={{route('payments.download', session('download'))}}">
+      @endif
    </head>
    <body>
       <div class="page">

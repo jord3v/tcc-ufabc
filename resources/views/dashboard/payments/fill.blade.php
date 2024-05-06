@@ -42,7 +42,7 @@
                 <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
                 @foreach ($reports->keys() as $report)
                 <li class="nav-item" role="presentation">
-                    <a href="#{{friendly($report)}}" class="nav-link {{$loop->first ? 'active':''}}" data-bs-toggle="tab" aria-selected="true" role="tab"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 21l18 0"></path><path d="M5 21v-14l8 -4v18"></path><path d="M19 21v-10l-6 -4"></path><path d="M9 9l0 .01"></path><path d="M9 12l0 .01"></path><path d="M9 15l0 .01"></path><path d="M9 18l0 .01"></path></svg> {{$report}}</a>
+                    <a href="#{{tab_id($report)}}" class="nav-link {{$loop->first ? 'active':''}}" data-bs-toggle="tab" aria-selected="true" role="tab"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 21l18 0"></path><path d="M5 21v-14l8 -4v18"></path><path d="M19 21v-10l-6 -4"></path><path d="M9 9l0 .01"></path><path d="M9 12l0 .01"></path><path d="M9 15l0 .01"></path><path d="M9 18l0 .01"></path></svg> {{$report}}</a>
                 </li>
                 @endforeach
                 </ul>
@@ -50,7 +50,7 @@
             <div class="card-body p-0">
                 <div class="tab-content">
                 @foreach ($reports as $key => $report)
-                <div class="tab-pane fade {{$loop->first ? 'active show':''}}" id="{{friendly($key)}}" role="tabpanel">
+                <div class="tab-pane fade {{$loop->first ? 'active show':''}}" id="{{tab_id($key)}}" role="tabpanel">
                     <div class="list-group list-group-flush">
                         @foreach ($report as $item)   
                         <div class="list-group-item">

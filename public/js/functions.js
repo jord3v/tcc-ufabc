@@ -129,6 +129,7 @@ if (edit) {
                         switch (inputType) {
                             case 'input':
                             case 'textarea':
+                                console.log(data[key] + 'recebe: '+inputField.name)
                                 inputField.value = data[key];
                                 if (inputField.type === 'radio' || inputField.type === 'checkbox') {
                                     inputField.checked = data[key];

@@ -6,10 +6,11 @@ use App\Models\Company;
 use App\Models\Payment;
 use App\Models\Report;
 use App\Services\PHPWord;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use ZipArchive;
-use Illuminate\Support\Facades\File;
 
 
 class PaymentController extends Controller
@@ -102,9 +103,15 @@ class PaymentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Payment $payment)
+    public function show(string $id): JsonResponse
     {
-        //
+        $payment = $this->payment->whereUuid($id)->firstOrFail();
+        $paymentArray = $payment->toArray();
+
+        if (isset($paymentArray['reference']) && is_string($paymentArray['reference'])) {
+            $paymentArray['reference'] = substr($paymentArray['reference'], 0, 7);
+        }
+        return response()->json($paymentArray);
     }
 
     /**
@@ -118,9 +125,11 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Payment $payment)
+    public function update(Request $request, string $id): RedirectResponse
     {
-        //
+        $payment = $this->payment->whereUuid($id)->firstOrFail();
+        $payment->update($request->all());
+        return back()->with('success', 'Pagamento atualizado com sucesso!');
     }
 
     /**

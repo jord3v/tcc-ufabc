@@ -102,8 +102,8 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                         <div class="card-actions">
                            <form action="{{route('payments.fill')}}" method="post" class="needs-validation" novalidate autocomplete="off">
                               @csrf
-                              <input type="hidden" name="notes[]" value="{{$report->id}}">
-                              <button type="submit" class="btn btn-success" {{$_GET['active'] == 0 ? 'disabled':''}}>Incluir pagamento</button>
+                              <input type="hidden" name="reports[]" value="{{$report->id}}">
+                              <button type="submit" class="btn btn-success" {{$_GET['active'] == 0 ? 'disabled':''}}>Adicionar pagamento</button>
                            </form>
                          </div>
                         @endif
@@ -156,7 +156,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                                       <path d="M19.5 21l3 -6"></path>
                                                    </svg>  Fazer download
                                                 </a>
-                                                <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit-payment" data-bs-id="{{$payment->id}}" data-bs-uuid="{{$payment->uuid}}" data-bs-invoice="{{$payment->invoice}}" data-bs-process="{{$payment->process}}" data-bs-reference="{{$payment->reference->format('Y-m')}}" data-bs-price="{{removeCurrency($payment->price)}}" data-bs-due_date="{{$payment->due_date->format('Y-m-d')}}" data-bs-signature_date="{{$payment->signature_date->format('Y-m-d')}}">
+                                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit" data-bs-id="{{$payment->uuid}}">
                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                       <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
@@ -200,3 +200,227 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
    </div>
 </div>
 @endsection
+@push('modals')
+@can('note-create')
+{{--! modal note-create--}}
+<div class="modal modal-blur fade" id="note-create" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+         <form action="{{route('notes.store')}}" method="POST" class="needs-validation" novalidate>
+            @csrf
+            <div class="modal-header">
+               <h5 class="modal-title">Nova nota de empenho</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-6">
+                     <div class="mb-3">
+                        <label class="form-label">Número</label>
+                        <input type="text" class="form-control" name="number" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-3">
+                     <div class="mb-3">
+                        <label class="form-label">Ano</label>
+                        <input type="number" name="year" class="form-control" min="1900" max="2099" step="1" value="{{now()->format('Y')}}" maxlength="4"/>
+                     </div>
+                  </div>
+                  <div class="col-lg-3">
+                     <div class="mb-3">
+                        <label class="form-label">Processo SECOM</label>
+                        <input type="text" class="process form-control" name="process" required>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-8">
+                     <div class="mb-3">
+                        <label class="form-label">Modalidade da licitação</label>
+                        <select class="form-select" name="modality" required>
+                           <option value="">Selecione a modalidade</option>
+                           <option value="Pregão Eletrônico">Pregão Eletrônico</option>
+                           <option value="Dispensa Eletrônica">Dispensa Eletrônica</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="col-lg-4">
+                     <div class="mb-3">
+                        <label class="form-label">Processo</label>
+                        <input type="text" class="process form-control" name="modality_process" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-12">
+                     <div class="mb-3">
+                        <label class="form-label">Objeto</label>
+                        <input type="text" class="form-control" name="service" required>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-6">
+                     <div class="mb-3">
+                        <label class="form-label">Valor total</label>
+                        <input type="text" class="money form-control" name="amount" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-6">
+                     <div class="mb-3">
+                        <label class="form-label">Valor mensal</label>
+                        <input type="text" class="money form-control" name="monthly_payment" required>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-6">
+                     <div class="mb-3">
+                        <label class="form-label">Data inicial</label>
+                        <input type="date" class="form-control" name="start" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-6">
+                     <div class="mb-3">
+                        <label class="form-label">Data final</label>
+                        <input type="date" class="form-control" name="end" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-12">
+                     <div>
+                        <label class="form-label">Observações</label>
+                        <textarea class="form-control" name="comments" rows="3"></textarea>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+               Cancelar
+               </a>
+               <button type="submit" class="btn btn-primary ms-auto">
+               Nova nota de empenho
+               </button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+@endcan
+@can('note-edit')
+{{--! modal note-edit--}}
+<div class="modal modal-blur fade" id="edit" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+         <form method="POST" class="needs-validation" novalidate>
+            @csrf
+            @method('PUT')
+            <div class="modal-header">
+               <h5 class="modal-title">Editar pagamento</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-4">
+                     <div class="mb-3">
+                        <label class="form-label">Número da Nota Fiscal/Fatura</label>
+                        <input type="hidden" name="uuid" required>
+                        <input type="text" class="form-control"  name="invoice" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-4">
+                     <div class="mb-3">
+                        <label class="form-label">Período de execução/referência</label>
+                        <input type="month" class="form-control"  name="reference" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-4">
+                     <div class="mb-3">
+                        <label class="form-label">Valor da Nota Fiscal/Fatura</label>
+                        <input type="text" class="money form-control"  name="price" required>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-4">
+                     <div class="mb-3">
+                        <label class="form-label">Protocolo SPW</label>
+                        <input type="text" class="process-spw form-control"  name="process" disabled>
+                     </div>
+                  </div>
+                  <div class="col-lg-4">
+                     <div class="mb-3">
+                        <label class="form-label">Vencimento </label>
+                        <input type="date" class="form-control"  name="due_date" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-4">
+                     <div class="mb-3">
+                        <label class="form-label">Data de elaboração</label>
+                        <input type="date" class="form-control"  name="signature_date" required>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+               Cancelar
+               </a>
+               <button type="submit" class="btn btn-primary ms-auto">
+               Editar pagamento
+               </button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+@endcan
+@can('note-delete')
+<div class="modal modal-blur fade" id="note-delete" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-sm modal-dialog-centered" user="document">
+      <div class="modal-content">
+         <form method="POST">
+            @method('DELETE')
+            @csrf
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-status bg-danger"></div>
+            <div class="modal-body text-center py-4">
+               <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+               <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M12 9v4" />
+                  <path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z" />
+                  <path d="M12 16h.01" />
+               </svg>
+               <h3>Tem certeza?</h3>
+               <div class="text-secondary">Você realmente deseja excluir esse localidade? O que você fizer não poderá ser desfeito.</div>
+            </div>
+            <div class="modal-footer">
+               <div class="w-100">
+                  <div class="row">
+                     <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                        Cancelar
+                        </a>
+                     </div>
+                     <div class="col">
+                        <button type="submit" class="btn btn-danger w-100">
+                           Excluir
+                        </button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+@endcan
+@endpush
+@push('scripts')
+@endpush

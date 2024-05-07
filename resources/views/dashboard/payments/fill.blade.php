@@ -99,7 +99,7 @@
                                 <thead>
                                     <tr>
                                         <th>Número da Nota Fiscal/Fatura</th>
-                                        <th>Período de execução/referência</th>
+                                        <th>Período de execução</th>
                                         <th>Valor da Nota Fiscal/Fatura – R$</th>
                                         <th>Vencimento</th>
                                         <th>Data de elaboração</th>

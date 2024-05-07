@@ -135,9 +135,11 @@ class PaymentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Payment $payment)
+    public function destroy(string $id): RedirectResponse
     {
-        //
+        $payment = $this->payment->whereUuid($id)->firstOrFail();
+        $payment->delete();
+        return back()->with('success', 'Pagamento removído com sucesso!');
     }
 
     /**

@@ -167,7 +167,16 @@ if (destroy) {
     destroy.addEventListener('show.bs.modal', event => {
         const button = event.relatedTarget
         const id = button.getAttribute('data-bs-id')
-        const route = `${window.location.href}/${id}`;
+        const route = `${window.location.origin + window.location.pathname}/${id}`;
         destroyForm.action = route;
     });
 }
+
+const selectElement = document.getElementById('year-note');
+selectElement.addEventListener('change', function() {
+    const selectedYear = this.value;
+    let currentUrl = window.location.href;
+    currentUrl = currentUrl.split('?')[0];
+    const newUrl = selectedYear ? `${currentUrl}?year=${selectedYear}` : currentUrl;
+    window.location.href = newUrl;
+});

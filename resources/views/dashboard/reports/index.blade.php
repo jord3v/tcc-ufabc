@@ -1,3 +1,6 @@
+@php 
+$_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
+@endphp
 @extends('layouts.app')
 @section('content')
 <div class="page-header d-print-none">
@@ -40,11 +43,14 @@
                </h3>
                </div>
                <div class="card-actions">
-                  <div class="btn-list">
-                     <a href="?year=2022" class="btn">2022</a>
-                     <a href="?year=2023" class="btn">2023</a>
-                     <a href="?year=2024" class="btn active">2024</a>
-                  </div>                
+                  <div class="form-floating">
+                     <select class="form-select" id="year-note">
+                        @for ($year = 2025; $year > 2020; $year--)
+                           <option value="{{ $year }}" {{$year == $_GET['year'] ? 'selected' : ''}}>notas de {{ $year }}</option>
+                        @endfor
+                     </select>
+                     <label for="year-note">Selecione o ano</label>
+                  </div>
                </div>
             </div>
             <div class="table-responsive">
@@ -99,7 +105,7 @@
 @can('report-create')
 {{--! modal report-create--}}
 <div class="modal modal-blur fade" id="report-create" tabindex="-1" user="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" user="document">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
          <form action="{{route('reports.store')}}" method="POST" class="needs-validation" novalidate>
             @csrf
@@ -194,7 +200,7 @@
 @endcan
 @can('report-delete')
 <div class="modal modal-blur fade" id="report-delete" tabindex="-1" user="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-sm modal-dialog-centered" user="document">
+   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
       <div class="modal-content">
          <form method="POST">
             @method('DELETE')
@@ -202,7 +208,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             <div class="modal-status bg-danger"></div>
             <div class="modal-body text-center py-4">
-               <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+               
                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                   <path d="M12 9v4" />

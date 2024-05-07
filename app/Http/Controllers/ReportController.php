@@ -23,9 +23,15 @@ class ReportController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $companies = $this->company->with(['user', 'reports.location', 'reports.note','reports.file', 'reports.payments'])->get();
+        $companies = $this->company
+        ->with(['user', 'reports.location', 'reports.note', 'reports.file', 'reports.payments'])
+        ->whereHas('reports.note', function ($query) use ($request) {
+            $query->where('year', $request->year ?? now()->format('Y'));
+        })
+        ->get();
+        
         $locations = $this->location->get();
         $notes = $this->note->get();
         $files = $this->file->get();

@@ -2,7 +2,6 @@
 $_GET['company'] = isset($_GET['company']) ? $_GET['company'] : '';
 $_GET['report'] = isset($_GET['report']) ? $_GET['report'] : '';
 $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
-
 @endphp
 @extends('layouts.app')
 @section('content')
@@ -24,6 +23,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
 </div>
 <div class="page-body">
    <div class="container-xl">
+      @include('layouts.flash-message')
       <div class="row row-deck row-cards">
          <div class="col-md-3">
             <form method="get" autocomplete="off" novalidate="" class="w-100 sticky-top">
@@ -164,7 +164,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                                       <path d="M16 5l3 3"></path>
                                                    </svg>  Editar
                                                 </a>
-                                                <a class="dropdown-item text-danger" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete-payment" data-bs-id="{{$payment->id}}" data-bs-uuid="{{$payment->uuid}}" data-bs-invoice="{{$payment->invoice}}" data-bs-reference="{{$payment->reference->format('Y-m')}}" data-bs-price="{{removeCurrency($payment->price)}}" data-bs-due_date="{{$payment->due_date->format('Y-m-d')}}" data-bs-signature_date="{{$payment->signature_date->format('Y-m-d')}}">
+                                                <a class="dropdown-item text-danger" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete" data-bs-id="{{$payment->uuid}}">
                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                       <path d="M4 7l16 0"></path>
@@ -334,7 +334,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                   </div>
                   <div class="col-lg-4">
                      <div class="mb-3">
-                        <label class="form-label">Período de execução/referência</label>
+                        <label class="form-label">Período de execução</label>
                         <input type="month" class="form-control"  name="reference" required>
                      </div>
                   </div>
@@ -351,7 +351,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                   <div class="col-lg-4">
                      <div class="mb-3">
                         <label class="form-label">Protocolo SPW</label>
-                        <input type="text" class="process-spw form-control"  name="process" disabled>
+                        <input type="text" class="form-control"  name="process">
                      </div>
                   </div>
                   <div class="col-lg-4">
@@ -381,9 +381,9 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
    </div>
 </div>
 @endcan
-@can('note-delete')
-<div class="modal modal-blur fade" id="note-delete" tabindex="-1" role="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-sm modal-dialog-centered" user="document">
+@can('payment-delete')
+<div class="modal modal-blur fade" id="delete" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
       <div class="modal-content">
          <form method="POST">
             @method('DELETE')
@@ -391,7 +391,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             <div class="modal-status bg-danger"></div>
             <div class="modal-body text-center py-4">
-               <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+               
                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                   <path d="M12 9v4" />
@@ -421,6 +421,4 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
    </div>
 </div>
 @endcan
-@endpush
-@push('scripts')
 @endpush

@@ -34,6 +34,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
     
     Route::get('/payments/{payment:uuid}', [PaymentController::class, 'show'])->name('payments.show');
     Route::put('/payments/{payment:uuid}', [PaymentController::class, 'update'])->name('payments.update');
+    Route::delete('/payments/{payment:uuid}', [PaymentController::class, 'destroy'])->name('payments.destroy');
 
     Route::post('/payments/fill', [PaymentController::class, 'fill'])->name('payments.fill');
     Route::get('/payments/download/{zipname}', [PaymentController::class, 'download'])->name('payments.download');

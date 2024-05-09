@@ -51,18 +51,18 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): JsonResponse
+    public function show(string $id)
     {
-        $company = $this->company->with('user')->findOrFail($id);
-        return response()->json($company);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Company $company)
+    public function edit(string $id): JsonResponse
     {
-        //
+        $company = $this->company->with('user')->findOrFail($id);
+        return response()->json($company);
     }
 
     /**

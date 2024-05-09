@@ -55,16 +55,16 @@ class UserController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $user = $this->user->with('roles')->findOrFail($id);
-        return response()->json($user);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): JsonResponse
     {
-        //
+        $user = $this->user->with('roles')->findOrFail($id);
+        return response()->json($user);
     }
 
     /**

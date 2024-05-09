@@ -56,18 +56,18 @@ class FileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): JsonResponse
+    public function show(string $id)
     {
-        $file = $this->file->findOrFail($id);
-        return response()->json($file);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(File $file)
+    public function edit(string $id): JsonResponse
     {
-        //
+        $file = $this->file->findOrFail($id);
+        return response()->json($file);
     }
 
     /**

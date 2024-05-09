@@ -46,18 +46,18 @@ class NoteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): JsonResponse
+    public function show(string $id)
     {
-        $note = $this->note->findOrFail($id);
-        return response()->json($note);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Note $note)
+    public function edit(string $id): JsonResponse
     {
-        //
+        $note = $this->note->findOrFail($id);
+        return response()->json($note);
     }
 
     /**

@@ -106,7 +106,7 @@ if (edit) {
         try {
             const button = event.relatedTarget;
             const id = button.getAttribute('data-bs-id');
-            const route = `${window.location.origin + window.location.pathname}/${id}`;
+            const route = `${window.location.origin + window.location.pathname}/${id}/edit`;
             const response = await fetch(route);
             if (!response.ok) {
                 throw new Error('Erro ao carregar dados do servidor');

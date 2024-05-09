@@ -103,7 +103,18 @@ class PaymentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): JsonResponse
+    public function show($uuid)
+    {
+        $payment = $this->payment->with('report.company', 'report.note')->where("uuid", $uuid)->first();
+        return response()
+            ->download($this->word->makeWord($payment))
+            ->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id): JsonResponse
     {
         $payment = $this->payment->whereUuid($id)->firstOrFail();
         $paymentArray = $payment->toArray();
@@ -112,14 +123,6 @@ class PaymentController extends Controller
             $paymentArray['reference'] = substr($paymentArray['reference'], 0, 7);
         }
         return response()->json($paymentArray);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Payment $payment)
-    {
-        //
     }
 
     /**

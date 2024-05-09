@@ -46,18 +46,18 @@ class LocationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): JsonResponse
+    public function show(string $id)
     {
-        $location = $this->location->with('user')->findOrFail($id);
-        return response()->json($location);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Location $location)
+    public function edit(string $id): JsonResponse
     {
-        //
+        $location = $this->location->with('user')->findOrFail($id);
+        return response()->json($location);
     }
 
     /**

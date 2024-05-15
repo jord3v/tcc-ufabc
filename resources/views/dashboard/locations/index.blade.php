@@ -41,7 +41,9 @@
                      <th class="w-75">localidade</th>
                      <th class="w-25">Responsável</th>
                      <th class="w-25">Situação</th>
-                     <th>Ação</th>
+                     @can('location-edit')
+                     <th></th>
+                     @endcan
                   </tr>
                </thead>
                <tbody>
@@ -64,13 +66,13 @@
                            </span>
                         @endif
                      </td>
+                     @can('location-edit')
                      <td>
-                        @can('location-edit')
                         <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#edit" data-bs-id="{{$location->id}}">
                         Editar
                         </a>
-                        @endcan
                      </td>
+                     @endcan
                   </tr>
                   @empty
                   @endforelse

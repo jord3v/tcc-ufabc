@@ -61,18 +61,22 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                         <th>Empenho</th>
                         <th>Gestor do relatório</th>
                         <th>Departamento</th>
+                        @can('payment-create')
                         <th></th>
+                        @endcan
                      </tr>
                   </thead>
                   <tbody>
                      @forelse ($reports as $company => $report)
                         <tr>
-                           <td colspan="4">
+                           <td colspan="{{auth()->user()->can('payment-create') ? '4' : '5'}}">
                               <strong>{{$company}}</strong>
                            </td>
+                           @can('payment-create')
                            <td>
                               <input type="checkbox" class="form-check-input group-checkbox">
                            </td>
+                           @endcan
                         </tr>
                         @foreach ($report as $item)
                         <tr>
@@ -80,7 +84,9 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                            <td>{{$item->note->number}}/{{$item->note->year}}<br>{{$item->note->modality}}</td>
                            <td>{{$item->manager}}</td>
                            <td>{{$item->department}}</td>
+                           @can('payment-create')
                            <td><input type="checkbox" class="form-check-input" name="reports[]" value="{{$item->id}}"></td>
+                           @endcan
                         </tr>
                         @endforeach
                      @empty
@@ -88,36 +94,15 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                            <td colspan="5" class="text-center bg-dark-lt"> nada encontrado</td>
                         </tr>
                      @endforelse
-                     {{--@foreach ($companies as $company)
-                        <tr>
-                           <td colspan="4">
-                              <strong>{{$company->name}} - {{$company->commercial_name}}<br><span class="text-muted">{{$company->cnpj}}</span></strong>
-                           </td>
-                           <td>
-                              <input type="checkbox" class="form-check-input group-checkbox">
-                           </td>
-                        </tr>    
-                        @forelse ($company->reports as $report)
-                           <tr>
-                              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path></svg>{{$report->location->name}}</td>
-                              <td>{{$report->note->number}}/{{$report->note->year}}<br>{{$report->note->modality}}</td>
-                              <td>{{$report->manager}}</td>
-                              <td>{{$report->department}}</td>
-                              <td><input type="checkbox" class="form-check-input" name="reports[]" value="{{$report->id}}"></td>
-                           </tr>
-                        @empty
-                           <tr>
-                              <td colspan="4">Nenhum relatório criado</td>
-                           </tr>
-                        @endforelse
-                     @endforeach--}}
                   </tbody>
                </table>
             </div>
             <div class="card-footer">
+               @can('payment-create')
                <div class="d-flex">
                   <button type="submit" class="btn btn-success ms-auto">Adicionar pagamentos</button>
                </div>
+               @endcan
             </div>
          </div>
       </form>

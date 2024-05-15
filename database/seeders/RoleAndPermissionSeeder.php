@@ -138,6 +138,10 @@ class RoleAndPermissionSeeder extends Seeder
             [
                 'name' => 'file-edit',
                 'module' => 'file'
+            ],
+            [
+                'name' => 'file-download',
+                'module' => 'file'
             ]
         ];
         foreach ($permissions as $permission) {

@@ -21,6 +21,7 @@ class PaymentController extends Controller
         $this->middleware('permission:payment-create', ['only' => ['create','store', 'fill']]);
         $this->middleware('permission:payment-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:payment-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:file-download', ['only' => ['download']]);
     }
     /**
      * Display a listing of the resource.

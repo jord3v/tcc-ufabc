@@ -41,7 +41,9 @@
                      <th class="w-75">Razão social/cnpj</th>
                      <th class="w-25">Nome comercial</th>
                      <th class="w-25">Responsável</th>
-                     <th>Ação</th>
+                     @can('company-edit')
+                     <th></th>
+                     @endcan
                   </tr>
                </thead>
                <tbody>
@@ -57,13 +59,13 @@
                      </td>
                      <td>{{$company->commercial_name}}</td>
                      <td>{{$company->user->name}}</td>
+                     @can('company-edit')
                      <td>
-                        @can('company-edit')
                         <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#edit" data-bs-id="{{$company->id}}">
                         Editar
                         </a>
-                        @endcan
                      </td>
+                     @endcan
                   </tr>
                   @empty
                   @endforelse

@@ -50,7 +50,9 @@
                      <th class="w-75">Nome do arquivo</th>
                      <th class="w-25">Responsável</th>
                      <th class="w-25">Situação</th>
-                     <th>Ação</th>
+                     @can('file-edit')
+                     <th></th>
+                     @endcan
                   </tr>
                </thead>
                <tbody>
@@ -75,18 +77,13 @@
                            </span>
                         @endif
                      </td>
+                     @can('file-edit')
                      <td>
-                        @can('file-edit')
                         <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#edit" data-bs-id="{{$file->id}}">
                         Editar
                         </a>
-                        @endcan
-                        @can('file-delete')
-                        <a href="#" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#file-delete" data-bs-id="{{$file->id}}">
-                        Excluir
-                        </a>
-                        @endcan
                      </td>
+                     @endcan
                   </tr>
                   @empty
                   @endforelse

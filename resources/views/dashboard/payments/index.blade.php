@@ -99,13 +99,15 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                            @endif
                         </div>
                         @if($report)
-                        <div class="card-actions">
-                           <form action="{{route('payments.fill')}}" method="post" class="needs-validation" novalidate autocomplete="off">
-                              @csrf
-                              <input type="hidden" name="reports[]" value="{{$report->id}}">
-                              <button type="submit" class="btn btn-success" {{$_GET['active'] == 0 ? 'disabled':''}}>Adicionar pagamento</button>
-                           </form>
-                         </div>
+                        @can('payment-create')
+                           <div class="card-actions">
+                              <form action="{{route('payments.fill')}}" method="post" class="needs-validation" novalidate autocomplete="off">
+                                 @csrf
+                                 <input type="hidden" name="reports[]" value="{{$report->id}}">
+                                 <button type="submit" class="btn btn-success" {{$_GET['active'] == 0 ? 'disabled':''}}>Adicionar pagamento</button>
+                              </form>
+                           </div>
+                           @endcan
                         @endif
                      </div>
                      <div class="card-body p-0">
@@ -119,7 +121,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                     <th>Vencimento</th>
                                     <th>Gerado</th>
                                     <th>Valor do Saldo<br> Contratual</th>
-                                    <th></th>
+                                    @canany(['file-download', 'payment-edit', 'payment-delete'])<th></th>@endcanany
                                  </tr>
                               </thead>
                               <tbody>
@@ -136,7 +138,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                     <td>{{$payment->due_date->format('d/m/Y')}}</td>
                                     <td>{{$payment->signature_date->format('d/m/Y')}}</td>
                                     <td class="w-1 fw-bold {{$saldo_acumulado < 0 ? 'text-danger':''}}">{{getPrice($saldo_acumulado)}}</td>
-                                    
+                                    @canany(['file-download', 'payment-edit', 'payment-delete'])
                                     <td>
                                        <div class="btn-list flex-nowrap">
                                           <div class="dropdown position-static">
@@ -144,6 +146,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                              Ações
                                              </button>
                                              <div class="dropdown-menu dropdown-menu-end">
+                                                @can('file-download')
                                                 <a class="dropdown-item" href="{{route('payments.show', $payment->uuid)}}">
                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-type-docx" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -156,6 +159,8 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                                       <path d="M19.5 21l3 -6"></path>
                                                    </svg>  Fazer download
                                                 </a>
+                                                @endcan
+                                                @can('payment-edit')
                                                 <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit" data-bs-id="{{$payment->uuid}}">
                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -164,6 +169,8 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                                       <path d="M16 5l3 3"></path>
                                                    </svg>  Editar
                                                 </a>
+                                                @endcan
+                                                @can('payment-delete')
                                                 <a class="dropdown-item text-danger" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete" data-bs-id="{{$payment->uuid}}">
                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -174,10 +181,12 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                                       <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
                                                    </svg>  Excluir
                                                 </a>
+                                                @endcan
                                              </div>
                                           </div>
                                        </div>
                                     </td>
+                                    @endcanany
                                  </tr>
                                  @empty
                                  <tr>
@@ -311,8 +320,8 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
    </div>
 </div>
 @endcan
-@can('note-edit')
-{{--! modal note-edit--}}
+@can('payment-edit')
+{{--! modal payment-edit--}}
 <div class="modal modal-blur fade" id="edit" tabindex="-1" role="dialog" aria-hidden="true">
    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">

@@ -76,6 +76,7 @@
                            </span>
                         </a>
                      </li>
+                     @can('company-list')
                      <li class="nav-item {{request()->routeIs('companies.index') ? 'active': ''}}">
                         <a class="nav-link" href="{{route('companies.index')}}">
                            <span class="nav-link-title">
@@ -84,6 +85,8 @@
                            </span>
                         </a>
                      </li>
+                     @endcan
+                     @can('report-list')
                      <li class="nav-item {{request()->routeIs('reports.index') ? 'active': ''}}">
                         <a class="nav-link" href="{{route('reports.index')}}">
                            <span class="nav-link-title">
@@ -92,6 +95,8 @@
                            </span>
                         </a>
                      </li>
+                     @endcan
+                     @can('note-list')
                      <li class="nav-item {{request()->routeIs('notes.index') ? 'active': ''}}">
                         <a class="nav-link" href="{{route('notes.index')}}">
                            <span class="nav-link-title">
@@ -100,6 +105,8 @@
                            </span>
                         </a>
                      </li>
+                     @endcan
+                     @can('payment-list')
                      <li class="nav-item {{request()->routeIs('payments.index') ? 'active': ''}}">
                         <a class="nav-link" href="{{route('payments.index')}}">
                            <span class="nav-link-title">
@@ -108,6 +115,7 @@
                            </span>
                         </a>
                      </li>
+                     @endcan
                      @canany(['user-list', 'role-list', 'location-list', 'file-list'])
                      <li class="nav-item {{request()->routeIs(['users.index', 'roles-and-permissions.index', 'locations.index', 'files.index']) ? 'active': ''}} dropdown">
                         <a class="nav-link dropdown-toggle" href="#settings" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">

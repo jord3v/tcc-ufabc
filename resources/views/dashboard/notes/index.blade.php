@@ -44,7 +44,7 @@
                      <th>Valor mensal</th>
                      <th>Período</th>
                      <th>Situação</th>
-                     <th>Ação</th>
+                     @can('note-edit')<th></th>@endcan
                   </tr>
                </thead>
                <tbody>
@@ -80,13 +80,13 @@
                            </span>
                         @endif
                      </td>
+                     @can('note-edit')
                      <td>
-                        @can('note-edit')
                         <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#edit" data-bs-id="{{$note->id}}">
                         Editar
                         </a>
-                        @endcan
                      </td>
+                     @endcan
                    </tr>
                   @empty
                   @endforelse

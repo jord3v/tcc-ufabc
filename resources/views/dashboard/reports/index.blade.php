@@ -65,7 +65,30 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                      </tr>
                   </thead>
                   <tbody>
-                     @foreach ($companies as $company)
+                     @forelse ($reports as $company => $report)
+                        <tr>
+                           <td colspan="4">
+                              <strong>{{$company}}</strong>
+                           </td>
+                           <td>
+                              <input type="checkbox" class="form-check-input group-checkbox">
+                           </td>
+                        </tr>
+                        @foreach ($report as $item)
+                        <tr>
+                           <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path></svg>{{$item->location->name}}</td>
+                           <td>{{$item->note->number}}/{{$item->note->year}}<br>{{$item->note->modality}}</td>
+                           <td>{{$item->manager}}</td>
+                           <td>{{$item->department}}</td>
+                           <td><input type="checkbox" class="form-check-input" name="reports[]" value="{{$item->id}}"></td>
+                        </tr>
+                        @endforeach
+                     @empty
+                        <tr>
+                           <td colspan="5" class="text-center bg-dark-lt"> nada encontrado</td>
+                        </tr>
+                     @endforelse
+                     {{--@foreach ($companies as $company)
                         <tr>
                            <td colspan="4">
                               <strong>{{$company->name}} - {{$company->commercial_name}}<br><span class="text-muted">{{$company->cnpj}}</span></strong>
@@ -87,7 +110,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                               <td colspan="4">Nenhum relatório criado</td>
                            </tr>
                         @endforelse
-                     @endforeach
+                     @endforeach--}}
                   </tbody>
                </table>
             </div>

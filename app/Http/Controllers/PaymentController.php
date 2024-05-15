@@ -163,7 +163,7 @@ class PaymentController extends Controller
 
     private function createZipFile($zipname, $files)
     {
-        $this->zip->open($zipname, ZipArchive::CREATE);
+        $this->zip->open($zipname, $this->zip::CREATE);
         foreach ($files as $file) {
             $this->zip->addFile($file, basename($file));
         }

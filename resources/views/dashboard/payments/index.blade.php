@@ -368,6 +368,28 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                   </div>
                </div>
             </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-12">
+                     <div class="mb-3">
+                        <label class="form-label">Eventuais ocorrências detectadas</label>
+                        <textarea name="occurrences[occurrence]" class="form-control" cols="30" rows="3"></textarea>
+                     </div>
+                  </div>
+                  <div class="col-lg-12">
+                     <div class="mb-3">
+                        <label class="form-label">Eventuais ocorrências/Falhas na execução do contrato</label>
+                        <textarea name="occurrences[failures]" class="form-control" cols="30" rows="3"></textarea>
+                     </div>
+                  </div>
+                  <div class="col-lg-12">
+                     <div class="mb-3">
+                        <label class="form-label">Sugestões de medidas a serem implementadas</label>
+                        <textarea name="occurrences[suggestions]" class="form-control" cols="30" rows="3"></textarea>
+                     </div>
+                  </div>
+               </div>
+            </div>
             <div class="modal-footer">
                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                Cancelar

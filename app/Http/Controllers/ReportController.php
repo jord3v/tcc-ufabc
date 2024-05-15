@@ -25,17 +25,19 @@ class ReportController extends Controller
      */
     public function index(Request $request): View
     {
-        $companies = $this->company
-        ->with(['user', 'reports.location', 'reports.note', 'reports.file', 'reports.payments'])
-        ->whereHas('reports.note', function ($query) use ($request) {
+        $reports = $this->report
+        ->with(['company.user', 'location', 'note', 'file', 'payments'])
+        ->whereHas('note', function ($query) use ($request) {
             $query->where('year', $request->year ?? now()->format('Y'));
         })
-        ->get();
-        
+        ->get()
+        ->groupBy('company.name');
+
         $locations = $this->location->get();
         $notes = $this->note->get();
         $files = $this->file->get();
-        return view('dashboard.reports.index', compact('locations', 'companies', 'notes', 'files'));
+        $companies = $this->company->get();
+        return view('dashboard.reports.index', compact('locations', 'reports', 'notes', 'files', 'companies'));
     }
 
     /**

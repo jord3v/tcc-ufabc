@@ -34,6 +34,14 @@
       <div class="card">
          <div class="card-header">
             <h3 class="card-title">Lista de templates</h3>
+            @can('file-create')
+               <div class="card-actions">
+                  <a href="#" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#file-help">
+                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-template"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 1a1 1 0 0 1 1 -1h14a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-14a1 1 0 0 1 -1 -1z" /><path d="M4 12m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 12l6 0" /><path d="M14 16l6 0" /><path d="M14 20l6 0" /></svg>
+                     Instruções para a criação de template
+                  </a>
+               </div>
+            @endcan
          </div>
          <div class="table-responsive">
             <table class="table card-table table-vcenter text-nowrap datatable">
@@ -119,6 +127,56 @@
                </button>
             </div>
          </form>
+      </div>
+   </div>
+</div>
+<div class="modal modal-blur fade" id="file-help" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        
+            <div class="modal-header">
+               <h5 class="modal-title">Instruções para a criação de template</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               <div class="markdown text-secondary mb-2">
+                  <p>Abaixo segue todas as variáveis que devem ser incluídas em seu documento no formato .docx. Segue exemplo disponível para download <a href="{{asset('example.docx')}}">Clique aqui</a></p>
+               </div>
+               @foreach (config('options') as $key => $option)
+               <p class="fw-bold text-primary">{{$key}}</p>
+               <table class="table table-sm table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Descrição</th>
+                      <th class="text-end">Variável para incluir no template</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  @foreach ($option as $item => $var)
+                     <tr>
+                        @if ($item != "notas")
+                           <td class="fw-bold">
+                              {!!$var!!}
+                           </td>
+                           <td class="w-1 text-end">
+                              <code>${{!!$item!!}}</code>
+                           </td>    
+                        @else
+                           <td class="fw-bold" colspan="2">
+                              {!!$var!!}
+                           </td>
+                        @endif
+                     </tr>
+                  @endforeach
+               </tbody>
+            </table>                     
+               @endforeach
+            </div>
+            <div class="modal-footer">
+               <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+               Fechar
+               </a>
+            </div>
       </div>
    </div>
 </div>

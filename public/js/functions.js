@@ -1,9 +1,15 @@
-function reloadPageOnClose(eventType) {
+function reloadPageOnClose(eventType, ignoreModalToReload) {
     document.addEventListener(eventType, function(event) {
+        if (ignoreModalToReload.includes(event.target)) {
+            return;
+        }
         location.reload();
     });
 }
-reloadPageOnClose('hidden.bs.modal');
+var ignoreModalToReload = [
+    document.querySelector('#occurrences'),
+];
+reloadPageOnClose('hidden.bs.modal', ignoreModalToReload);
 reloadPageOnClose('hidden.bs.offcanvas');
 
 function add(event) {
@@ -16,12 +22,12 @@ function add(event) {
     const report = botao.getAttribute('data-bs-report')
 
     novaLinha.innerHTML = `
-            <td><input type="hidden" class="form-control" name="payments[${rand}][report_id]" value="${report}" required><input type="text" class="form-control" name="payments[${rand}][invoice]" required></td>
+            <td><div class="d-none"><input type="hidden" name="payments[${rand}][report_id]" value="${report}" required=""><textarea name="payments[${rand}][occurrences][occurrence]"></textarea><textarea name="payments[${rand}][occurrences][failures]"></textarea><textarea name="payments[${rand}][occurrences][suggestions]"></textarea></div><input type="text" class="form-control" name="payments[${rand}][invoice]" required></td>
             <td><input type="month" class="form-control" name="payments[${rand}][reference]" required></td>
             <td><input type="text" class="form-control" name="payments[${rand}][price]" required></td>
             <td><input type="date" class="form-control" name="payments[${rand}][due_date]" required></td>
             <td><input type="date" class="form-control" name="payments[${rand}][signature_date]" required></td>
-            <td><button type="button" class="btn-link" onclick="remove(this)">Remover</button></td>
+            <td><div class="row"><div class="col-6" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Eventuais ocorrências" data-bs-original-title="Eventuais ocorrências"><button type="button" class="btn btn-default btn-icon text-primary" data-bs-toggle="modal" data-bs-target="#occurrences" data-bs-id="${rand}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-alert"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M14 3v4a1 1 0 0 0 1 1h4"></path><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path><path d="M12 17l.01 0"></path><path d="M12 11l0 3"></path></svg></button></div><div class="col-6" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Remover pagamento" data-bs-original-title="Remover pagamento"><button type="button" class="btn btn-default btn-icon text-danger" onclick="remove(this)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg></button></div></div></td>
         `;
     tabela.appendChild(novaLinha);
 }
@@ -113,7 +119,7 @@ if (edit) {
             }
             const data = await response.json();
             const editForm = edit.querySelector('form');
-            editForm.action = route;
+            editForm.action = route.replace('/edit', '');
             for (const key in data) {
                 if (Array.isArray(data[key])) {
                     data[key].forEach(item => {
@@ -122,6 +128,11 @@ if (edit) {
                             checkbox.checked = true;
                         }
                     });
+                } else if (isObject(data[key])) {
+                    var array = data[key];
+                    for (const item in array) {
+                        edit.querySelector(`textarea[name="${key}[${item}]"]`).value = array[item];
+                    }
                 } else {
                     const inputField = edit.querySelector(`[name="${key}"]`);
                     if (inputField) {
@@ -129,7 +140,7 @@ if (edit) {
                         switch (inputType) {
                             case 'input':
                             case 'textarea':
-                                console.log(data[key] + 'recebe: '+inputField.name)
+                                //console.log(inputField.name + ':' +data[key])
                                 inputField.value = data[key];
                                 if (inputField.type === 'radio' || inputField.type === 'checkbox') {
                                     inputField.checked = data[key];
@@ -161,6 +172,63 @@ if (edit) {
     });
 }
 
+const modalOccurrences = document.getElementById('occurrences');
+
+if (modalOccurrences) {
+    modalOccurrences.addEventListener('show.bs.modal', async event => {
+        const button = event.relatedTarget;
+        const id = button.getAttribute('data-bs-id');
+        const occurrenceIdField = modalOccurrences.querySelector('[name="occurrence_id"]');
+        const occurrenceTextarea = modalOccurrences.querySelector('[name="occurrence"]');
+        const failuresTextarea = modalOccurrences.querySelector('[name="failures"]');
+        const suggestionsTextarea = modalOccurrences.querySelector('[name="suggestions"]');
+        if (occurrenceIdField && occurrenceTextarea && failuresTextarea && suggestionsTextarea) {
+            occurrenceIdField.value = id;
+            occurrenceTextarea.value = getValue(`textarea[name="payments[${id}][occurrences][occurrence]"]`);
+            failuresTextarea.value = getValue(`textarea[name="payments[${id}][occurrences][failures]"]`);
+            suggestionsTextarea.value = getValue(`textarea[name="payments[${id}][occurrences][suggestions]"]`);
+        }
+    });
+
+    modalOccurrences.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const occurrenceIdInput = modalOccurrences.querySelector('[name="occurrence_id"]');
+        const occurrenceInput = modalOccurrences.querySelector('[name="occurrence"]');
+        const failuresInput = modalOccurrences.querySelector('[name="failures"]');
+        const suggestionsInput = modalOccurrences.querySelector('[name="suggestions"]');
+        if (occurrenceIdInput && occurrenceInput && failuresInput && suggestionsInput) {
+            const occurrenceId = occurrenceIdInput.value;
+            const occurrence = occurrenceInput.value;
+            const failures = failuresInput.value;
+            const suggestions = suggestionsInput.value;
+            setValue(`textarea[name="payments[${occurrenceId}][occurrences][occurrence]"]`, occurrence);
+            setValue(`textarea[name="payments[${occurrenceId}][occurrences][failures]"]`, failures);
+            setValue(`textarea[name="payments[${occurrenceId}][occurrences][suggestions]"]`, suggestions);
+            const bootstrapModal = bootstrap.Modal.getInstance(modalOccurrences);
+            if (bootstrapModal) {
+                bootstrapModal.hide();
+            }
+        }
+    });
+}
+
+function getValue(selector) {
+    const element = document.querySelector(selector);
+    return element ? element.value : '';
+}
+
+function setValue(selector, value) {
+    const element = document.querySelector(selector);
+    if (element) {
+        element.value = value;
+    }
+}
+
+function isObject(value) {
+    return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+
 const destroy = document.getElementById('delete')
 if (destroy) {
     const destroyForm = destroy.querySelector('form');
@@ -173,10 +241,12 @@ if (destroy) {
 }
 
 const selectElement = document.getElementById('year-note');
-selectElement.addEventListener('change', function() {
-    const selectedYear = this.value;
-    let currentUrl = window.location.href;
-    currentUrl = currentUrl.split('?')[0];
-    const newUrl = selectedYear ? `${currentUrl}?year=${selectedYear}` : currentUrl;
-    window.location.href = newUrl;
-});
+if (selectElement) {
+    selectElement.addEventListener('change', function() {
+        const selectedYear = this.value;
+        let currentUrl = window.location.href;
+        currentUrl = currentUrl.split('?')[0];
+        const newUrl = selectedYear ? `${currentUrl}?year=${selectedYear}` : currentUrl;
+        window.location.href = newUrl;
+    });
+}

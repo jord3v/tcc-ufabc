@@ -72,11 +72,16 @@ class PHPWord
             "valor_apresentado" => $this->getFormattedPaymentValue($object),
             "vencimento" => $object->due_date->format("d/m/Y"),
             "mes_referencia" => reference($object->reference),
+            //ocorrências
+            "eventuais_ocorrencias" => $object->occurrences['occurrence'],
+            "eventuais_falhas" => $object->occurrences['failures'],
+            "sugestoes" => $object->occurrences['suggestions'],
             "fatura" => $object->invoice,
             //relatório elaborado por:
             "autor" => $object->report->manager,
             "departamento" => $object->report->department,
         ]);
+
     }
 
     private function fillPaymentHistory(

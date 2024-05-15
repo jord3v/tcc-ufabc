@@ -23,6 +23,7 @@ class Payment extends Model
         'invoice',
         'process',
         'reference',	
+        'occurrences',
         'price',	
         'due_date',	
         'signature_date'
@@ -45,6 +46,7 @@ class Payment extends Model
     {
         return [
             'reference' => 'datetime:Y-m-d',
+            'occurrences' => 'array',
             'due_date'  => 'datetime:Y-m-d',
             'signature_date' => 'datetime:Y-m-d'
         ];

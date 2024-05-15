@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('invoice');
             $table->string('process')->nullable();
             $table->date('reference');
+            $table->json('occurrences')->nullable();
             $table->decimal('price', 10, 2);
             $table->date('due_date');
             $table->date('signature_date');

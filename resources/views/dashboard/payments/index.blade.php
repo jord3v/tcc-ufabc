@@ -115,7 +115,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                            <table class="table card-table table-vcenter text-nowrap datatable">
                               <thead>
                                  <tr>
-                                    <th>Período de execução<br>referência / Pro SPW</th>
+                                    <th>Período de execução<br>referência / Protocolo</th>
                                     <th>Número da Nota<br> Fiscal/Fatura</th>
                                     <th>Valor da Nota<br> Fiscal/Fatura</th>
                                     <th>Vencimento</th>
@@ -359,7 +359,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                <div class="row">
                   <div class="col-lg-4">
                      <div class="mb-3">
-                        <label class="form-label">Protocolo SPW</label>
+                        <label class="form-label">Protocolo</label>
                         <input type="text" class="form-control"  name="process">
                      </div>
                   </div>

@@ -8,6 +8,7 @@ use App\Http\Controllers\{
     LocationController,
     NoteController,
     PaymentController,
+    ProtocolController,
     ReportController,
     UserController,
     RoleAndPermissionController
@@ -27,6 +28,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => ['auth', 'prevent-demo-a
         'locations' => LocationController::class,
         'notes' => NoteController::class,
         'payments' => PaymentController::class,
+        'protocols' => ProtocolController::class,
         'reports' => ReportController::class,
         'roles-and-permissions' => RoleAndPermissionController::class,
         'users' => UserController::class,
@@ -38,4 +40,5 @@ Route::group(['prefix' => 'dashboard',  'middleware' => ['auth', 'prevent-demo-a
     Route::post('/payments/fill', [PaymentController::class, 'fill'])->name('payments.fill');
     Route::get('/payments/download/{zipname}', [PaymentController::class, 'download'])->name('payments.download');
     Route::put('/update-profile', [UserController::class, 'updateProfile'])->name('users.update-profile'); 
+    Route::post('protocols/attachment', [ProtocolController::class, 'attachment'])->name('protocols.attachment');
 });

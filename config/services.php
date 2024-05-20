@@ -31,4 +31,8 @@ return [
         ],
     ],
 
+    'erp' => [
+        'url'   => env('ERP_URL'),
+        'key' => env('ERP_KEY'),
+    ],
 ];

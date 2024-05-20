@@ -100,7 +100,7 @@
                <div class="mb-3">
                   <label class="form-label">Nome comercial</label>
                   <input type="text" name="commercial_name" class="form-control" required>
-                  <small class="form-hint">Nome que vai ser lançado no protocolo SPW</small>
+                  <small class="form-hint">Nome que vai ser lançado no protocolo</small>
                </div>
                <div class="mb-3">
                   <label class="form-label">CNPJ</label>
@@ -141,7 +141,7 @@
                <div class="mb-3">
                   <label class="form-label">Nome comercial</label>
                   <input type="text" name="commercial_name" class="form-control" required>
-                  <small class="form-hint">Nome que vai ser lançado no protocolo SPW</small>
+                  <small class="form-hint">Nome que vai ser lançado no protocolo</small>
                </div>
                <div class="mb-3">
                   <label class="form-label">CNPJ</label>

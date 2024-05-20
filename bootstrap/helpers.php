@@ -68,3 +68,21 @@ if (!function_exists("removeCurrency")) {
         return trim(str_replace("R$", "", getPrice($value)));
     }
 }
+
+if (!function_exists("multiplePayment")) {
+    function multiplePayment($payment)
+    {
+        return $payment
+            ->where("report_id", $payment->report_id)
+            ->where("reference", $payment->reference)
+            ->where("signature_date", $payment->signature_date)
+            ->get();
+    }
+}
+
+if (!function_exists("formatPeriod")) {
+    function formatPeriod($start, $end)
+    {
+        return $start->format('d/m/Y').' até '.$end->format('d/m/Y');
+    }
+}

@@ -22,6 +22,9 @@
          body {
             font-feature-settings: "cv03", "cv04", "cv11";
          }
+         .highlight {
+             background-color: #f0f1f3;
+         }
       </style>
       @if (session('download'))
          <meta http-equiv="refresh" content="1;url={{route('payments.download', session('download'))}}">
@@ -112,6 +115,16 @@
                            <span class="nav-link-title">
                               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-wallet"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12" /><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" /></svg>
                               Pagamentos
+                           </span>
+                        </a>
+                     </li>
+                     @endcan
+                     @can('payment-list')
+                     <li class="nav-item {{request()->routeIs('protocols.index') ? 'active': ''}}">
+                        <a class="nav-link" href="{{route('protocols.index')}}">
+                           <span class="nav-link-title">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-databricks"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 17l9 5l9 -5v-3l-9 5l-9 -5v-3l9 5l9 -5v-3l-9 5l-9 -5l9 -5l5.418 3.01"></path></svg>
+                              Protocolos
                            </span>
                         </a>
                      </li>
@@ -255,6 +268,98 @@
                   </div>
                </form>
             </div>
+         </div>
+      </div>
+      <div class="modal modal-blur fade" id="add-attachment" tabindex="-1" role="dialog" aria-hidden="true">
+         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+           <form action="{{route('protocols.attachment')}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
+            @csrf
+           <div class="modal-content">
+             <div class="modal-header">
+               <h5 class="modal-title">Incluir anexo</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+             <input type="hidden" name="id">
+             <input type="hidden" name="uuid">
+             <div class="modal-body">
+               <div class="form-selectgroup-boxes row mb-3">
+                 <div class="col-lg-3">
+                   <label class="form-selectgroup-item">
+                     <input type="radio" name="tipo" value="148" class="form-selectgroup-input" required>
+                     <span class="form-selectgroup-label d-flex align-items-center p-3">
+                       <span class="me-3">
+                         <span class="form-selectgroup-check"></span>
+                       </span>
+                       <span class="form-selectgroup-label-content">
+                         <span class="form-selectgroup-title strong mb-1">Circunstanciado</span>
+                         <span class="d-block text-secondary">148</span>
+                       </span>
+                     </span>
+                   </label>
+                 </div>
+                 <div class="col-lg-3">
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="tipo" value="147" class="form-selectgroup-input" required>
+                    <span class="form-selectgroup-label d-flex align-items-center p-3">
+                      <span class="me-3">
+                        <span class="form-selectgroup-check"></span>
+                      </span>
+                      <span class="form-selectgroup-label-content">
+                        <span class="form-selectgroup-title strong mb-1">N. Fiscal</span>
+                        <span class="d-block text-secondary">147</span>
+                      </span>
+                    </span>
+                  </label>
+                </div>
+                <div class="col-lg-3">
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="tipo" value="48" class="form-selectgroup-input" required>
+                    <span class="form-selectgroup-label d-flex align-items-center p-3">
+                      <span class="me-3">
+                        <span class="form-selectgroup-check"></span>
+                      </span>
+                      <span class="form-selectgroup-label-content">
+                        <span class="form-selectgroup-title strong mb-1">Boleto</span>
+                        <span class="d-block text-secondary">48</span>
+                      </span>
+                    </span>
+                  </label>
+                </div>
+                <div class="col-lg-3">
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="tipo" value="150" class="form-selectgroup-input" required>
+                    <span class="form-selectgroup-label d-flex align-items-center p-3">
+                      <span class="me-3">
+                        <span class="form-selectgroup-check"></span>
+                      </span>
+                      <span class="form-selectgroup-label-content">
+                        <span class="form-selectgroup-title strong mb-1">SICAF</span>
+                        <span class="d-block text-secondary">150</span>
+                      </span>
+                    </span>
+                  </label>
+                </div>
+               </div>
+             </div>
+             <div class="modal-body">
+               <div class="row">
+                 <div class="col-lg-12">
+                   <div class="mb-3">
+                     <input type="file" name="arquivo" class="form-control" accept=".pdf" required/>
+                   </div>
+                 </div>
+               </div>
+             </div>
+             <div class="modal-footer">
+               <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+               Cancelar
+               </a>
+               <button type="submit" class="btn btn-primary ms-auto">
+               Incluir anexo
+               </button>
+             </div>
+           </div>
+           </form>
          </div>
       </div>
       <script src="{{ mix('js/app.js') }}" defer></script>

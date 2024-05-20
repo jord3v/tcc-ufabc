@@ -9,8 +9,7 @@ function reloadPageOnClose(eventType, ignoreModalToReload) {
 var ignoreModalToReload = [
     document.querySelector('#occurrences'),
 ];
-reloadPageOnClose('hidden.bs.modal', ignoreModalToReload);
-reloadPageOnClose('hidden.bs.offcanvas');
+
 
 function add(event) {
     var botao = event.target;
@@ -254,3 +253,39 @@ if (selectElement) {
         window.location.href = newUrl;
     });
 }
+
+const addAttachment = document.getElementById('add-attachment')
+            if (addAttachment) {
+               addAttachment.addEventListener('show.bs.modal', event => {
+               const button = event.relatedTarget
+               const id = button.getAttribute('data-bs-id')
+               const uuid = button.getAttribute('data-bs-uuid')
+               const process = button.getAttribute('data-bs-process')
+               addAttachment.querySelector('input[name="id"]').value = id;
+               addAttachment.querySelector('input[name="uuid"]').value = uuid;
+               const title = addAttachment.querySelector('.modal-title')
+               title.textContent = `Incluir anexo no protocolo ${process}`
+            })
+         }
+
+function highlightLines() {
+    var linhas = document.querySelectorAll("#tabela tr");
+    console.log(linhas);
+    linhas.forEach(function (linha, index) {
+        for (var i = index + 1; i < linhas.length; i++) {
+            if (
+                linha.getAttribute("data-company") === linhas[i].getAttribute("data-company") &&
+                linha.getAttribute("data-reference") === linhas[i].getAttribute("data-reference") &&
+                linha.getAttribute("data-location") === linhas[i].getAttribute("data-location")
+            ) {
+                // Adicionar classe de destaque
+                linha.classList.add("highlight");
+                linhas[i].classList.add("highlight");
+            }
+        }
+    });
+}
+
+reloadPageOnClose('hidden.bs.modal', ignoreModalToReload);
+reloadPageOnClose('hidden.bs.offcanvas');
+highlightLines();

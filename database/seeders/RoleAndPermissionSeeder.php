@@ -96,6 +96,22 @@ class RoleAndPermissionSeeder extends Seeder
                 'module' => 'payment'
             ],
             [
+                'name' => 'protocol-list',
+                'module' => 'protocol'
+            ],
+            [
+                'name' => 'protocol-create',
+                'module' => 'protocol'
+            ],
+            [
+                'name' => 'protocol-edit',
+                'module' => 'protocol'
+            ],
+            [
+                'name' => 'protocol-delete',
+                'module' => 'protocol'
+            ],
+            [
                 'name' => 'note-list',
                 'module' => 'note'
             ],

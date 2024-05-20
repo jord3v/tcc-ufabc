@@ -46,7 +46,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                   <div class="form-floating">
                      <select class="form-select" id="year-note">
                         @for ($year = 2025; $year > 2020; $year--)
-                           <option value="{{ $year }}" {{$year == $_GET['year'] ? 'selected' : ''}}>notas de {{ $year }}</option>
+                           <option value="{{ $year }}" {{$year == $_GET['year'] ? 'selected' : ''}}>Empenhos de {{ $year }}</option>
                         @endfor
                      </select>
                      <label for="year-note">Selecione o ano</label>

@@ -56,12 +56,7 @@
                         </div>
                      </td>
                      <td>
-                        @foreach ($user->roles as $role)
-                           <span class="status status-blue">
-                              <span class="status-dot"></span>
-                              {{$role->name}}
-                           </span>
-                        @endforeach
+                        {{ $user->roles->pluck('name')->implode(', ') }}
                      </td>
                      @canany(['user-edit', 'user-delete'])
                      <td>

@@ -9,16 +9,7 @@
                page-pretitle
             </div>
             <h2 class="page-title">
-               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M3 21l18 0"></path>
-                  <path d="M5 21v-14l8 -4v18"></path>
-                  <path d="M19 21v-10l-6 -4"></path>
-                  <path d="M9 9l0 .01"></path>
-                  <path d="M9 12l0 .01"></path>
-                  <path d="M9 15l0 .01"></path>
-                  <path d="M9 18l0 .01"></path>
-               </svg>
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-wallet"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"></path><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4"></path></svg>
                Adicionar pagamentos
             </h2>
          </div>

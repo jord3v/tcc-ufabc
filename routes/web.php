@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Auth::routes(['register' => false, 'reset' => true]);
 
-Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
+Route::group(['prefix' => 'dashboard',  'middleware' => ['auth', 'prevent-demo-actions']], function(){
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resources([
         'companies' => CompanyController::class,
@@ -35,8 +35,6 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
     Route::get('/payments/{payment:uuid}', [PaymentController::class, 'show'])->name('payments.show');
     Route::put('/payments/{payment:uuid}', [PaymentController::class, 'update'])->name('payments.update');
     Route::delete('/payments/{payment:uuid}', [PaymentController::class, 'destroy'])->name('payments.destroy');
-
     Route::post('/payments/fill', [PaymentController::class, 'fill'])->name('payments.fill');
     Route::get('/payments/download/{zipname}', [PaymentController::class, 'download'])->name('payments.download');
-
 });

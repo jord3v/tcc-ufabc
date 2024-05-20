@@ -25,7 +25,7 @@
 </div>
 <div class="page-body">
    <div class="container-xl">
-      @include('layouts.flash-message')
+      
       <form action="{{route('payments.store')}}" method="post" class="needs-validation" novalidate="" autocomplete="off">
          @csrf
          <div class="card">

@@ -109,6 +109,8 @@ Acesse o seu aplicativo em [http://localhost:8000](http://localhost:8000).
 
 - [apexcharts/apexcharts.js](https://github.com/apexcharts/apexcharts.js)
 
+- [realrashid/sweet-alert](https://github.com/realrashid/sweet-alert)
+
   
 
 ### Contribuição

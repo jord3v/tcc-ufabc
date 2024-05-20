@@ -23,7 +23,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
 </div>
 <div class="page-body">
    <div class="container-xl">
-      @include('layouts.flash-message')
+      
       <div class="row row-deck row-cards">
          <div class="col-md-3">
             <form method="get" autocomplete="off" novalidate="" class="w-100 sticky-top">

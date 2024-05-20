@@ -17,7 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'prevent-demo-actions' => \App\Http\Middleware\PreventDemoUserActions::class,
+            'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         ]);
+        $middleware->appendToGroup('web', \RealRashid\SweetAlert\ToSweetAlert::class,);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -32,7 +32,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
 </div>
 <div class="page-body">
    <div class="container-xl">
-      @include('layouts.flash-message')
+      
       <form action="{{route('payments.fill')}}" method="POST" class="needs-validation" novalidate>
          @csrf
          <div class="card">

@@ -29,7 +29,7 @@
 </div>
 <div class="page-body">
    <div class="container-xl">
-      @include('layouts.flash-message')
+      
       <div class="card">
          <div class="card-header">
             <h3 class="card-title">Lista de notas empenho</h3>

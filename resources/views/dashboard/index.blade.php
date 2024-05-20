@@ -22,7 +22,7 @@
 </div>
 <div class="page-body">
    <div class="container-xl">
-      @include('layouts.flash-message')
+      
       <div class="row row-deck row-cards">
          @canany(['company-list', 'report-list', 'note-list', 'location-list'])
          <div class="col-md-6 col-lg-4">

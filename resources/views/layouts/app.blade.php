@@ -1,3 +1,6 @@
+@php 
+   $user = auth()->user();
+@endphp
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
    <head>
@@ -160,8 +163,8 @@
                      <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
                         <span class="avatar avatar-sm" style="background-image: url('{{avatar()}}')"></span>
                         <div class="d-none d-xl-block ps-2">
-                           <div>{{auth()->user()->name}}</div>
-                           <div class="mt-1 small text-secondary">{{ auth()->user()->roles->pluck('name')->implode(', ') }}</div>
+                           <div>{{$user->name}}</div>
+                           <div class="mt-1 small text-secondary">{{ $user->roles->pluck('name')->implode(', ') }}</div>
                         </div>
                      </a>
                      <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -204,6 +207,54 @@
                </div>
             </footer>
          </main>
+      </div>
+      <div class="modal modal-blur fade" id="modal-profile" tabindex="-1" role="dialog" aria-hidden="true">
+         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+               <form action="{{route('users.update-profile')}}" method="POST" class="needs-validation" novalidate>
+                  @csrf
+                  @method('PUT')
+                  <div class="modal-header">
+                     <h5 class="modal-title">Editar usuário</h5>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                     <div class="mb-3">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="name" value="{{$user->name}}" required>
+                     </div>
+                     <div class="mb-3">
+                        <label class="form-label">Endereço de e-mail</label>
+                        <input type="email" class="form-control" name="email" value="{{$user->email}}" required>
+                     </div>
+                  </div>
+                  <div class="modal-body">
+                     <div class="row">
+                       <div class="col-lg-6">
+                         <div class="mb-3">
+                           <label class="form-label">{{ __('Password') }}</label>
+                           <input type="password" class="form-control" name="password" placeholder="password">
+                         </div>
+                       </div>
+                       <div class="col-lg-6">
+                         <div class="mb-3">
+                           <label class="form-label">{{ __('Confirm Password') }}</label>
+                           <input type="password" class="form-control" name="password_confirmation" placeholder="password">
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                  <div class="modal-footer">
+                     <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                     Cancelar
+                     </a>
+                     <button type="submit" class="btn btn-primary ms-auto">
+                     Editar usuário
+                     </button>
+                  </div>
+               </form>
+            </div>
+         </div>
       </div>
       <script src="{{ mix('js/app.js') }}" defer></script>
       @stack('modals')

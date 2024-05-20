@@ -89,4 +89,14 @@ class UserController extends Controller
         $user->delete();
         return back()->with('success', 'Usuário removído com sucesso!');
     }
+
+    public function updateProfile(UserRequest $request)
+    {
+
+        $user = auth()->user();
+        $input = $request->all();
+        if (empty($input['password'])) {unset($input['password']);}
+        $user->update($input);
+        return back()->with('success', 'Usuário atualizado com sucesso!');
+    }
 }

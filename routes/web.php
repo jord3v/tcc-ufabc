@@ -37,4 +37,5 @@ Route::group(['prefix' => 'dashboard',  'middleware' => ['auth', 'prevent-demo-a
     Route::delete('/payments/{payment:uuid}', [PaymentController::class, 'destroy'])->name('payments.destroy');
     Route::post('/payments/fill', [PaymentController::class, 'fill'])->name('payments.fill');
     Route::get('/payments/download/{zipname}', [PaymentController::class, 'download'])->name('payments.download');
+    Route::put('/update-profile', [UserController::class, 'updateProfile'])->name('users.update-profile'); 
 });

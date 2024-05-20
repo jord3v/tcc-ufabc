@@ -1,12 +1,8 @@
-# UNIVERSIDADE FEDERAL DO ABC
-## Especialização em Tecnologias e Sistemas de Informação
+# UNIVERSIDADE FEDERAL DO ABC - Especialização em Tecnologias e Sistemas de Informação
 
----
-
-# DESENVOLVIMENTO DE UMA FERRAMENTA PARA PADRONIZAÇÃO DE RELATÓRIOS CIRCUNSTANCIADOS UTILIZANDO O FRAMEWORK LARAVEL
+## DESENVOLVIMENTO DE UMA FERRAMENTA PARA PADRONIZAÇÃO DE RELATÓRIOS CIRCUNSTANCIADOS UTILIZANDO O FRAMEWORK LARAVEL
   
-
-## Requisitos
+### Requisitos
 
   
 
@@ -20,7 +16,7 @@
 
   
 
-## Instalação
+### Instalação
 
   
 
@@ -78,7 +74,7 @@ $ php artisan migrate --seed
 
   
 
-## Utilização
+### Utilização
 
   
 
@@ -99,7 +95,7 @@ Acesse o seu aplicativo em [http://localhost:8000](http://localhost:8000).
 
   
 
-## Pacotes Utilizados
+### Pacotes Utilizados
 
   
 
@@ -111,9 +107,11 @@ Acesse o seu aplicativo em [http://localhost:8000](http://localhost:8000).
 
 - [laravel-mix/laravel-mix](https://github.com/laravel-mix/laravel-mix)
 
+- [apexcharts/apexcharts.js](https://github.com/apexcharts/apexcharts.js)
+
   
 
-## Contribuição
+### Contribuição
 
   
 
@@ -121,7 +119,7 @@ Se você quiser contribuir para este projeto, por favor abra uma issue para disc
 
   
 
-## Licença
+### Licença
 
   
 

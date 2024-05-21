@@ -50,7 +50,7 @@
                   <tr data-company="{{$payment->report->company->id}}" data-reference="{{$payment->reference->format('Y-m-d')}}" data-location="{{$payment->report->location->id}}">
                       <td>
                           {{$payment->report->company->name}}<br>
-                          {{$payment->report->note->service}} - {{$payment->report->location->name}} - {{Str::upper(reference($payment->reference))}}
+                          {{$payment->report->note->service}} - {{$payment->report->location->name}} - {{str()->upper(reference($payment->reference))}}
                       </td>
                       <td>
                         @if ($payment->process)

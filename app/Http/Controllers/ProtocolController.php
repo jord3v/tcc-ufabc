@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Payment;
 use App\Services\Erp;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class ProtocolController extends Controller
 {
@@ -65,7 +63,7 @@ class ProtocolController extends Controller
             $payment->report->note->service . " - " .
             $payment->report->company->name . " - " .
             $payment->report->location->name . " - REF: " .
-            Str::upper(reference($payment->reference));
+            str()->upper(reference($payment->reference));
     }
 
     private function createProtocol($description, $payment)

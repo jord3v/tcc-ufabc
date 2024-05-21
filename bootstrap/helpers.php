@@ -1,7 +1,6 @@
 <?php
 
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 
 if (! function_exists('avatar')) {
     function avatar($user = null) {
@@ -14,7 +13,7 @@ if (! function_exists('avatar')) {
 
 if (! function_exists('tab_id')) {
     function tab_id($var = null) {
-        return Str::slug($var, '-');
+        return str()->slug($var, '-');
     }
 }
 
@@ -26,7 +25,7 @@ if (!function_exists("friendly")) {
         }else{
             $id = $object->id;
         }        
-        return $payment->reference->format('mY').'-'.Str::slug($object->report->company->name .'-'. $object->report->location->name.'-'.$id, '-'). ".docx";//$object->id . ".docx";
+        return $payment->reference->format('mY').'-'.str()->slug($object->report->company->name .'-'. $object->report->location->name.'-'.$id, '-'). ".docx";//$object->id . ".docx";
     }
 }
 

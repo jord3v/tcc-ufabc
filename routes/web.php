@@ -15,7 +15,7 @@ use App\Http\Controllers\{
 };
 
 Route::get('/', function () {
-    return redirect()->route('dashboard');
+    return to_route('dashboard');
 });
 
 Auth::routes(['register' => false, 'reset' => true]);

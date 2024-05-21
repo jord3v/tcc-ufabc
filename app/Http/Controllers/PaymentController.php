@@ -97,7 +97,7 @@ class PaymentController extends Controller
         $zipname = now()->timestamp.".rar";
         $this->createZipFile($zipname, $files);
         $this->cleanUpTempFiles($files);
-        return redirect()->route('reports.index')->with('success', 'Pagamento(s) adicionado(s) com sucesso!')->with('download', $zipname);
+        return to_route('reports.index')->with('success', 'Pagamento(s) adicionado(s) com sucesso!')->with('download', $zipname);
     }
     
 

@@ -22,8 +22,7 @@
 </div>
 <div class="page-body">
    <div class="container-xl">
-      
-      <div class="row row-deck row-cards">
+      <div class="row row-deck row-cards mb-3">
          @canany(['company-list', 'report-list', 'note-list', 'location-list'])
          <div class="col-md-6 col-lg-4">
             <div class="row row-cards">
@@ -110,6 +109,48 @@
            </div>
          </div>
          @endcan
+      </div>
+      <div class="row row-deck row-cards">
+        <h3 class="text-primary">
+          <a href="{{route('notes.index')}}">Notas de empenho</a>
+        </h3>
+        @forelse ($notes as $note)
+        @php $total = 0 @endphp
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col text-truncate">
+                  <h3 class="card-title mb-1">{{$note->number}}/{{$note->year}} - {{$note->modality}}</h3>
+                  <small class="text-truncate text-muted">{{$note->service}}</small>
+                  <div class="mt-3">
+                    <div class="row g-2 align-items-center">
+                      <div class="col">
+                        <div class="d-flex mb-2">
+                          @foreach ($note->reports as $report)
+                            @php 
+                              $total += $report->payments_sum_price; 
+                              $percentage = round(($total / $note->amount) * 100);
+                            @endphp
+                          @endforeach
+                          <div>Valor usado: R${{$total}}</div>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar bg-info" style="width: {{$percentage}}%" role="progressbar" aria-valuenow="{{$percentage}}" aria-valuemin="0" aria-valuemax="100" aria-label="{{$percentage}}% Complete">
+                            <span class="visually-hidden">{{$percentage}}% Complete</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>    
+        @empty
+            
+        @endforelse
       </div>
    </div>
 </div>

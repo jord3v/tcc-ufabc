@@ -38,4 +38,9 @@ class Note extends Model
         'start' => 'datetime:Y-m-d',
         'end'  => 'datetime:Y-m-d',
     ];
+
+    public function reports()
+    {
+       return $this->hasMany(Report::class);
+    }
 }

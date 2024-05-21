@@ -27,7 +27,12 @@ class DashboardController extends Controller
 
         $companies = $this->company->get();
         $reports = $this->report->get();
-        $notes = $this->note->get();
+        $notes = $this->note->with([
+            'reports' => function ($query) {
+                $query->withSum('payments', 'price');
+            }
+        ])->get();
+        
         $locations = $this->location->get();
 
         return view('dashboard.index', compact('data', 'companies', 'reports', 'notes', 'locations'));

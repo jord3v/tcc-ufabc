@@ -2,13 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
-use App\Models\File;
-use App\Models\Location;
-use App\Models\Note;
-use App\Models\Report;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use App\Models\{Company, File, Location, Note, Report};
+use Illuminate\Http\{RedirectResponse, Request};
 use Illuminate\View\View;
 
 class ReportController extends Controller

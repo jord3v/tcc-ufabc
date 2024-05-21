@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
-use App\Models\Payment;
-use App\Models\Report;
+use App\Models\{Company, Payment, Report};
 use App\Services\PHPWord;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request, Response};
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
 
 
@@ -26,7 +23,7 @@ class PaymentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
 
         $request->has('active') ? $request->active : $request['active'] = true;
@@ -88,7 +85,7 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         foreach ($request->payments as $key => $value) {
             $payment = $this->payment->create($value);
@@ -104,7 +101,7 @@ class PaymentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($uuid)
+    public function show($uuid): BinaryFileResponse
     {
         $payment = $this->payment->with('report.company', 'report.note')->where("uuid", $uuid)->first();
         return response()
@@ -155,14 +152,15 @@ class PaymentController extends Controller
         return view('dashboard.payments.fill', compact('reports'));
     }
 
-    public function download($zipname){
+    public function download($zipname): BinaryFileResponse
+    {
         
         return response()
             ->download($zipname)
             ->deleteFileAfterSend(true);
     }
 
-    private function createZipFile($zipname, $files)
+    private function createZipFile($zipname, $files): void
     {
         $this->zip->open($zipname, $this->zip::CREATE);
         foreach ($files as $file) {
@@ -171,7 +169,7 @@ class PaymentController extends Controller
         $this->zip->close();
     }
 
-    private function cleanUpTempFiles($files)
+    private function cleanUpTempFiles($files): void
     {
         foreach ($files as $file) {
             if (file_exists($file)) {

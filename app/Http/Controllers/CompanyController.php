@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\View\View;
 
 class CompanyController extends Controller
@@ -68,7 +66,7 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $company = $this->company->find($id);
         $company->update($request->all());

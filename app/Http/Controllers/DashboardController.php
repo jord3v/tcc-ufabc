@@ -1,24 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Company;
-use App\Models\Location;
-use App\Models\Note;
-use App\Models\Payment;
-use App\Models\Report;
+use App\Models\{Company, Location, Note, Payment, Report};
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function __construct(
-        private Company $company,
-        private Report $report,
-        private Note $note,
-        private Location $location,
-        private Payment $payment
-    ) {}
+    public function __construct(private Company $company, private Report $report, private Note $note, private Location $location, private Payment $payment) {}
     /**
      * Display a listing of the resource.
      */

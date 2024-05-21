@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Services\Erp;
-use Illuminate\Http\Request;
+use Illuminate\Http\{RedirectResponse, Request};
+use Illuminate\View\View;
 
 class ProtocolController extends Controller
 {
     public function __construct(private Payment $payment, private Erp $erp){}
 
-    public function index()
+    public function index(): View
     {
         $payments = $this->payment->with(['report.location', 'report.company', 'report.note'])
             ->orderBy("signature_date", "desc")
@@ -18,7 +19,7 @@ class ProtocolController extends Controller
         return view('dashboard.protocols.index', compact('payments'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         try {
             $payment = $this->payment->with(['report.location', 'report.company', 'report.note'])
@@ -37,7 +38,7 @@ class ProtocolController extends Controller
     }
 
 
-    public function attachment(Request $request)
+    public function attachment(Request $request): RedirectResponse
     {
         $payment = $this->payment->findOrFail($request->id);
         if($payment->uuid !== $request->uuid){
@@ -55,7 +56,7 @@ class ProtocolController extends Controller
         return back()->with('success', $protocol);
     }
 
-    private function generateDescription($payments, $payment)
+    private function generateDescription($payments, $payment): string
     {
         $prices = $payments->pluck("price")->map(fn ($price) => getPrice($price));
 
@@ -86,7 +87,7 @@ class ProtocolController extends Controller
     }
 
 
-    private function updatePayments($payments, $protocol)
+    private function updatePayments($payments, $protocol): void
     {
         $payments->each(function ($payment) use ($protocol) {
             $payment->process = $protocol;

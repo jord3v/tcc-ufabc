@@ -16,10 +16,12 @@ class PHPWord
         // Obter os dados do pagamento com os relacionamentos necessários
         $object = $this->payment
             ->with([
-                "report.company",
-                "report.location",
-                "report.note",
-                "report.user",
+                'report' => [
+                    'company',
+                    'location',
+                    'note',
+                    'user'
+                ],
             ])
             ->find($payment->id);
 
@@ -49,6 +51,12 @@ class PHPWord
         // Preencher os valores estáticos no template
         $note = $object->report->note;
 
+        $values = $this->getFormattedPaymentValue($object);
+        $transformedValues = $values->map(function ($value) {
+            return 'R$ ' . $value;
+        });
+        $formattedString = $transformedValues->implode(' + ');
+
         $templateProcessor->setValues([
             //nota de empenho
             "modalidade" => $note->modality,
@@ -69,7 +77,7 @@ class PHPWord
             "empresa" => $object->report->company->name,
             "cnpj" => $object->report->company->cnpj,
             //pagamento
-            "valor_apresentado" => $this->getFormattedPaymentValue($object),
+            "valor_apresentado" => $formattedString,
             "vencimento" => $object->due_date->format("d/m/Y"),
             "mes_referencia" => reference($object->reference),
             //ocorrências
@@ -101,7 +109,7 @@ class PHPWord
             ->where("report_id", $object->report_id)
             ->where("reference", $object->reference)
             ->where("signature_date", $object->signature_date)
-            ->pluck("price");
+            ->pluck('price');
 
         // Formatar os valores de pagamento
         return $join;

@@ -13,17 +13,27 @@ class ProtocolController extends Controller
 
     public function index(): View
     {
-        $payments = $this->payment->with(['report.location', 'report.company', 'report.note'])
-            ->orderBy("signature_date", "desc")
-            ->paginate(20);
+        $payments = $this->payment->with([
+            'report' => [
+                'location', 
+                'company', 
+                'note'
+            ],
+        ])->orderBy("signature_date", "desc")
+        ->paginate(20);
         return view('dashboard.protocols.index', compact('payments'));
     }
 
     public function store(Request $request): RedirectResponse
     {
         try {
-            $payment = $this->payment->with(['report.location', 'report.company', 'report.note'])
-                ->findOrFail($request->id);
+            $payment = $this->payment->with([
+                'report' => [
+                    'location', 
+                    'company', 
+                    'note'
+                ],
+            ])->findOrFail($request->id);
             if ($payment->uuid !== $request->uuid) {
                 return back()->with('error', 'Não autorizado');
             }
@@ -58,7 +68,7 @@ class ProtocolController extends Controller
 
     private function generateDescription($payments, $payment): string
     {
-        $prices = $payments->pluck("price")->map(fn ($price) => getPrice($price));
+        $prices = $payments->pluck('price')->map(fn ($price) => getPrice($price));
 
         return $prices->implode(" + ") . " - " .
             $payment->report->note->service . " - " .

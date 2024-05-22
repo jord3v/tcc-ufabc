@@ -21,7 +21,15 @@ class ReportController extends Controller
     public function index(Request $request): View
     {
         $reports = $this->report
-        ->with(['company.user', 'location', 'note', 'file', 'payments'])
+        ->with([
+            'company' => [
+                'user'
+            ], 
+            'location', 
+            'note', 
+            'file', 
+            'payments'
+        ])
         ->whereHas('note', function ($query) use ($request) {
             $query->where('year', $request->year ?? now()->format('Y'));
         })

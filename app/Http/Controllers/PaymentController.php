@@ -30,10 +30,17 @@ class PaymentController extends Controller
 
 
 
-        $companies = $this->company->with(["reports.location"])->get();
+        $companies = $this->company->with([
+            'reports' => [
+                'location'
+            ],
+        ])->get();
 
         $filters = $this->report
-            ->with(["location", "note"])
+            ->with([
+                'location', 
+                'note'
+            ])
             ->where("company_id", $request->company)
             ->whereHas('note', function ($query) use ($request) {
                 $query->where('active', $request->active);
@@ -58,7 +65,7 @@ class PaymentController extends Controller
             ->get();
 
         $report = $this->report
-            ->with(["note"])
+            ->with('note')
             ->whereHas("company", function ($query) use ($request) {
                 return $query->where("company_id", "=", $request->company);
             })
@@ -94,7 +101,10 @@ class PaymentController extends Controller
         $zipname = now()->timestamp.".rar";
         $this->createZipFile($zipname, $files);
         $this->cleanUpTempFiles($files);
-        return to_route('reports.index')->with('success', 'Pagamento(s) adicionado(s) com sucesso!')->with('download', $zipname);
+        return to_route('reports.index')->with([
+            'success' => 'Pagamento(s) adicionado(s) com sucesso!',
+            'download' => $zipname
+        ]);
     }
     
 
@@ -103,7 +113,12 @@ class PaymentController extends Controller
      */
     public function show($uuid): BinaryFileResponse
     {
-        $payment = $this->payment->with('report.company', 'report.note')->where("uuid", $uuid)->first();
+        $payment = $this->payment->with([
+            'report' => [
+                'company', 
+                'note'
+            ]
+        ])->where("uuid", $uuid)->first();
         return response()
             ->download($this->word->makeWord($payment))
             ->deleteFileAfterSend(true);
@@ -148,7 +163,13 @@ class PaymentController extends Controller
      */
     public function fill(Request $request): View
     {
-        $reports = $this->report->with(['company', 'location', 'note', 'file', 'user'])->whereKey($request->reports)->get()->groupBy('company.name');
+        $reports = $this->report->with([
+            'company', 
+            'location', 
+            'note', 
+            'file', 
+            'user'
+        ])->whereKey($request->reports)->get()->groupBy('company.name');
         return view('dashboard.payments.fill', compact('reports'));
     }
 

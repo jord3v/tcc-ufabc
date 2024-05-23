@@ -20,7 +20,13 @@ class NoteController extends Controller
      */
     public function index(): View
     {
-        $notes = $this->note->paginate(10);
+        $notes = $this->note->with([
+            'reports' => function ($query) {
+                $query->withSum('payments', 'price');
+            }
+        ])
+        ->where('active', true)
+        ->paginate(10);
         return view('dashboard.notes.index', compact('notes'));
     }
 
@@ -61,9 +67,12 @@ class NoteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Note $note)
+    public function update(Request $request, string $id): RedirectResponse
     {
-        //
+        $note = $this->note->find($id);
+        $request->has('active') ? $request['active'] = true : $request['active'] = false;
+        $note->update($request->all());
+        return back()->with('success', 'Nota de empenho atualizada com sucesso!');
     }
 
     /**

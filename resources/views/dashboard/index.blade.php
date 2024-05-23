@@ -88,13 +88,13 @@
          @can('payment-list')
          <div class="col-lg-8">
            <div class="card">
-             <div class="card-header">
+             <div class="card-header border-0">
                <div>
                  <h3 class="card-title">
                   Pagamentos lançados
                  </h3>
                  <p class="card-subtitle">
-                   Valores pagos por mês
+                   Últimos {{count($data['months'])}} meses
                  </p>
                </div>
                <div class="card-actions">
@@ -103,7 +103,7 @@
                  </a>
                </div>
              </div>
-             <div class="card-body">
+             <div class="card-body p-0">
                <div id="chart"></div>
              </div>
            </div>
@@ -135,11 +135,9 @@
                           @endforeach
                           <div>Valor usado: R${{$total}}</div>
                         </div>
-                        <div class="progress">
-                          <div class="progress-bar bg-info" style="width: {{$percentage}}%" role="progressbar" aria-valuenow="{{$percentage}}" aria-valuemin="0" aria-valuemax="100" aria-label="{{$percentage}}% Complete">
-                            <span class="visually-hidden">{{$percentage}}% Complete</span>
-                          </div>
-                        </div>
+                        <div class="progress progress-xs">
+                          <div class="progress-bar bg-info" style="width: {{$percentage}}%"></div>
+                       </div>
                       </div>
                     </div>
                   </div>
@@ -160,7 +158,7 @@
    var options = {
     series: [{
     name: 'Boleto',
-    data: @json(array_values($data))
+    data: @json(array_values($data['sum']))
   }],
     chart: {
     height: 350,
@@ -190,7 +188,7 @@
   },
   
   xaxis: {
-    categories: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+    categories: @json(array_values($data['months'])),
     position: 'bottom',
     axisBorder: {
       show: true

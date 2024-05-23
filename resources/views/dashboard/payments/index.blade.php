@@ -18,6 +18,13 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                Pagamentos
             </h2>
          </div>
+         <div class="col-auto ms-auto d-print-none">
+            <div class="btn-list">
+               <a href="{{route('dashboard')}}" class="btn">
+               Voltar
+               </a>
+            </div>
+         </div>
       </div>
    </div>
 </div>

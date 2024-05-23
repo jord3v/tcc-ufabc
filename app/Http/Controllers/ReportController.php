@@ -32,13 +32,14 @@ class ReportController extends Controller
         ])
         ->whereHas('note', function ($query) use ($request) {
             $query->where('year', $request->year ?? now()->format('Y'));
+            $query->where('active', true);
         })
         ->get()
         ->groupBy('company.name');
 
-        $locations = $this->location->get();
-        $notes = $this->note->get();
-        $files = $this->file->get();
+        $locations = $this->location->where('active', true)->get();
+        $notes = $this->note->where('active', true)->get();
+        $files = $this->file->where('active', true)->get();
         $companies = $this->company->get();
         return view('dashboard.reports.index', compact('locations', 'reports', 'notes', 'files', 'companies'));
     }

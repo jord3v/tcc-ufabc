@@ -15,7 +15,7 @@
          </div>
          <div class="col-auto ms-auto d-print-none">
             <div class="btn-list">
-               <a href="{{route('dashboard')}}" class="btn">
+               <a href="{{route('reports.index')}}" class="btn">
                Voltar
                </a>
             </div>

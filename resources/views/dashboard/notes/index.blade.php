@@ -49,11 +49,21 @@
                </thead>
                <tbody>
                   @forelse ($notes as $note)
+                  @php $total = 0 @endphp
                   <tr>
                      <td class="td-truncate">
                         <div class="font-weight-medium">{{$note->service}}</div>
                         <div class="text-truncate">
                            {{$note->comments ? $note->comments : 'N/A'}}
+                        </div>
+                        @foreach ($note->reports as $report)
+                            @php 
+                              $total += $report->payments_sum_price; 
+                              $percentage = round(($total / $note->amount) * 100);
+                            @endphp
+                        @endforeach
+                        <div class="progress progress-xs">
+                           <div class="progress-bar bg-info" style="width: {{$percentage}}%"></div>
                         </div>
                      </td>
                      <td>
@@ -236,7 +246,7 @@
             @csrf
             @method('PUT')
             <div class="modal-header">
-               <h5 class="modal-title">Editar localidade</h5>
+               <h5 class="modal-title">Editar nota de empenho</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -324,13 +334,24 @@
                      </div>
                   </div>
                </div>
+               <div class="row">
+                  <div class="col">
+                     <div class="mt-3">
+                        <div class="form-label">Ativo</div>
+                        <label class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="active" checked>
+                        <span class="form-check-label"></span>
+                        </label>
+                     </div>
+                  </div>
+               </div>
             </div>
             <div class="modal-footer">
                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                Cancelar
                </a>
                <button type="submit" class="btn btn-primary ms-auto">
-               Editar localidade
+               Editar nota de empenho
                </button>
             </div>
          </form>

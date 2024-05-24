@@ -22,6 +22,8 @@ Auth::routes(['register' => false, 'reset' => true]);
 
 Route::group(['prefix' => 'dashboard',  'middleware' => ['auth', 'prevent-demo-actions']], function(){
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/reports/list', [ReportController::class, 'list'])->name('reports.list');
+    Route::post('/reports/download', [ReportController::class, 'download'])->name('reports.download');
     Route::resources([
         'companies' => CompanyController::class,
         'files' => FileController::class,
@@ -33,7 +35,6 @@ Route::group(['prefix' => 'dashboard',  'middleware' => ['auth', 'prevent-demo-a
         'roles-and-permissions' => RoleAndPermissionController::class,
         'users' => UserController::class,
     ]);
-    
     Route::get('/payments/{payment:uuid}', [PaymentController::class, 'show'])->name('payments.show');
     Route::put('/payments/{payment:uuid}', [PaymentController::class, 'update'])->name('payments.update');
     Route::delete('/payments/{payment:uuid}', [PaymentController::class, 'destroy'])->name('payments.destroy');

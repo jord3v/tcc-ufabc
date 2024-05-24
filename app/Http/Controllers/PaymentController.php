@@ -94,17 +94,10 @@ class PaymentController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        foreach ($request->payments as $key => $value) {
-            $payment = $this->payment->create($value);
-            $files[] = $this->word->makeWord($payment);
+        foreach ($request->payments as $payment) {
+            $this->payment->create($payment);
         }
-        $zipname = now()->timestamp.".rar";
-        $this->createZipFile($zipname, $files);
-        $this->cleanUpTempFiles($files);
-        return to_route('reports.index')->with([
-            'success' => 'Pagamento(s) adicionado(s) com sucesso!',
-            'download' => $zipname
-        ]);
+        return to_route('reports.list')->with(['success' => 'Pagamento(s) adicionado(s) com sucesso!']);
     }
     
 
@@ -179,23 +172,5 @@ class PaymentController extends Controller
         return response()
             ->download($zipname)
             ->deleteFileAfterSend(true);
-    }
-
-    private function createZipFile($zipname, $files): void
-    {
-        $this->zip->open($zipname, $this->zip::CREATE);
-        foreach ($files as $file) {
-            $this->zip->addFile($file, basename($file));
-        }
-        $this->zip->close();
-    }
-
-    private function cleanUpTempFiles($files): void
-    {
-        foreach ($files as $file) {
-            if (file_exists($file)) {
-                unlink($file);
-            }
-        }
     }
 }

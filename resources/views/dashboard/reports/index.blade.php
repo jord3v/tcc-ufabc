@@ -9,7 +9,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
          <div class="col">
             <div class="page-pretitle"> </div>
             <h2 class="page-title">
-               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M14 3v4a1 1 0 0 0 1 1h4"></path><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path><path d="M9 17h6"></path><path d="M9 13h6"></path></svg> Rel. circunstanciados
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M14 3v4a1 1 0 0 0 1 1h4"></path><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path><path d="M9 17h6"></path><path d="M9 13h6"></path></svg> Rel. circunstanciados - Preencher
             </h2>
          </div>
          <div class="col-auto ms-auto d-print-none">
@@ -29,61 +29,63 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
 </div>
 <div class="page-body">
    <div class="container-xl">
-      
       <form action="{{route('payments.fill')}}" method="POST" class="needs-validation" novalidate>
          @csrf
          <div class="card">
             <div class="card-header">
                <div>
-               <h3 class="card-title">
-                  Lista de Relatórios circunstanciados
-               </h3>
+                  <h3 class="card-title">
+                     Lista de Relatórios circunstanciados
+                  </h3>
                </div>
                <div class="card-actions">
-                  <div class="form-floating">
-                     <select class="form-select" id="year-note">
-                        @for ($year = 2025; $year > 2020; $year--)
-                           <option value="{{ $year }}" {{$year == $_GET['year'] ? 'selected' : ''}}>Empenhos de {{ $year }}</option>
-                        @endfor
-                     </select>
-                     <label for="year-note">Selecione o ano</label>
-                  </div>
+                   <div class="dropdown">
+                     <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                        Empenhos de {{$_GET['year']}}
+                     </button>
+                     <div class="dropdown-menu">
+                       @for ($year = 2025; $year > 2020; $year--)
+                        <a class="dropdown-item" href="?year={{ $year }}">
+                           Empenhos de {{ $year }}
+                        </a>
+                       @endfor
+                     </div>
+                     @can('report-create')
+                     <button type="submit" class="btn btn-outline-success">Preencher selecionados</button>
+                     @endcan
+                   </div>
                </div>
             </div>
             <div class="table-responsive">
                <table class="table table-hover card-table table-vcenter text-nowrap datatable">
                   <thead>
                      <tr>
+                        @can('report-create')<th></th>@endcan
                         <th>Prestador de serviço<br>Unidade operacional</th>
                         <th>Empenho</th>
                         <th>Gestor do relatório</th>
                         <th>Departamento</th>
-                        @can('payment-create')
-                        <th></th>
-                        @endcan
                      </tr>
                   </thead>
                   <tbody>
                      @forelse ($reports as $company => $report)
                         <tr>
-                           <td colspan="{{auth()->user()->can('payment-create') ? '4' : '5'}}">
-                              <strong>{{$company}}</strong>
-                           </td>
-                           @can('payment-create')
-                           <td>
-                              <input type="checkbox" class="form-check-input group-checkbox">
-                           </td>
+                           @can('report-create')
+                           <td><input type="checkbox" class="form-check-input group-checkbox-reports"></td>
                            @endcan
+                           <td colspan="{{auth()->user()->can('report-create') ? '4' : '5'}}">
+                              <u class="fw-bold">{{$company}}</u>
+                           </td>
                         </tr>
                         @foreach ($report->sortBy('location.name') as $item)
                         <tr>
+                           @can('report-create')
+                           <td><input type="checkbox" class="form-check-input" name="reports[]" value="{{$item->id}}"></td>
+                           @endcan
                            <td><a href="{{route('payments.index', ['company' => $item->company_id, 'report' => $item->id])}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path></svg>{{$item->location->name}}</a></td>
                            <td>{{$item->note->number}}/{{$item->note->year}}<br>{{$item->note->modality}}</td>
                            <td>{{$item->manager}}</td>
                            <td>{{$item->department}}</td>
-                           @can('payment-create')
-                           <td><input type="checkbox" class="form-check-input" name="reports[]" value="{{$item->id}}"></td>
-                           @endcan
                         </tr>
                         @endforeach
                      @empty
@@ -96,9 +98,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
             </div>
             <div class="card-footer">
                @can('payment-create')
-               <div class="d-flex">
-                  <button type="submit" class="btn btn-success ms-auto">Adicionar pagamentos</button>
-               </div>
+               
                @endcan
             </div>
          </div>

@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Company, File, Location, Note, Report};
+use App\Models\{Company, File, Location, Note, Payment, Report};
 use Illuminate\Http\{RedirectResponse, Request};
 use Illuminate\View\View;
+use App\Services\PHPWord;
+use ZipArchive;
 
 class ReportController extends Controller
 {
-    public function __construct(private Report $report, private Location $location, private Company $company, private Note $note, private File $file)
+    public function __construct(private Report $report, private Location $location, private Company $company, private Note $note, private File $file, private Payment $payment, private PhpWord $word, private ZipArchive $zip)
     {
         $this->middleware('permission:report-list', ['only' => ['index','show']]);
-        $this->middleware('permission:report-create', ['only' => ['create','store']]);
+        $this->middleware('permission:report-create', ['only' => ['create','store', 'list', 'download']]);
         $this->middleware('permission:report-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:report-delete', ['only' => ['destroy']]);
     }
@@ -91,5 +93,59 @@ class ReportController extends Controller
     public function destroy(Report $report)
     {
         //
+    }
+
+    /**
+     * Download report
+     */
+    public function list()
+    {
+        $payments = $this->payment->with([
+            'report' => [
+                'location', 
+                'company', 
+                'note'
+            ],
+        ])->orderBy("signature_date", "desc")
+        ->get()
+        ->groupBy('signature_date');
+        return view('dashboard.reports.list', compact('payments'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function download(Request $request): RedirectResponse
+    {
+        $payments = $this->payment::whereIn('uuid', $request->payments)->get();
+
+        foreach ($payments as $key => $payment) {
+            $files[] = $this->word->makeWord($payment);
+        }
+        $zipname = now()->timestamp.".rar";
+        $this->createZipFile($zipname, $files);
+        $this->cleanUpTempFiles($files);
+        return back()->with([
+            'success' => 'Download realizado com sucesso!',
+            'download' => $zipname
+        ]);
+    }
+
+    private function createZipFile($zipname, $files): void
+    {
+        $this->zip->open($zipname, $this->zip::CREATE);
+        foreach ($files as $file) {
+            $this->zip->addFile($file, basename($file));
+        }
+        $this->zip->close();
+    }
+
+    private function cleanUpTempFiles($files): void
+    {
+        foreach ($files as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
     }
 }

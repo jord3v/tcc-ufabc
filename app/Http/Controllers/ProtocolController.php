@@ -11,17 +11,9 @@ class ProtocolController extends Controller
 {
     public function __construct(private Payment $payment, private Erp $erp){}
 
-    public function index(): View
+    public function index(): void
     {
-        $payments = $this->payment->with([
-            'report' => [
-                'location', 
-                'company', 
-                'note'
-            ],
-        ])->orderBy("signature_date", "desc")
-        ->paginate(20);
-        return view('dashboard.protocols.index', compact('payments'));
+        
     }
 
     public function store(Request $request): RedirectResponse

@@ -96,18 +96,19 @@ botoes.forEach(function(botao) {
 })();
 
 
-document.querySelectorAll('.group-checkbox').forEach(function(checkbox) {
-    checkbox.addEventListener('click', function() {
-        var isChecked = this.checked;
-        var currentTr = this.parentNode.parentNode;
-        var nextTr = currentTr.nextElementSibling;
-        while (nextTr && nextTr.querySelector('td[colspan="4"]') === null) {
-            nextTr.querySelector('input[type="checkbox"]').checked = isChecked;
-            nextTr = nextTr.nextElementSibling;
-        }
+function handleCheckboxGroup(groupClass, colspanValue) {
+    document.querySelectorAll(groupClass).forEach(function(checkbox) {
+        checkbox.addEventListener('click', function() {
+            var isChecked = this.checked;
+            var currentTr = this.parentNode.parentNode;
+            var nextTr = currentTr.nextElementSibling;
+            while (nextTr && nextTr.querySelector('td[colspan="' + colspanValue + '"]') === null) {
+                nextTr.querySelector('input[type="checkbox"]').checked = isChecked;
+                nextTr = nextTr.nextElementSibling;
+            }
+        });
     });
-});
-
+}
 
 const edit = document.getElementById('edit');
 if (edit) {
@@ -252,17 +253,6 @@ if (destroy) {
     });
 }
 
-const selectElement = document.getElementById('year-note');
-if (selectElement) {
-    selectElement.addEventListener('change', function() {
-        const selectedYear = this.value;
-        let currentUrl = window.location.href;
-        currentUrl = currentUrl.split('?')[0];
-        const newUrl = selectedYear ? `${currentUrl}?year=${selectedYear}` : currentUrl;
-        window.location.href = newUrl;
-    });
-}
-
 const addAttachment = document.getElementById('add-attachment')
             if (addAttachment) {
                addAttachment.addEventListener('show.bs.modal', event => {
@@ -305,4 +295,6 @@ $(document).ready(function(){
 
 reloadPageOnClose('hidden.bs.modal', ignoreModalToReload);
 reloadPageOnClose('hidden.bs.offcanvas');
+handleCheckboxGroup('.group-checkbox-reports', '4');
+handleCheckboxGroup('.group-checkbox-reports-downloads', '3');
 highlightLines();

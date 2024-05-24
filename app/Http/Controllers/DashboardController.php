@@ -16,7 +16,7 @@ class DashboardController extends Controller
     public function index(): View
     {
         $payments = $this->payment
-            ->whereBetween('due_date', [now()->subMonths(11)->startOfMonth(), now()->endOfMonth()])
+            ->whereBetween('reference', [now()->subMonths(11)->startOfMonth(), now()->endOfMonth()])
             ->get();
 
         $data = [
@@ -28,13 +28,13 @@ class DashboardController extends Controller
 
         foreach ($period as $dt) {
             $paymentsInMonth = $payments->filter(function ($payment) use ($dt) {
-                return Carbon::parse($payment->due_date)->isSameMonth($dt);
+                return Carbon::parse($payment->reference)->isSameMonth($dt);
             });
 
             $data['months'][] = $dt->translatedFormat('M/Y');
             $data['sum'][] = $paymentsInMonth->sum('price');
+            $data['count'][] = $paymentsInMonth->count();
         }
-
 
         $companies = $this->company->get();
         $reports = $this->report->get();

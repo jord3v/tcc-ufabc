@@ -4,10 +4,7 @@
    <div class="container-xl">
       <div class="row g-2 align-items-center">
          <div class="col">
-            <!-- Page pre-title -->
-            <div class="page-pretitle">
-               page-pretitle
-            </div>
+            <div class="page-pretitle"> </div>
             <h2 class="page-title">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-receipt"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2m4 -14h6m-6 4h6m-2 4h2"></path></svg> Notas de empenho
             </h2>
@@ -52,8 +49,8 @@
                   @php $total = 0 @endphp
                   <tr>
                      <td class="td-truncate">
-                        <div class="font-weight-medium">{{$note->service}}</div>
-                        <div class="text-truncate">
+                        <div class="font-weight-medium text-truncate">{{$note->number}}/{{$note->year}} - {{$note->service}}</div>
+                        <div class="text-truncate text-muted">
                            {{$note->comments ? $note->comments : 'N/A'}}
                         </div>
                         @foreach ($note->reports as $report)
@@ -76,7 +73,7 @@
                      </td>
                      <td>{{$note->amount}}</td>
                      <td>{{$note->monthly_payment}}</td>
-                     <td>{{$note->monthly_payment}}</td>
+                     <td>{{formatPeriod($note->start, $note->end)}}</td>
                      <td>
                         @if ($note->active)
                            <span class="status status-primary">
@@ -140,16 +137,19 @@
             </div>
             <div class="modal-body">
                <div class="row">
-                  <div class="col-lg-6">
+                  <div class="col-lg-9">
                      <div class="mb-3">
-                        <label class="form-label">Número</label>
-                        <input type="text" class="form-control" name="number" required>
-                     </div>
-                  </div>
-                  <div class="col-lg-3">
-                     <div class="mb-3">
-                        <label class="form-label">Ano</label>
-                        <input type="number" name="year" class="form-control" min="1900" max="2099" step="1" value="{{now()->format('Y')}}" maxlength="4"/>
+                        <label class="form-label">Número da nota/ANO</label>
+                        <div class="input-group">
+                           <input type="number" name="number" class="form-control">
+                           <select name="year" class="form-control">
+                              <option value="">Selecione</option>
+                              <option value="2022">2022</option>
+                              <option value="2023">2023</option>
+                              <option value="2024" selected>2024</option>
+                              <option value="2025">2025</option>
+                           </select>
+                        </div>
                      </div>
                   </div>
                   <div class="col-lg-3">
@@ -251,16 +251,19 @@
             </div>
             <div class="modal-body">
                <div class="row">
-                  <div class="col-lg-6">
+                  <div class="col-lg-9">
                      <div class="mb-3">
-                        <label class="form-label">Número</label>
-                        <input type="text" class="form-control" name="number" required>
-                     </div>
-                  </div>
-                  <div class="col-lg-3">
-                     <div class="mb-3">
-                        <label class="form-label">Ano</label>
-                        <input type="number" name="year" class="form-control" min="1900" max="2099" step="1" value="{{now()->format('Y')}}" maxlength="4"/>
+                        <label class="form-label">Número da nota/ANO</label>
+                        <div class="input-group">
+                           <input type="number" name="number" class="form-control">
+                           <select name="year" class="form-control">
+                              <option value="">Selecione</option>
+                              <option value="2022">2022</option>
+                              <option value="2023">2023</option>
+                              <option value="2024">2024</option>
+                              <option value="2025">2025</option>
+                           </select>
+                        </div>
                      </div>
                   </div>
                   <div class="col-lg-3">

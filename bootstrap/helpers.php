@@ -85,3 +85,12 @@ if (!function_exists("formatPeriod")) {
         return $start->format('d/m/Y').' até '.$end->format('d/m/Y');
     }
 }
+
+if (!function_exists("setPrice")) {
+    function setPrice($input)
+    {
+        $input = str_replace(".", "", $input);
+        $input = str_replace(",", ".", $input);
+        return $input;
+    }
+}

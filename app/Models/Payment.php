@@ -70,6 +70,16 @@ class Payment extends Model
         );
     }
 
+    /**
+     * Format date.
+     */
+    protected function price(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => setPrice($value),
+        );
+    }
+
     public function report()
     {
         return $this->belongsTo(Report::class);

@@ -25,7 +25,6 @@ class NoteController extends Controller
                 $query->withSum('payments', 'price');
             }
         ])
-        ->where('active', true)
         ->paginate(10);
         return view('dashboard.notes.index', compact('notes'));
     }

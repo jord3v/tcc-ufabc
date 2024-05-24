@@ -4,10 +4,7 @@
    <div class="container-xl">
       <div class="row g-2 align-items-center">
          <div class="col">
-            <!-- Page pre-title -->
-            <div class="page-pretitle">
-               page-pretitle
-            </div>
+            <div class="page-pretitle"> </div>
             <h2 class="page-title">
                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dashboard" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -110,10 +107,13 @@
          </div>
          @endcan
       </div>
+      @can('note-list')
       <div class="row row-deck row-cards">
-        <h3 class="text-primary">
-          <a href="{{route('notes.index')}}">Notas de empenho</a>
-        </h3>
+        <div class="col-12 p-3">
+          <h2 class="page-title">
+            <a href="{{route('notes.index')}}">Notas de empenho</a>
+          </h2>
+        </div>
         @forelse ($notes as $note)
         @php $total = 0 @endphp
         <div class="col-md-3">
@@ -150,6 +150,7 @@
             
         @endforelse
       </div>
+      @endcan
    </div>
 </div>
 @endsection
@@ -157,14 +158,14 @@
 <script>
    var options = {
     series: [{
-    name: 'Boleto',
+    name: 'Lançamento de boletos',
     data: @json(array_values($data['sum']))
   }],
     chart: {
     height: 350,
     type: 'area',
     toolbar: {
-      show: false,
+      show: true,
     },
   },
   plotOptions: {
@@ -178,7 +179,11 @@
   dataLabels: {
     enabled: false,
     formatter: function (val) {
-      return "R$ "+val;
+      var valNumber = parseFloat(val);
+      if (!isNaN(valNumber)) {
+        var valorFormatado = valNumber.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      return "R$ "+valorFormatado;
     },
     offsetY: -20,
     style: {
@@ -222,7 +227,11 @@
     labels: {
       show: true,
       formatter: function (val) {
-        return "R$ "+ val;
+        var valNumber = parseFloat(val);
+        if (!isNaN(valNumber)) {
+          var valorFormatado = valNumber.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        return "R$ "+valorFormatado;
       }
     }
   

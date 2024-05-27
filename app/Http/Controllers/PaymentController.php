@@ -28,8 +28,6 @@ class PaymentController extends Controller
 
         $request->has('active') ? $request->active : $request['active'] = true;
 
-
-
         $companies = $this->company->with([
             'reports' => [
                 'location'

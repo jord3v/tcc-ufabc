@@ -51,7 +51,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                        @endfor
                      </div>
                      @can('report-create')
-                     <button type="submit" class="btn btn-outline-success">Preencher selecionados</button>
+                        <button type="submit" class="dynamic-button btn btn-outline-success" data-base-text="Preencher itens selecionados" disabled>Preencher itens selecionados</button>
                      @endcan
                    </div>
                </div>

@@ -364,7 +364,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                   <div class="col-lg-4">
                      <div class="mb-3">
                         <label class="form-label">Protocolo</label>
-                        <input type="text" class="form-control"  name="process">
+                        <input type="text" class="process-erp form-control"  name="process">
                      </div>
                   </div>
                   <div class="col-lg-4">

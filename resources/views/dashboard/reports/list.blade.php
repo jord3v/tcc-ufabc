@@ -41,7 +41,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                      </a>
                      @endfor
                   </div>
-                  <button type="submit" class="btn btn-outline-success">Download dos selecionados</button>
+                  <button type="submit" class="dynamic-button btn btn-outline-success" data-base-text="Download dos itens selecionados" disabled>Download dos itens selecionados</button>
                   </div>
             </div>
             </div>
@@ -126,14 +126,9 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                               @if ($item->process)
                                  ADM-{{$item->process}}
                               @else
-                              <form action="{{route('protocols.store')}}" method="post">
-                                 @csrf
-                                    <input type="hidden" name="id" value="{{$item->id}}">
-                                    <input type="hidden" name="uuid" value="{{$item->uuid}}">
-                                    <button type="submit" class="btn btn-outline-success">
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-databricks"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 17l9 5l9 -5v-3l-9 5l-9 -5v-3l9 5l9 -5v-3l-9 5l-9 -5l9 -5l5.418 3.01"></path></svg> Gerar protocolo
-                                    </button>
-                                 </form>
+                                 <a href="{{route('protocols.show', $item->uuid)}}" class="btn btn-outline-success">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-databricks"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 17l9 5l9 -5v-3l-9 5l-9 -5v-3l9 5l9 -5v-3l-9 5l-9 -5l9 -5l5.418 3.01"></path></svg>Gerar protocolo
+                                 </a>
                               @endif
                            </td>
                            <td>

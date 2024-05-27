@@ -16,8 +16,19 @@ class ProtocolController extends Controller
         
     }
 
-    public function store(Request $request): RedirectResponse
+    public function show($uuid): RedirectResponse
     {
+        $payment = $this->payment->with([
+            'report' => [
+                'location', 
+                'company', 
+                'note'
+            ],
+        ])->where('uuid', $uuid)
+            ->whereNull('process')
+            ->firstOrFail();
+
+            dd($payment);
         try {
             $payment = $this->payment->with([
                 'report' => [
@@ -25,10 +36,9 @@ class ProtocolController extends Controller
                     'company', 
                     'note'
                 ],
-            ])->findOrFail($request->id);
-            if ($payment->uuid !== $request->uuid) {
-                return back()->with('error', 'Não autorizado');
-            }
+            ])->where('uuid', $uuid)
+                ->whereNull('process')
+                ->firstOrFail();
             $join = multiplePayment($payment);
             $description = $this->generateDescription($join, $payment);
             $protocol = $this->createProtocol($description, $payment);

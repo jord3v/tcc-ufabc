@@ -98,7 +98,7 @@ class ReportController extends Controller
     /**
      * Download report
      */
-    public function list()
+    public function list(Request $request)
     {
         $payments = $this->payment->with([
             'report' => [
@@ -106,7 +106,11 @@ class ReportController extends Controller
                 'company', 
                 'note'
             ],
-        ])->orderBy("signature_date", "desc")
+        ])
+        ->whereHas('report.note', function ($query) use ($request) {
+            $query->where('year', $request->year ?? now()->format('Y'));
+        })
+        ->orderBy("signature_date", "desc")
         ->get()
         ->groupBy('signature_date');
         return view('dashboard.reports.list', compact('payments'));

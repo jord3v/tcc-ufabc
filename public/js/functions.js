@@ -9,6 +9,7 @@ function reloadPageOnClose(eventType, ignoreModalToReload) {
 
 var ignoreModalToReload = [
     document.querySelector('#occurrences'),
+    document.querySelector('#bulk-fill')
 ];
 
 function add(event) {
@@ -21,10 +22,10 @@ function add(event) {
     const report = botao.getAttribute('data-bs-report')
     novaLinha.innerHTML = `
             <td><div class="d-none"><input type="hidden" name="payments[${rand}][report_id]" value="${report}" required=""><textarea name="payments[${rand}][occurrences][occurrence]"></textarea><textarea name="payments[${rand}][occurrences][failures]"></textarea><textarea name="payments[${rand}][occurrences][suggestions]"></textarea></div><input type="text" class="form-control" name="payments[${rand}][invoice]" required></td>
-            <td><input type="month" class="form-control" name="payments[${rand}][reference]" required></td>
+            <td><input type="month" class="reference form-control" name="payments[${rand}][reference]" required></td>
             <td><input type="text" class="money form-control" name="payments[${rand}][price]" required></td>
-            <td><input type="date" class="form-control" name="payments[${rand}][due_date]" required></td>
-            <td><input type="date" class="form-control" name="payments[${rand}][signature_date]" required></td>
+            <td><input type="date" class="due_date form-control" name="payments[${rand}][due_date]" required></td>
+            <td><input type="date" class="signature_date form-control" name="payments[${rand}][signature_date]" required></td>
             <td><div class="row"><div class="col-6" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Eventuais ocorrências" data-bs-original-title="Eventuais ocorrências"><button type="button" class="btn btn-default btn-icon text-primary" data-bs-toggle="modal" data-bs-target="#occurrences" data-bs-id="${rand}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-alert"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M14 3v4a1 1 0 0 0 1 1h4"></path><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path><path d="M12 17l.01 0"></path><path d="M12 11l0 3"></path></svg></button></div><div class="col-6" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Remover pagamento" data-bs-original-title="Remover pagamento"><button type="button" class="btn btn-default btn-icon text-danger" onclick="remove(this)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 7l16 0"></path><path d="M10 11l0 6"></path><path d="M14 11l0 6"></path><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg></button></div></div></td>
         `;
     tabela.appendChild(novaLinha);
@@ -41,6 +42,52 @@ function remove(botao) {
     var linha = botao.closest('tr');
     linha.parentNode.removeChild(linha);
 }
+
+function put() {
+    function putValue(nomeCampo) {
+        var valorCampo = document.querySelector('input[name="' + nomeCampo + '"]').value;
+        var camposCorrespondentes = document.querySelectorAll('.' + nomeCampo);
+        camposCorrespondentes.forEach(function(campo) {
+            campo.value = valorCampo;
+        });
+    }
+    putValue('reference');
+    putValue('due_date');
+    putValue('signature_date');
+}
+
+function lastInvoice(id) {
+    // Fazer a requisição HTTP para obter o pagamento com o ID especificado usando o método POST
+    fetch('last', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Adicione isso se estiver usando Laravel com proteção CSRF
+            },
+            body: JSON.stringify({
+                id: id
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao buscar pagamento');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const paymentInvoiceInput = document.querySelector(`#myTable_${id} tr[data-id="${id}"] .invoice`);
+            paymentInvoiceInput.value = data.last_invoice; // Supondo que o retorno da requisição seja um objeto com a propriedade "last_invoice"
+        })
+        .catch(error => {
+            Swal.fire({
+                title: 'Ops!',
+                text: 'O relatório possui contas com diferentes números. Deverá preencher manualmente.',
+                icon: 'error',
+                confirmButtonText: 'Entendido'
+            })
+        });
+}
+
 
 var botoes = document.querySelectorAll('.btn-outline-primary');
 botoes.forEach(function(botao) {
@@ -273,7 +320,6 @@ if (addAttachment) {
 
 function highlightLines() {
     var linhas = document.querySelectorAll("#tabela tr");
-    console.log(linhas);
     linhas.forEach(function(linha, index) {
         for (var i = index + 1; i < linhas.length; i++) {
             if (
@@ -329,7 +375,7 @@ $(document).ready(function() {
     $('.cnpj').mask('00.000.000/0000-00', {
         reverse: true
     });
-    $('.process').mask('000/0000', {
+    $('.process').mask('0000/0000', {
         reverse: true
     });
     $('.process-erp').mask('0000/000000', {
@@ -337,9 +383,27 @@ $(document).ready(function() {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    function updateSelectedText(selectElement) {
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        var selectedText = selectedOption.text;
+        var spanElement = document.getElementById(selectElement.getAttribute('data-span-id'));
+        if (spanElement) {
+            spanElement.textContent = selectedText;
+        }
+    }
+
+    // Inicializa todos os elementos select com a classe 'dynamic-select'
+    var selects = document.querySelectorAll('select.dynamic-select');
+    selects.forEach(function(selectElement) {
+        updateSelectedText(selectElement);
+        selectElement.addEventListener('change', function() {
+            updateSelectedText(selectElement);
+        });
+    });
+});
 
 reloadPageOnClose('hidden.bs.modal', ignoreModalToReload);
-reloadPageOnClose('hidden.bs.offcanvas');
 handleCheckboxGroup('.group-checkbox-reports', '4');
 handleCheckboxGroup('.group-checkbox-reports-downloads', '3');
 highlightLines();

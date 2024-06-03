@@ -82,7 +82,7 @@ if (!function_exists("multiplePayment")) {
 if (!function_exists("formatPeriod")) {
     function formatPeriod($start, $end)
     {
-        return $start->format('d/m/Y').' até '.$end->format('d/m/Y');
+        return $start->format('d/m/y').' até '.$end->format('d/m/y');
     }
 }
 
@@ -91,6 +91,21 @@ if (!function_exists("setPrice")) {
     {
         $input = str_replace(".", "", $input);
         $input = str_replace(",", ".", $input);
+        return $input;
+    }
+}
+
+if (!function_exists("removeParams")) {
+    function removeParams($key)
+    {
+        return rawurldecode(preg_replace('~(\?|&)' . $key . '=[^&]*~', '$1', url()->full()));
+    }
+}
+
+if (!function_exists("replaceTag")) {
+    function replaceTag($input)
+    {
+        $input = str_replace("-", " ", $input);
         return $input;
     }
 }

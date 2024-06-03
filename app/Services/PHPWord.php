@@ -53,7 +53,7 @@ class PHPWord
 
         $values = $this->getFormattedPaymentValue($object);
         $transformedValues = $values->map(function ($value) {
-            return 'R$ ' . $value;
+            return getPrice($value);
         });
         $formattedString = $transformedValues->implode(' + ');
 
@@ -65,9 +65,10 @@ class PHPWord
             "ne" => $note->number . "/" . $note->year,
             "objeto" => $note->service,
             "inicio" => $note->start->format("d/m/Y"),
+            "vigencia" => ceil($note->start->diffInMonths($note->end->subDay())),
             "fim" => $note->end->format("d/m/Y"),
             "valor_total_contrato" => getPrice($note->amount),
-            "valor_mensal_contrato" => $note->monthly_payment,
+            "valor_mensal_contrato" => getPrice($note->monthly_payment),
             "data_assinatura" => $object->signature_date->isoFormat(
                 "D [de] MMMM [de] YYYY"
             ),
@@ -137,6 +138,7 @@ class PHPWord
                 "n_preco" => getPrice($payment->price),
                 "n_vencimento" => $payment->due_date->format("d/m/Y"),
                 "n_saldo" => getPrice($saldo_acumulado),
+                "n_protocolo" => $payment->process
             ];
         }
 
@@ -158,6 +160,7 @@ class PHPWord
                 "n_preco" => '${n_preco_' . $i . "}",
                 "n_vencimento" => '${n_vencimento_' . $i . "}",
                 "n_saldo" => '${n_saldo' . $i . "}",
+                "n_protocolo" => '${n_protocolo' . $i . "}",
             ];
             $i++;
         }
@@ -179,6 +182,7 @@ class PHPWord
                     "n_preco_{$i}" => $row["n_preco"],
                     "n_vencimento_{$i}" => $row["n_vencimento"],
                     "n_saldo{$i}" => $row["n_saldo"],
+                    "n_protocolo{$i}" => $row["n_protocolo"],
                 ];
             }
             $templateProcessor->cloneRowAndSetValues(

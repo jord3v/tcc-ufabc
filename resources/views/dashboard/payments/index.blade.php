@@ -29,6 +29,18 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
    <div class="container-xl">
       
       <div class="row row-deck row-cards">
+         <div class="col-12">
+            <div class="tags-list">
+               @foreach ($_GET as $key => $item)
+                  @if($item && $key !== 'active')
+                  <span class="tag">
+                     <strong id="{{$key}}">{{$key}}: {{replaceTag($item)}}</strong>
+                     <a href="{{removeParams($key)}}" class="btn-close"></a>
+                   </span>
+                  @endif
+               @endforeach
+            </div>
+         </div>
          <div class="col-md-3">
             <form method="get" autocomplete="off" novalidate="" class="w-100 sticky-top">
                <div class="form-label">Situação</div>
@@ -50,7 +62,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                </div>
                <div class="form-label">Empresa</div>
                <div class="mb-4">
-                  <select class="form-select" name="company" onchange='this.form.submit()'>
+                  <select class="form-select dynamic-select" name="company" onchange='this.form.submit()' data-span-id="company"> 
                      <option value="">Selecione</option>
                      @forelse ($companies as $company)
                      <option value="{{$company->id}}" {{$_GET['company'] == $company->id ? 'selected' : ''}}>{{$company->name}}</option>
@@ -61,7 +73,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                </div>
                <div class="form-label">Relatório circustanciado</div>
                <div class="mb-4">
-                  <select class="form-control" name="report" onchange='this.form.submit()'>
+                  <select class="form-control dynamic-select" name="report" onchange='this.form.submit()' data-span-id="report">
                      <option value="">Selecione</option>
                      @forelse ($filters as $key => $filter)
                      <optgroup label="{{$key}}">
@@ -214,116 +226,6 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
 </div>
 @endsection
 @push('modals')
-@can('note-create')
-{{--! modal note-create--}}
-<div class="modal modal-blur fade" id="note-create" tabindex="-1" role="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-         <form action="{{route('notes.store')}}" method="POST" class="needs-validation" novalidate>
-            @csrf
-            <div class="modal-header">
-               <h5 class="modal-title">Nova nota de empenho</h5>
-               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-               <div class="row">
-                  <div class="col-lg-6">
-                     <div class="mb-3">
-                        <label class="form-label">Número</label>
-                        <input type="text" class="form-control" name="number" required>
-                     </div>
-                  </div>
-                  <div class="col-lg-3">
-                     <div class="mb-3">
-                        <label class="form-label">Ano</label>
-                        <input type="number" name="year" class="form-control" min="1900" max="2099" step="1" value="{{now()->format('Y')}}" maxlength="4"/>
-                     </div>
-                  </div>
-                  <div class="col-lg-3">
-                     <div class="mb-3">
-                        <label class="form-label">Processo SECOM</label>
-                        <input type="text" class="process form-control" name="process" required>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="modal-body">
-               <div class="row">
-                  <div class="col-lg-8">
-                     <div class="mb-3">
-                        <label class="form-label">Modalidade da licitação</label>
-                        <select class="form-select" name="modality" required>
-                           <option value="">Selecione a modalidade</option>
-                           <option value="Pregão Eletrônico">Pregão Eletrônico</option>
-                           <option value="Dispensa Eletrônica">Dispensa Eletrônica</option>
-                        </select>
-                     </div>
-                  </div>
-                  <div class="col-lg-4">
-                     <div class="mb-3">
-                        <label class="form-label">Processo</label>
-                        <input type="text" class="process form-control" name="modality_process" required>
-                     </div>
-                  </div>
-                  <div class="col-lg-12">
-                     <div class="mb-3">
-                        <label class="form-label">Objeto</label>
-                        <input type="text" class="form-control" name="service" required>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="modal-body">
-               <div class="row">
-                  <div class="col-lg-6">
-                     <div class="mb-3">
-                        <label class="form-label">Valor total</label>
-                        <input type="text" class="money form-control" name="amount" required>
-                     </div>
-                  </div>
-                  <div class="col-lg-6">
-                     <div class="mb-3">
-                        <label class="form-label">Valor mensal</label>
-                        <input type="text" class="money form-control" name="monthly_payment" required>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="modal-body">
-               <div class="row">
-                  <div class="col-lg-6">
-                     <div class="mb-3">
-                        <label class="form-label">Data inicial</label>
-                        <input type="date" class="form-control" name="start" required>
-                     </div>
-                  </div>
-                  <div class="col-lg-6">
-                     <div class="mb-3">
-                        <label class="form-label">Data final</label>
-                        <input type="date" class="form-control" name="end" required>
-                     </div>
-                  </div>
-                  <div class="col-lg-12">
-                     <div>
-                        <label class="form-label">Observações</label>
-                        <textarea class="form-control" name="comments" rows="3"></textarea>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="modal-footer">
-               <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-               Cancelar
-               </a>
-               <button type="submit" class="btn btn-primary ms-auto">
-               Nova nota de empenho
-               </button>
-            </div>
-         </form>
-      </div>
-   </div>
-</div>
-@endcan
 @can('payment-edit')
 {{--! modal payment-edit--}}
 <div class="modal modal-blur fade" id="edit" tabindex="-1" role="dialog" aria-hidden="true">

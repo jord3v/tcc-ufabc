@@ -60,7 +60,7 @@
                             @endphp
                         @endforeach
                         <div class="progress progress-xs">
-                           <div class="progress-bar bg-info" style="width: {{$percentage}}%"></div>
+                           <div class="progress-bar bg-info" style="width: {{$percentage ?? 0}}%"></div>
                         </div>
                      </td>
                      <td>
@@ -71,8 +71,8 @@
                          </div>
                        </div>
                      </td>
-                     <td>{{$note->amount}}</td>
-                     <td>{{$note->monthly_payment}}</td>
+                     <td>{{getPrice($note->amount)}}</td>
+                     <td>{{getPrice($note->monthly_payment)}}</td>
                      <td>{{formatPeriod($note->start, $note->end)}}</td>
                      <td>
                         @if ($note->active)

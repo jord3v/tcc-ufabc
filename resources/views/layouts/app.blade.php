@@ -14,6 +14,7 @@
       <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
       <!-- Scripts -->
       <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <style>
          @import url('https://rsms.me/inter/inter.css');
          :root {
@@ -31,7 +32,7 @@
       @endif
    </head>
    <body>
-      @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
+      @include('sweetalert::alert')
       <div class="page">
          <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
             <div class="container-fluid">

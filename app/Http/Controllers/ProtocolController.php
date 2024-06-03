@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Payment;
 use App\Services\Erp;
 use Illuminate\Http\{RedirectResponse, Request};
-use Illuminate\View\View;
 
 class ProtocolController extends Controller
 {
@@ -18,17 +17,6 @@ class ProtocolController extends Controller
 
     public function show($uuid): RedirectResponse
     {
-        $payment = $this->payment->with([
-            'report' => [
-                'location', 
-                'company', 
-                'note'
-            ],
-        ])->where('uuid', $uuid)
-            ->whereNull('process')
-            ->firstOrFail();
-
-            dd($payment);
         try {
             $payment = $this->payment->with([
                 'report' => [
@@ -91,7 +79,7 @@ class ProtocolController extends Controller
             "CodigoOrigem"  => 23,
             "CodigoIdentOrigem"  => 5689,
             "Discriminacao"  => $description,
-            "LocalizacaoAtual"  => 13,
+            "LocalizacaoAtual"  => 23,
             "CodigoSituacao"  => 6
         ];
 

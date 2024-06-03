@@ -171,4 +171,18 @@ class PaymentController extends Controller
             ->download($zipname)
             ->deleteFileAfterSend(true);
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Payment  $payment
+     * @return \Illuminate\Http\Response
+     */
+    public function last(Request $request)
+    {
+        $query = $this->payment->where('report_id', $request->id)->get()->groupBy('invoice')->keys();
+        if($query->count() == 1) 
+            return response()->json(['last_invoice' => $query->first()]);
+        return response()->json(['error' => 'Ocorreu um erro interno no servidor'], 500);
+    }
 }

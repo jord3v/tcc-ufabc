@@ -16,10 +16,10 @@ class LocationSeeder extends Seeder
     {
         $locations = ['AMERICANA', 'ARAÇATUBA', 'BAURU', 'CAMPINAS', 'CARAGUATATUBA', 'CENTRO', 'DEPÓSITO', 'FRANCA', 'GUARULHOS', 'ITU', 'JUNDIAÍ', 'MARÍLIA', 'OSASCO', 'PIRACICABA', 'PRAIA GRANDE', 'PRESIDENTE PRUDENTE', 'RIBEIRÃO PRETO', 'RIO CLARO', 'SANTO ANDRÉ', 'SANTOS', 'SÃO CARLOS', 'SÃO JOSÉ DO RIO PRETO', 'SÃO JOSÉ DOS CAMPOS', 'SOROCABA', 'SEDE'];
         foreach ($locations as $key => $location) {
-            $this->location->create([
+            /*$this->location->create([
                 'name'  => $location,
                 'user_id' => 1
-            ]);
+            ]);*/
         }
     }
 }

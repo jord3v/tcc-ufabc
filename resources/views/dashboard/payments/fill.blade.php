@@ -1,3 +1,6 @@
+@php 
+   $reportCount = 0;
+@endphp
 @extends('layouts.app')
 @section('content')
 <div class="page-header d-print-none">
@@ -25,7 +28,7 @@
          @csrf
          <div class="card">
             <div class="card-header">
-               <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+               <ul class="nav nav-tabs card-header-tabs bg-white" data-bs-toggle="tabs" role="tablist">
                   @foreach ($reports->keys() as $report)
                   <li class="nav-item" role="presentation">
                      <a href="#{{tab_id($report)}}" class="nav-link {{$loop->first ? 'active':''}}" data-bs-toggle="tab" aria-selected="true" role="tab">
@@ -44,6 +47,19 @@
                   </li>
                   @endforeach
                </ul>
+               <div class="card-actions">
+                  @foreach ($reports as $key => $report)
+                     @php
+                        $reportCount += count($report);
+                     @endphp
+                  @endforeach
+                  @if($reportCount > 1 )
+                     <a href="" class="btn-sm" data-bs-toggle="modal" data-bs-target="#bulk-fill">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-box-multiple" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" /><path d="M17 17v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h2" /></svg>
+                     Preencher relatórios em massa
+                     </a>
+                  @endif
+                </div>
             </div>
             <div class="card-body p-0">
                <div class="tab-content">
@@ -121,10 +137,12 @@
                               </div>
                            </div>
                            <div class="table-responsive">
-                              <table class="table table-hover table-bordered card-table table-vcenter text-nowrap datatable">
+                              <table class="table table-hover table-bordered card-table table-vcenter text-nowrap datatable" id="myTable_{{$item->id}}">
                                  <thead>
                                     <tr>
-                                       <th>Número da Nota Fiscal/Fatura</th>
+                                       <th>Número da Nota Fiscal/Fatura <a href="javascript:void(0)" onclick="lastInvoice({{$item->id}})" data-bs-trigger="hover" data-bs-toggle="popover"
+                                          title="Repetir o número da fatura anterior" data-bs-content="Só é útil em casos de boletos com o mesmo número de conta. Exemplo: Faturas da Vivo"
+                                        ><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-placeholder" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 20.415a8 8 0 1 0 3 -15.415h-3" /><path d="M13 8l-3 -3l3 -3" /><path d="M7 17l4 -4l-4 -4l-4 4z" /></svg></a></th>
                                        <th>Período de execução</th>
                                        <th>Valor da Nota Fiscal/Fatura – R$</th>
                                        <th>Vencimento</th>
@@ -133,7 +151,7 @@
                                     </tr>
                                  </thead>
                                  <tbody>
-                                    <tr>
+                                    <tr data-id="{{$item->id}}">
                                        <td>
                                             <div class="d-none">
                                                 <input type="hidden" name="payments[{{$item->id}}][report_id]" value="{{$item->id}}" required>
@@ -141,19 +159,19 @@
                                                 <textarea name="payments[{{$item->id}}][occurrences][failures]"></textarea>
                                                 <textarea name="payments[{{$item->id}}][occurrences][suggestions]"></textarea>
                                             </div>
-                                          <input type="text" class="form-control" name="payments[{{$item->id}}][invoice]" required>
+                                          <input type="text" class="invoice form-control" name="payments[{{$item->id}}][invoice]" required>
                                        </td>
                                        <td>
-                                          <input type="month" class="form-control" name="payments[{{$item->id}}][reference]" required>
+                                          <input type="month" class="reference form-control" name="payments[{{$item->id}}][reference]" required>
                                        </td>
                                        <td>
                                           <input type="text" class="money form-control" name="payments[{{$item->id}}][price]" required>
                                        </td>
                                        <td>
-                                          <input type="date" class="form-control" name="payments[{{$item->id}}][due_date]" required>
+                                          <input type="date" class="due_date form-control" name="payments[{{$item->id}}][due_date]" required>
                                        </td>
                                        <td>
-                                          <input type="date" class="form-control" name="payments[{{$item->id}}][signature_date]" value="{{now()->format('Y-m-d')}}" required>
+                                          <input type="date" class="signature_date form-control" name="payments[{{$item->id}}][signature_date]" value="{{now()->format('Y-m-d')}}" required>
                                        </td>
                                        <td>
                                         <div class="row">
@@ -241,4 +259,37 @@
       </div>
    </div>
 </div>
+<div class="modal modal-blur fade" id="bulk-fill" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+     <form>
+     <div class="modal-content">
+       <div class="modal-header">
+         <h5 class="modal-title">Preencher em massa</h5>
+         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+       </div>
+       <div class="modal-body">
+         <div class="row mb-3">
+           <div class="col-lg-4">
+            <label class="form-label">Período de execução</label>
+            <input type="month" class="form-control" name="reference">
+           </div>
+           <div class="col-lg-4">
+            <label class="form-label">Vencimento</label>
+            <input type="date" class="form-control" name="due_date">
+           </div>
+           <div class="col-lg-4">
+            <label class="form-label">Data de elaboração</label>
+            <input type="date" class="form-control" name="signature_date" value="{{now()->format('Y-m-d')}}">
+           </div>
+         </div>
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cancelar</button>
+         <button type="button" class="btn btn-primary" onclick="put()" data-bs-dismiss="modal">Aplicar</button>
+       </div>
+     </div>
+     </form>
+   </div>
+</div>
 @endcan
+@endpush

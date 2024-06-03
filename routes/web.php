@@ -40,6 +40,16 @@ Route::group(['prefix' => 'dashboard',  'middleware' => ['auth', 'prevent-demo-a
     Route::delete('/payments/{payment:uuid}', [PaymentController::class, 'destroy'])->name('payments.destroy');
     Route::post('/payments/fill', [PaymentController::class, 'fill'])->name('payments.fill');
     Route::get('/payments/download/{zipname}', [PaymentController::class, 'download'])->name('payments.download');
+    Route::post('/payments/last', [PaymentController::class, 'last'])->name('payments.last');
     Route::put('/update-profile', [UserController::class, 'updateProfile'])->name('users.update-profile'); 
     Route::post('protocols/attachment', [ProtocolController::class, 'attachment'])->name('protocols.attachment');
+});
+
+
+Route::get('/test', function () {
+    $note = App\Models\Note::find(2);
+    $diferenciaMeses = $note->start->diffInMonths($note->end);
+    return $diferenciaMeses;
+
+    //return 'foo';
 });

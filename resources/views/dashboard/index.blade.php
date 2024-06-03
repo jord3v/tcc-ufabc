@@ -136,7 +136,7 @@
                           <div>Valor usado: R${{$total}}</div>
                         </div>
                         <div class="progress progress-xs">
-                          <div class="progress-bar bg-info" style="width: {{$percentage}}%"></div>
+                          <div class="progress-bar bg-info" style="width: {{$percentage ?? 0}}%"></div>
                        </div>
                       </div>
                     </div>

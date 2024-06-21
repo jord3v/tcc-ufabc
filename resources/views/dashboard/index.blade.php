@@ -133,7 +133,7 @@
                               $percentage = round(($total / $note->amount) * 100);
                             @endphp
                           @endforeach
-                          <div>Valor usado: R${{$total}}</div>
+                          <div>Valor usado: {{getPrice($total)}}</div>
                         </div>
                         <div class="progress progress-xs">
                           <div class="progress-bar bg-info" style="width: {{$percentage ?? 0}}%"></div>

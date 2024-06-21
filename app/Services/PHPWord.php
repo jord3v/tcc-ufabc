@@ -57,6 +57,8 @@ class PHPWord
         });
         $formattedString = $transformedValues->implode(' + ');
 
+        $validity = ceil($note->start->diffInMonths($note->end->subDay()));
+
         $templateProcessor->setValues([
             //nota de empenho
             "modalidade" => $note->modality,
@@ -65,7 +67,7 @@ class PHPWord
             "ne" => $note->number . "/" . $note->year,
             "objeto" => $note->service,
             "inicio" => $note->start->format("d/m/Y"),
-            "vigencia" => ceil($note->start->diffInMonths($note->end->subDay())),
+            "vigencia" => $validity . ' ' . ($validity == 1 ? 'mês' : 'meses'),
             "fim" => $note->end->format("d/m/Y"),
             "valor_total_contrato" => getPrice($note->amount),
             "valor_mensal_contrato" => getPrice($note->monthly_payment),

@@ -31,8 +31,8 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                <h3 class="card-title">Histórico de pagamentos</h3>
                <div class="card-actions">
                   <div class="dropdown">
-                  <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
-                     Empenhos de {{$_GET['year']}}
+                  <button type="button" class="btn position-relative dropdown-toggle" data-bs-toggle="dropdown">
+                     Empenhos de {{$_GET['year']}} <span class="badge bg-blue text-blue-fg badge-notification badge-pill">{{$total}}</span>
                   </button>
                   <div class="dropdown-menu">
                      @for ($year = 2025; $year > 2020; $year--)

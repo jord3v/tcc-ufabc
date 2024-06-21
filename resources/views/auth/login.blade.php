@@ -24,7 +24,7 @@
                 </div>
                 <div class="mb-2">
                   <label class="form-label">
-                      {{ __('Password') }}
+                      {{ __('Senha') }}
                       <span class="form-label-description">
                           <a href="{{ route('password.request') }}">{{ __('Forgot Your Password?') }}</a>
                       </span>

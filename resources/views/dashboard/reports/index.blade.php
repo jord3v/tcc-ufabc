@@ -65,6 +65,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                         <th>Empenho</th>
                         <th>Gestor do relatório</th>
                         <th>Departamento</th>
+                        <th>Ação</th>
                      </tr>
                   </thead>
                   <tbody>
@@ -73,8 +74,9 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                            @can('report-create')
                            <td><input type="checkbox" class="form-check-input group-checkbox-reports"></td>
                            @endcan
-                           <td colspan="{{auth()->user()->can('report-create') ? '4' : '5'}}">
-                              <u class="fw-bold">{{$company}}</u>
+                           <td colspan="{{auth()->user()->can('report-create') ? '5' : '6'}}">
+                              <span class="fw-bold h4 text-warning">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 21l18 0"></path><path d="M5 21v-14l8 -4v18"></path><path d="M19 21v-10l-6 -4"></path><path d="M9 9l0 .01"></path><path d="M9 12l0 .01"></path><path d="M9 15l0 .01"></path><path d="M9 18l0 .01"></path></svg> {{$company}}</span>
                            </td>
                         </tr>
                         @foreach ($report->sortBy('location.name') as $item)
@@ -86,11 +88,16 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                            <td>{{$item->note->number}}/{{$item->note->year}}<br>{{$item->note->modality}}</td>
                            <td>{{$item->manager}}</td>
                            <td>{{$item->department}}</td>
+                           <td>
+                              <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#edit" data-bs-id="{{$item->id}}">
+                                 Editar
+                              </a>
+                           </td>
                         </tr>
                         @endforeach
                      @empty
                         <tr>
-                           <td colspan="5" class="text-center bg-dark-lt"> nada encontrado</td>
+                           <td colspan="6" class="text-center bg-dark-lt"> nada encontrado</td>
                         </tr>
                      @endforelse
                   </tbody>
@@ -98,7 +105,6 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
             </div>
             <div class="card-footer">
                @can('payment-create')
-               
                @endcan
             </div>
          </div>
@@ -203,40 +209,50 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
    </div>
 </div>
 @endcan
-@can('report-delete')
-<div class="modal modal-blur fade" id="report-delete" tabindex="-1" user="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+@can('report-edit')
+<div class="modal modal-blur fade" id="edit" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
-         <form method="POST">
-            @method('DELETE')
-            @csrf
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            <div class="modal-status bg-danger"></div>
-            <div class="modal-body text-center py-4">
-               
-               <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                  <path d="M12 9v4" />
-                  <path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z" />
-                  <path d="M12 16h.01" />
-               </svg>
-               <h3>Tem certeza?</h3>
-               <div class="text-secondary">Você realmente deseja excluir esse localidade? O que você fizer não poderá ser desfeito.</div>
+         <form method="POST" class="needs-validation" novalidate>
+            <input type="hidden" name="_token" value="Q9nSHhLC76oNml3TlMvdHcTd7Fkk6ndHmfgVZiq8" autocomplete="off">            <input type="hidden" name="_method" value="PUT">            <div class="modal-header">
+               <h5 class="modal-title">Editar relatório circunstanciados</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-footer">
-               <div class="w-100">
-                  <div class="row">
-                     <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
-                        Cancelar
-                        </a>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-6">
+                     <div class="mb-3">
+                        <label class="form-label">Gestor do relatório</label>
+                        <input type="text" class="form-control" name="manager" required>
                      </div>
-                     <div class="col">
-                        <button type="submit" class="btn btn-danger w-100">
-                           Excluir
-                        </button>
+                  </div>
+                  <div class="col-lg-6">
+                     <div class="mb-3">
+                        <label class="form-label">Departamento</label>
+                        <input type="text" class="form-control" name="department" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-12">
+                     <div class="mb-3">
+                        <label class="form-label">Modelo word</label>
+                        <select class="form-select" name="file_id" required>
+                           <option value="" selected>Selecione o template word</option>
+                           @forelse ($files as $file)
+                           <option value="{{$file->id}}">{{$file->filename}}</option>
+                           @empty
+                           @endforelse
+                        </select>
                      </div>
                   </div>
                </div>
+            </div>
+            <div class="modal-footer">
+               <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+               Cancelar
+               </a>
+               <button type="submit" class="btn btn-primary ms-auto">
+               Editar relatório circunstanciados
+               </button>
             </div>
          </form>
       </div>

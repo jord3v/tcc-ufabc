@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\{Company, File, Location, Note, Payment, Report};
-use Illuminate\Http\{RedirectResponse, Request};
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\View\View;
 use App\Services\PHPWord;
 use ZipArchive;
@@ -74,17 +74,20 @@ class ReportController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Report $report)
+    public function edit(string $id): JsonResponse
     {
-        //
+        $report = $this->report->findOrFail($id);
+        return response()->json($report);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Report $report)
+    public function update(Request $request, string $id): RedirectResponse
     {
-        //
+        $report = $this->report->find($id);
+        $report->update($request->all());
+        return back()->with('success', 'Relatório circunstanciado atualizado com sucesso!');
     }
 
     /**
@@ -113,7 +116,12 @@ class ReportController extends Controller
         ->orderBy("signature_date", "desc")
         ->get()
         ->groupBy('signature_date');
-        return view('dashboard.reports.list', compact('payments'));
+
+        $total = $payments->sum(function($group) {
+            return $group->count();
+        });
+
+        return view('dashboard.reports.list', compact('payments', 'total'));
     }
 
     /**

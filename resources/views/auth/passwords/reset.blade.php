@@ -24,7 +24,7 @@
                   @enderror
                 </div>
                 <div class="mb-2">
-                  <label class="form-label">{{ __('Password') }}</label>
+                  <label class="form-label">{{ __('Senha') }}</label>
                   <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
                       @error('password')
                           <span class="invalid-feedback" role="alert">
@@ -33,7 +33,7 @@
                       @enderror
                 </div>
                 <div class="mb-2">
-                    <label class="form-label">{{ __('Confirm Password') }}</label>
+                    <label class="form-label">{{ __('Confirmar senha') }}</label>
                     <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                 </div>
                 <div class="form-footer">

@@ -404,6 +404,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 reloadPageOnClose('hidden.bs.modal', ignoreModalToReload);
-handleCheckboxGroup('.group-checkbox-reports', '4');
+handleCheckboxGroup('.group-checkbox-reports', '5');
 handleCheckboxGroup('.group-checkbox-reports-downloads', '3');
 highlightLines();

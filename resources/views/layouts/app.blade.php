@@ -271,13 +271,13 @@
                      <div class="row">
                        <div class="col-lg-6">
                          <div class="mb-3">
-                           <label class="form-label">{{ __('Password') }}</label>
+                           <label class="form-label">{{ __('Senha') }}</label>
                            <input type="password" class="form-control" name="password" placeholder="password">
                          </div>
                        </div>
                        <div class="col-lg-6">
                          <div class="mb-3">
-                           <label class="form-label">{{ __('Confirm Password') }}</label>
+                           <label class="form-label">{{ __('Confirmar senha') }}</label>
                            <input type="password" class="form-control" name="password_confirmation" placeholder="password">
                          </div>
                        </div>

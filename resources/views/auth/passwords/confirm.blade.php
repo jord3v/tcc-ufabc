@@ -9,7 +9,7 @@
             </div>
             <div class="card card-md">
                <div class="card-body">
-                  <h2 class="h2 text-center mb-4">{{ __('Confirm Password') }}</h2>
+                  <h2 class="h2 text-center mb-4">{{ __('Confirmar senha') }}</h2>
                   {{ __('Please confirm your password before continuing.') }}
                   <form method="POST" action="{{ route('password.confirm') }}">
                      @csrf
@@ -30,7 +30,7 @@
                                  <path d="M12 16m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
                                  <path d="M8 11v-5a4 4 0 0 1 8 0"></path>
                               </svg>
-                              {{ __('Confirm Password') }}
+                              {{ __('Confirmar senha') }}
                            </button>
                            @if (Route::has('password.request'))
                            <a class="btn btn-link" href="{{ route('password.request') }}">

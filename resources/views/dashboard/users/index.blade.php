@@ -118,26 +118,38 @@
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-               <div class="mb-3">
-                  <label class="form-label">Nome</label>
-                  <input type="text" class="form-control" name="name" placeholder="Administrator" required>
-               </div>
-               <div class="mb-3">
-                  <label class="form-label">Endereço de e-mail</label>
-                  <input type="email" class="form-control" name="email" placeholder="admin@admin.com" required>
+               <div class="row">
+                  <div class="col-lg-12">
+                     <div class="mb-3">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="name" placeholder="Administrator" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-8">
+                     <div class="mb-3">
+                        <label class="form-label">Endereço de e-mail</label>
+                        <input type="email" class="form-control" name="email" placeholder="admin@admin.com" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-4">
+                     <div class="mb-3">
+                        <label class="form-label">Usuário ERP</label>
+                        <input type="text" class="form-control" name="username">
+                     </div>
+                  </div>
                </div>
             </div>
             <div class="modal-body">
                <div class="row">
                  <div class="col-lg-6">
                    <div class="mb-3">
-                     <label class="form-label">{{ __('Password') }}</label>
+                     <label class="form-label">{{ __('Senha') }}</label>
                      <input type="password" class="form-control" name="password" placeholder="password" required>
                    </div>
                  </div>
                  <div class="col-lg-6">
                    <div class="mb-3">
-                     <label class="form-label">{{ __('Confirm Password') }}</label>
+                     <label class="form-label">{{ __('Confirmar senha') }}</label>
                      <input type="password" class="form-control" name="password_confirmation" placeholder="password" required>
                    </div>
                  </div>
@@ -184,26 +196,38 @@
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-               <div class="mb-3">
-                  <label class="form-label">Nome</label>
-                  <input type="text" class="form-control" name="name" placeholder="Administrator" required>
-               </div>
-               <div class="mb-3">
-                  <label class="form-label">Endereço de e-mail</label>
-                  <input type="email" class="form-control" name="email" placeholder="admin@admin.com" required>
+               <div class="row">
+                  <div class="col-lg-12">
+                     <div class="mb-3">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="name" placeholder="Administrator" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-8">
+                     <div class="mb-3">
+                        <label class="form-label">Endereço de e-mail</label>
+                        <input type="email" class="form-control" name="email" placeholder="admin@admin.com" required>
+                     </div>
+                  </div>
+                  <div class="col-lg-4">
+                     <div class="mb-3">
+                        <label class="form-label">Usuário ERP</label>
+                        <input type="text" class="form-control" name="username">
+                     </div>
+                  </div>
                </div>
             </div>
             <div class="modal-body">
                <div class="row">
                  <div class="col-lg-6">
                    <div class="mb-3">
-                     <label class="form-label">{{ __('Password') }}</label>
+                     <label class="form-label">{{ __('Senha') }}</label>
                      <input type="password" class="form-control" name="password" placeholder="password">
                    </div>
                  </div>
                  <div class="col-lg-6">
                    <div class="mb-3">
-                     <label class="form-label">{{ __('Confirm Password') }}</label>
+                     <label class="form-label">{{ __('Confirmar senha') }}</label>
                      <input type="password" class="form-control" name="password_confirmation" placeholder="password">
                    </div>
                  </div>

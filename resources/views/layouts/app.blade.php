@@ -13,7 +13,7 @@
       <link rel="dns-prefetch" href="//fonts.bunny.net">
       <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
       <!-- Scripts -->
-      <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+      <link rel="stylesheet" href="{{ asset('css/app.css') }}">
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <style>
          @import url('https://rsms.me/inter/inter.css');
@@ -41,7 +41,7 @@
                </button>
                <h1 class="navbar-brand navbar-brand-autodark">
                   <a href="{{route('dashboard')}}">
-                  <img src="{{ asset('img/logo.svg') }}" width="110" height="32" alt="Tabler" class="navbar-brand-image">
+                  <img src="{{ asset('img/2Z6qNZ-LogoMakr.png') }}" width="110" height="32" alt="Tabler" class="navbar-brand-image">
                   </a>
                </h1>
                <div class="navbar-nav flex-row d-lg-none">
@@ -228,17 +228,16 @@
             <footer class="footer footer-transparent d-print-none">
                <div class="container-xl">
                   <div class="row text-center align-items-center flex-row-reverse">
-                     <div class="col-lg-auto ms-lg-auto">
-                        <ul class="list-inline list-inline-dots mb-0">
-                           <li class="list-inline-item"><a href="https://tabler.io/docs" target="_blank" class="link-secondary" rel="noopener">Documentation</a></li>
-                        </ul>
-                     </div>
                      <div class="col-12 col-lg-auto mt-3 mt-lg-0">
                         <ul class="list-inline list-inline-dots mb-0">
                            <li class="list-inline-item">
+                              Construído com: 
+                              <a href="https://laravel.com/" class="link-secondary" target="_blank">Laravel - The PHP Framework For Web Artisans</a>.
+                           </li>
+                           <li class="list-inline-item">
                               Copyright © 2023
-                              <a href="." class="link-secondary">Tabler</a>.
-                              All rights reserved.
+                              <a href="https://tabler.io/docs" class="link-secondary" target="_blank">Tabler</a>.
+                              Todos os direitos reservados.
                            </li>
                         </ul>
                      </div>
@@ -387,7 +386,7 @@
            </form>
          </div>
       </div>
-      <script src="{{ mix('js/app.js') }}" defer></script>
+      <script src="{{ asset('js/app.js') }}" defer></script>
       @stack('modals')
       <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
       @stack('scripts')

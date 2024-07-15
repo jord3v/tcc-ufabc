@@ -37,7 +37,10 @@ class DashboardController extends Controller
         }
 
         $companies = $this->company->get();
-        $reports = $this->report->get();
+        $reports = $this->report->whereHas('note', function ($query) {
+            $query->where('active', true);
+        })
+        ->get();
         $notes = $this->note->with([
             'reports' => function ($query) {
                 $query->withSum('payments', 'price');

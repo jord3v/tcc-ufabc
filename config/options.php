@@ -25,6 +25,8 @@ return [
         "eventuais_falhas" => "Eventuais ocorrências/Falhas na execução do contrato",
         "sugestoes" => "Sugestões de medidas a serem implementadas",
         "fatura" => "Número da Nota Fiscal/Fatura",
+        "total_pago" => "Total já pago",
+        "restante_a_pagar" => "Saldo restante a pagar",
         "notas" => 'Planilha de Acompanhamento do Saldo Contratual <br><small class="text-danger">Por se tratar de uma <code>array</code>, é necessário fazer a iteração no documento</small><br><code>${notas}<br>  ${n_nota_fiscal}<br>   ${n_referencia}<br>   ${n_preco}<br>   ${n_vencimento}<br>   ${n_saldo}<br>${notas}</code>',
     ],
     "GESTOR" => [

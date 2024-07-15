@@ -10,12 +10,12 @@
       <link rel="dns-prefetch" href="//fonts.bunny.net">
       <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
       <!-- Scripts -->
-      <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+      <link rel="stylesheet" href="{{ asset('css/app.css') }}">
    </head>
    <body class="d-flex flex-column">
     <div class="page page-center">
         @yield('content')
     </div>
-    <script src="{{ mix('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
    </body>
 </html>

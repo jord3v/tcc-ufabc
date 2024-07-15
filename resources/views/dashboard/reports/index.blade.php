@@ -214,7 +214,9 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
          <form method="POST" class="needs-validation" novalidate>
-            <input type="hidden" name="_token" value="Q9nSHhLC76oNml3TlMvdHcTd7Fkk6ndHmfgVZiq8" autocomplete="off">            <input type="hidden" name="_method" value="PUT">            <div class="modal-header">
+            @csrf
+            @method('PUT')   
+            <div class="modal-header">
                <h5 class="modal-title">Editar relatório circunstanciados</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>

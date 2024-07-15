@@ -169,6 +169,7 @@
                            <option value="">Selecione a modalidade</option>
                            <option value="Pregão Eletrônico">Pregão Eletrônico</option>
                            <option value="Dispensa Eletrônica">Dispensa Eletrônica</option>
+                           <option value="Não se aplica">Não se aplica</option>
                            <option value="Outros">Outros</option>
                         </select>
                      </div>
@@ -284,6 +285,7 @@
                            <option value="">Selecione a modalidade</option>
                            <option value="Pregão Eletrônico">Pregão Eletrônico</option>
                            <option value="Dispensa Eletrônica">Dispensa Eletrônica</option>
+                           <option value="Não se aplica">Não se aplica</option>
                            <option value="Outros">Outros</option>
                         </select>
                      </div>

@@ -59,6 +59,8 @@ class PHPWord
 
         $validity = ceil($note->start->diffInMonths($note->end->subDay()));
 
+        $total = $this->getPaymentsHistory($object, true);
+
         $templateProcessor->setValues([
             //nota de empenho
             "modalidade" => $note->modality,
@@ -83,6 +85,8 @@ class PHPWord
             "valor_apresentado" => $formattedString,
             "vencimento" => $object->due_date->format("d/m/Y"),
             "mes_referencia" => reference($object->reference),
+            "total_pago"     => getPrice($total),
+            "restante_a_pagar"     => getPrice($note->amount - $total),
             //ocorrências
             "eventuais_ocorrencias" => $object->occurrences['occurrence'] ?? null,
             "eventuais_falhas" => $object->occurrences['failures'] ?? null,
@@ -118,34 +122,42 @@ class PHPWord
         return $join;
     }
 
-    private function getPaymentsHistory($object)
+    private function getPaymentsHistory($object, $sum = false)
     {
-        // Obter o histórico de pagamentos associado ao objeto
-        $payments = $this->payment
+        $query = $this->payment
             ->where("report_id", $object->report_id)
             ->whereDate("reference", "<=", $object->reference)
             ->whereDate("signature_date", "<=", $object->signature_date)
-            ->orderBy("signature_date", "asc")
-            ->get();
+            ->orderBy("signature_date", "asc");
 
-        $saldo_acumulado = $object->report->note->amount;
-        $saldos_acumulados = [];
+        if ($sum) {
+            // Calcular a soma dos preços dos pagamentos
+            $paymentsSum = $query->sum('price');
+            return $paymentsSum;
+        } else {
+            // Obter o histórico detalhado de pagamentos
+            $payments = $query->get();
 
-        // Calcular o saldo acumulado
-        foreach ($payments as $payment) {
-            $saldo_acumulado -= convertFloat($payment->price);
-            $saldos_acumulados[] = [
-                "n_nota_fiscal" => $payment->invoice,
-                "n_referencia" => reference($payment->reference),
-                "n_preco" => getPrice($payment->price),
-                "n_vencimento" => $payment->due_date->format("d/m/Y"),
-                "n_saldo" => getPrice($saldo_acumulado),
-                "n_protocolo" => $payment->process
-            ];
+            $saldo_acumulado = $object->report->note->amount;
+            $saldos_acumulados = [];
+
+            // Calcular o saldo acumulado e formatar os dados de retorno
+            foreach ($payments as $payment) {
+                $saldo_acumulado -= convertFloat($payment->price);
+                $saldos_acumulados[] = [
+                    "n_nota_fiscal" => $payment->invoice,
+                    "n_referencia" => reference($payment->reference),
+                    "n_preco" => getPrice($payment->price),
+                    "n_vencimento" => $payment->due_date->format("d/m/Y"),
+                    "n_saldo" => getPrice($saldo_acumulado),
+                    "n_protocolo" => $payment->process
+                ];
+            }
+
+            return ["Acompanhamento" => $saldos_acumulados];
         }
-
-        return ["Acompanhamento" => $saldos_acumulados];
     }
+
 
     private function cloneBlockInTemplate(
         TemplateProcessor $templateProcessor,

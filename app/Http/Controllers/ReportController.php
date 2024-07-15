@@ -103,6 +103,12 @@ class ReportController extends Controller
      */
     public function list(Request $request)
     {
+        $request->merge([
+            'start' => $request->filled('start') ? $request->input('start') : now()->startOfWeek(),
+            'end' => $request->filled('end') ? $request->input('end') : now()->endOfWeek(),
+        ]);
+
+        $companies = $this->company->get();
         $payments = $this->payment->with([
             'report' => [
                 'location', 
@@ -110,8 +116,16 @@ class ReportController extends Controller
                 'note'
             ],
         ])
-        ->whereHas('report.note', function ($query) use ($request) {
+        /*->whereHas('report.note', function ($query) use ($request) {
             $query->where('year', $request->year ?? now()->format('Y'));
+        })*/
+        ->whereHas('report.company', function ($query) use ($request) {
+            $query->when($request->filled('company'), function ($query) use ($request) {
+                $query->where('id', $request->company);
+            });
+        })
+        ->when($request->start && $request->end, function ($query) use ($request) {
+            $query->whereBetween('signature_date', [$request->start, $request->end]);
         })
         ->orderBy("signature_date", "desc")
         ->get()
@@ -121,7 +135,7 @@ class ReportController extends Controller
             return $group->count();
         });
 
-        return view('dashboard.reports.list', compact('payments', 'total'));
+        return view('dashboard.reports.list', compact('payments', 'total', 'companies'));
     }
 
     /**

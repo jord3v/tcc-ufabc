@@ -325,6 +325,7 @@ function highlightLines() {
             if (
                 linha.getAttribute("data-company") === linhas[i].getAttribute("data-company") &&
                 linha.getAttribute("data-reference") === linhas[i].getAttribute("data-reference") &&
+                linha.getAttribute("data-signature") === linhas[i].getAttribute("data-signature") &&
                 linha.getAttribute("data-location") === linhas[i].getAttribute("data-location")
             ) {
                 // Adicionar classe de destaque

@@ -1,5 +1,8 @@
 @php 
-$_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
+$_GET['company'] = isset($_GET['company']) ? $_GET['company'] : '';
+$_GET['reference'] = isset($_GET['reference']) ? $_GET['reference'] : '';
+$_GET['start'] = $_GET['start'] ?? now()->startOfWeek()->format('Y-m-d');
+$_GET['end'] = $_GET['end'] ?? now()->endOfWeek()->format('Y-m-d');
 @endphp
 @extends('layouts.app')
 @section('content')
@@ -24,26 +27,52 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
 </div>
 <div class="page-body">
    <div class="container-xl">
+      <form action="">
+         <div class="card card-borderless mb-3">
+            <div class="card-header">
+               <h3 class="card-title">Busca rápida</h3>
+            </div>
+            <div class="card-body">
+               <div class="row">
+                  <div class="col-5">
+                  <label class="form-label">Prestador de serviço</label>
+                  <select name="company" class="form-select">
+                        <option value="">Todos</option>
+                     @foreach ($companies as $company)
+                        <option value="{{$company->id}}" {{$_GET['company'] == $company->id ? 'selected' : ''}}>{{$company->name}}</option>
+                     @endforeach
+                  </select>
+                  </div>
+                  <div class="col-3">
+                  <label class="form-label">Período de execução</label>
+                  <input type="month" name="reference" class="form-control" value="{{$_GET['reference']}}">
+                  </div>
+                  <div class="col-4">
+                  <label class="form-label">Intervalo de pagamentos</label>
+                  <div class="row g-2">
+                     <div class="col-6">
+                     <input type="date" name="start" class="form-control" value="{{$_GET['start']}}">
+                     </div>
+                     <div class="col-6">
+                        <input type="date" name="end" class="form-control" value="{{$_GET['end']}}">
+                     </div>
+                  </div>
+                  </div>
+               </div>           
+            </div>
+            <div class="card-footer">
+               <button class="btn">Filtrar</button>
+            </div>
+         </div>
+      </form>
       <form action="{{route('reports.download')}}" method="POST" class="needs-validation" novalidate>
          @csrf
          <div class="card">
             <div class="card-header">
                <h3 class="card-title">Histórico de pagamentos</h3>
                <div class="card-actions">
-                  <div class="dropdown">
-                  <button type="button" class="btn position-relative dropdown-toggle" data-bs-toggle="dropdown">
-                     Empenhos de {{$_GET['year']}} <span class="badge bg-blue text-blue-fg badge-notification badge-pill">{{$total}}</span>
-                  </button>
-                  <div class="dropdown-menu">
-                     @for ($year = 2025; $year > 2020; $year--)
-                     <a class="dropdown-item" href="?year={{ $year }}">
-                        Empenhos de {{ $year }}
-                     </a>
-                     @endfor
-                  </div>
-                  <button type="submit" class="dynamic-button btn btn-outline-success" data-base-text="Download dos itens selecionados" disabled>Download dos itens selecionados</button>
-                  </div>
-            </div>
+                  <button type="submit" class="dynamic-button btn btn-outline-success" data-base-text="Download dos itens selecionados" disabled>Download dos itens selecionados</button>   
+               </div>
             </div>
             <div class="table-responsive">
                {{--<table class="table card-table table-vcenter text-nowrap datatable" id="tabela">
@@ -112,15 +141,15 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                               <td><input type="checkbox" class="form-check-input group-checkbox-reports-downloads"></td>
                            @endcan
                            <td colspan="{{auth()->user()->can('payment-create') ? '3' : '4'}}">
-                              <u class="fw-bold">Relatórios circunstanciados gerados em <strong>{{date('d/m/Y', strtotime($date))}}</strong></u>
+                              <u class="fw-bold text-warning">Relatórios circunstanciados gerados em <strong>{{date('d/m/Y', strtotime($date))}}</strong></u>
                            </td>
                         </tr>
                         @foreach ($payment as $item)
-                        <tr data-company="{{$item->report->company->id}}" data-reference="{{$item->reference->format('Y-m-d')}}" data-location="{{$item->report->location->id}}">
+                        <tr data-company="{{$item->report->company->id}}" data-reference="{{$item->reference->format('Y-m-d')}}" data-location="{{$item->report->location->id}}" data-signature="{{$date}}">
                            <td><input type="checkbox" name="payments[]" class="form-check-input" value="{{$item->uuid}}"></td>
                            <td>
                               {{$item->report->company->name}}<br>
-                              {{getPrice($item->price)}} - {{$item->report->note->service}} - {{$item->report->location->name}} - {{str()->upper(reference($item->reference))}}
+                              {{getPrice($item->price)}} - {{(strlen($item->report->note->service) > 50 ? substr($item->report->note->service, 0, 50) . "..." : $item->report->note->service)}} - {{$item->report->location->name}} - {{str()->upper(reference($item->reference))}}
                            </td>
                            <td>
                               @if ($item->process)

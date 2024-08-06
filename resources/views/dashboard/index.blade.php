@@ -37,20 +37,6 @@
                 </div>
               </div>
               @endcan
-              @can('report-list')
-              <div class="col-12">
-               <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center">
-                      <div class="subheader">
-                        <a href="{{route('reports.index')}}">Relatórios circunstanciados</a>
-                     </div>
-                    </div>
-                    <div class="h1 mb-3">{{$reports->count()}}</div>
-                  </div>
-                </div>
-              </div>
-              @endcan
               @can('note-list')
               <div class="col-12">
                <div class="card">
@@ -75,6 +61,20 @@
                      </div>
                     </div>
                     <div class="h1 mb-3">{{$locations->count()}}</div>
+                  </div>
+                </div>
+              </div>
+              @endcan
+              @can('report-list')
+              <div class="col-12">
+               <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">
+                        <a href="{{route('reports.index')}}">Relatórios circunstanciados</a>
+                     </div>
+                    </div>
+                    <div class="h1 mb-3">{{$reports->count()}}</div>
                   </div>
                 </div>
               </div>

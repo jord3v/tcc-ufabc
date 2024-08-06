@@ -120,11 +120,11 @@
                   </div>
                   @foreach ($permissions as $key => $permission)
                   <div class="col-lg-3 mb-3">
-                     <label class="form-label">{{$key}}</label>
+                     <label class="form-label">{{trans('system.'.$key)}}</label>
                      @foreach ($permission as $item)
                      <label class="form-check">
                      <input type="checkbox" name="permissions[]" class="form-check-input" value="{{$item->name}}">
-                     <span class="form-check-label">{{$item->name}}</span>
+                     <span class="form-check-label">{{trans('system.'.$item->name)}}</span>
                      </label>
                      @endforeach
                   </div>

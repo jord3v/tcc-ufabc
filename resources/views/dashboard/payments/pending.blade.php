@@ -55,7 +55,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive-off" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 4h11a2 2 0 1 1 0 4h-7m-4 0h-3a2 2 0 0 1 -.826 -3.822" /><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 1.824 -1.18m.176 -3.82v-7" /><path d="M10 12h2" /><path d="M3 3l18 18" /></svg>
                       Arquivados
                   </a>
-                  <a href="{{route('payments.pending')}}" class="form-selectgroup-item w-100 btn text-muted fw-bold" id="pendings-button">
+                  <a href="{{route('payments.pending')}}" class="form-selectgroup-item w-100 btn fw-bold active" id="pendings-button">
                      carregando
                   </a>
                </div>
@@ -85,11 +85,11 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                      </div>
                      <div class="card-body p-0">
                         <div class="table-responsive">
-                           <table class="table card-table table-vcenter text-nowrap datatable">
+                           <table class="table card-table table-vcenter text-nowrap datatable table-bordered">
                               <thead>
                                   <tr>
-                                      <th>Mês</th>
-                                      <th>Relatórios sem pagamento</th>
+                                      <th>Referência</th>
+                                      <th>Rel. circunstanciados</th>
                                   </tr>
                               </thead>
                               <tbody>
@@ -98,19 +98,30 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                           <td>{{ $monthName }}<br> <strong class="text-danger">{{$reports->count() > 0 ? $reports->count().' pendências' : ''}}</strong></td>
                                           <td class="td-truncate">
                                               @if ($reports->isEmpty())
-                                                  <span class="text-success">Não há pendências</span>
+                                              <div class="alert alert-important bg-green-lt m-0" role="alert">
+                                                <div class="d-flex fw-bold">
+                                                  <div>
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                         <path d="M5 12l5 5l10 -10"></path>
+                                                      </svg>
+                                                  </div>
+                                                  <div>Não há pendências</div>
+                                                </div>
+                                              </div>
                                               @else
                                                    @foreach ($reports->groupBy('company.name') as $company => $notes)
                                                       <h3 class="text-warning mb-2">{{$company}}</h3>
                                                       @foreach ($notes as $note)
-                                                      
                                                          <label class="form-check">
                                                             <input type="checkbox" class="form-check-input" name="reports[]" value="{{$note->id}}">
                                                             <span class="form-check-label">
                                                                {{$note->note->number}}/{{$note->note->year}} {{$note->location->name}}
                                                             </span>
-                                                            <span class="form-check-description">
-                                                               {{$note->note->service}}
+                                                            <span class="form-check-description text-truncate">
+                                                               <div>
+                                                                  {{$note->note->service}}
+                                                               </div>
                                                             </span>
                                                           </label>
                                                       @endforeach

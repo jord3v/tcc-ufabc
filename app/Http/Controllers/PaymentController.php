@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Company, Payment, Report};
+use App\Models\{Company, Note, Payment, Report};
 use App\Services\PHPWord;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request, Response};
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -12,7 +13,7 @@ use ZipArchive;
 
 class PaymentController extends Controller
 {
-    public function __construct(private Payment $payment, private Report $report, private Company $company, private PHPWord $word, private ZipArchive $zip)
+    public function __construct(private Payment $payment, private Report $report, private Company $company, private Note $note, private PHPWord $word, private ZipArchive $zip)
     {
         $this->middleware('permission:payment-list', ['only' => ['index','show']]);
         $this->middleware('permission:payment-create', ['only' => ['create','store', 'fill']]);
@@ -184,5 +185,71 @@ class PaymentController extends Controller
         if($query->count() == 1) 
             return response()->json(['last_invoice' => $query->first()]);
         return response()->json(['error' => 'Ocorreu um erro interno no servidor'], 500);
+    }
+
+    /**
+     * missing payments by reference.
+     *
+     * @param  \App\Models\Payment  $payment
+     * @return \Illuminate\Http\Response
+     */
+    public function pending()
+    {
+        $period = CarbonPeriod::create(now()->startOfYear(), "1 month", now()->subMonth()->endOfMonth());
+
+        $pendingPayments = [];
+
+        foreach ($period as $date) {
+            $reportsWithPendingPayments = $this->report->with(['location', 'note', 'company', 'payments'])
+                ->whereHas('note', function ($query) {
+                    $query->where('active', true);
+                })
+                ->whereDoesntHave('payments', function ($query) use ($date) {
+                    $query->whereYear('reference', now()->year)
+                        ->whereMonth('reference', $date->month);
+                })
+                ->whereHas('payments', function ($query) use ($date) {
+                    $query->whereDate('reference', '<=', $date->endOfMonth());
+                })
+            ->get();
+            $filteredReports = $reportsWithPendingPayments->filter(function ($report) use ($date) {
+                $firstPayment = $report->payments()->orderBy('reference', 'asc')->first();
+                return $firstPayment && $firstPayment->reference->month <= $date->month;
+            });
+            $pendingPayments[$date->translatedFormat('F/Y')] = $filteredReports;
+        }
+
+        return view('dashboard.payments.pending', compact('pendingPayments'));
+    }
+
+    public function pendingsTotal()
+    {
+        $period = CarbonPeriod::create(now()->startOfYear(), "1 month", now()->subMonth()->endOfMonth());
+
+        $pendingPayments = [];
+
+        foreach ($period as $date) {
+            $reportsWithPendingPayments = $this->report->with(['location', 'note', 'company', 'payments'])
+                ->whereHas('note', function ($query) {
+                    $query->where('active', true);
+                })
+                ->whereDoesntHave('payments', function ($query) use ($date) {
+                    $query->whereYear('reference', now()->year)
+                        ->whereMonth('reference', $date->month);
+                })
+                ->whereHas('payments', function ($query) use ($date) {
+                    $query->whereDate('reference', '<=', $date->endOfMonth());
+                })
+            ->get();
+            $filteredReports = $reportsWithPendingPayments->filter(function ($report) use ($date) {
+                $firstPayment = $report->payments()->orderBy('reference', 'asc')->first();
+                return $firstPayment && $firstPayment->reference->month <= $date->month;
+            });
+            $pendingPayments[$date->translatedFormat('F/Y')] = $filteredReports;
+        }
+        $total = array_sum(array_map(function($report) {
+            return $report->count();
+        }, $pendingPayments));
+        return response('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-urgent"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M8 16v-4a4 4 0 0 1 8 0v4"></path><path d="M3 12h1m8 -9v1m8 8h1m-15.4 -6.4l.7 .7m12.1 -.7l-.7 .7"></path><path d="M6 16m0 1a1 1 0 0 1 1 -1h10a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-10a1 1 0 0 1 -1 -1z"></path></svg>'.$total.' pendências', 200)->header('Content-Type', 'text/html');
     }
 }

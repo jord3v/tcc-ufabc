@@ -98,6 +98,7 @@
                  <a href="{{route('payments.index')}}" class="btn btn-outline-primary">
                    Consultar pagamentos
                  </a>
+                 <a href="{{route('payments.pending')}}" id="pendings-button" class="btn btn-outline-warning">carregando</a>
                </div>
              </div>
              <div class="card-body p-0">
@@ -111,7 +112,7 @@
       <div class="row row-deck row-cards">
         <div class="col-12 p-3">
           <h2 class="page-title">
-            <a href="{{route('notes.index')}}">Notas de empenho</a>
+            <a href="{{route('notes.index')}}">Notas de empenho em vigor</a>
           </h2>
         </div>
         @forelse ($notes as $note)

@@ -404,6 +404,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const button = document.getElementById('pendings-button');
+    const url = '/dashboard/payments/pending/total'; // Substitua com o caminho da sua rota
+
+    // Função para carregar o conteúdo da rota e atualizar o botão
+    function updateButtonContent() {
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                button.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Erro ao carregar o conteúdo:', error);
+            });
+    }
+
+    // Atualize o botão quando a página for carregada
+    updateButtonContent();
+});
+
 reloadPageOnClose('hidden.bs.modal', ignoreModalToReload);
 handleCheckboxGroup('.group-checkbox-reports', '5');
 handleCheckboxGroup('.group-checkbox-reports-downloads', '3');

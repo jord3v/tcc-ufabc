@@ -46,18 +46,21 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                <div class="form-label">Situação</div>
                <div class="mb-4">
                <div class="form-selectgroup w-100">
-                  <label class="form-selectgroup-item">
+                  <label class="form-selectgroup-item w-100">
                     <input type="radio" name="active" value="1" class="form-selectgroup-input" onchange='this.form.submit()' {{$_GET['active'] == '1' ? 'checked' : ''}}>
-                    <span class="form-selectgroup-label"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                    <span class="form-selectgroup-label fw-bold"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" /><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" /><path d="M10 12l4 0" /></svg>
                       Ativo</span>
                   </label>
-                  <label class="form-selectgroup-item">
+                  <label class="form-selectgroup-item w-100">
                     <input type="radio" name="active" value="0" class="form-selectgroup-input" onchange='this.form.submit()' {{$_GET['active'] == '0' ? 'checked' : ''}}>
-                    <span class="form-selectgroup-label"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                    <span class="form-selectgroup-label fw-bold"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive-off" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 4h11a2 2 0 1 1 0 4h-7m-4 0h-3a2 2 0 0 1 -.826 -3.822" /><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 1.824 -1.18m.176 -3.82v-7" /><path d="M10 12h2" /><path d="M3 3l18 18" /></svg>
                       Arquivados</span>
                   </label>
+                  <a href="{{route('payments.pending')}}" class="form-selectgroup-item w-100 btn text-muted fw-bold" id="pendings-button">
+                     carregando
+                  </a>
                </div>
                </div>
                <div class="form-label">Empresa</div>

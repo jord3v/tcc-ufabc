@@ -13,6 +13,9 @@ use App\Http\Controllers\{
     UserController,
     RoleAndPermissionController
 };
+use App\Models\Report;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 Route::get('/', function () {
     return to_route('dashboard');
@@ -24,6 +27,8 @@ Route::group(['prefix' => 'dashboard',  'middleware' => ['auth', 'prevent-demo-a
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/reports/list', [ReportController::class, 'list'])->name('reports.list');
     Route::post('/reports/download', [ReportController::class, 'download'])->name('reports.download');
+    Route::get('/payments/pending', [PaymentController::class, 'pending'])->name('payments.pending');
+    Route::get('/payments/pending/total', [PaymentController::class, 'pendingsTotal'])->name('payments.pendings.total');
     Route::resources([
         'companies' => CompanyController::class,
         'files' => FileController::class,
@@ -43,13 +48,4 @@ Route::group(['prefix' => 'dashboard',  'middleware' => ['auth', 'prevent-demo-a
     Route::post('/payments/last', [PaymentController::class, 'last'])->name('payments.last');
     Route::put('/update-profile', [UserController::class, 'updateProfile'])->name('users.update-profile'); 
     Route::post('protocols/attachment', [ProtocolController::class, 'attachment'])->name('protocols.attachment');
-});
-
-
-Route::get('/test', function () {
-    $note = App\Models\Note::find(2);
-    $diferenciaMeses = $note->start->diffInMonths($note->end);
-    return $diferenciaMeses;
-
-    //return 'foo';
 });

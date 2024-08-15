@@ -3,7 +3,7 @@
 ## DESENVOLVIMENTO DE UMA FERRAMENTA PARA PADRONIZAÇÃO DE RELATÓRIOS CIRCUNSTANCIADOS UTILIZANDO O FRAMEWORK LARAVEL
 ### O que é o Gestor de Relatório Circustanciado
 
-[![Software Gestor de Relatório Circustanciado](https://raw.githubusercontent.com/jord3v/tcc-ufabc/master/docs/prints/Captura%20de%20tela%202024-08-06%20005310.png)](https://raw.githubusercontent.com/jord3v/tcc-ufabc/master/docs/prints/Captura de tela 2024-08-14 214542.png)
+[![Software Gestor de Relatório Circustanciado](https://github.com/jord3v/tcc-ufabc/blob/master/docs/prints/Captura%20de%20tela%202024-08-14%20214542.png?raw=true)]([https://raw.githubusercontent.com/jord3v/tcc-ufabc/master/docs/prints/Captura de tela 2024-08-14 214542.png](https://www.youtube.com/playlist?list=PLdoeid7n5i21SCsI9cdgIjYEbB3r_ao6X))
   
 ### Requisitos
 

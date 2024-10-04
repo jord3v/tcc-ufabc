@@ -15,7 +15,7 @@ class PaymentController extends Controller
 {
     public function __construct(private Payment $payment, private Report $report, private Company $company, private Note $note, private PHPWord $word, private ZipArchive $zip)
     {
-        $this->middleware('permission:payment-list', ['only' => ['index','show']]);
+        $this->middleware('permission:payment-list', ['only' => ['index','show', 'pending', 'pendingsTotal']]);
         $this->middleware('permission:payment-create', ['only' => ['create','store', 'fill']]);
         $this->middleware('permission:payment-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:payment-delete', ['only' => ['destroy']]);

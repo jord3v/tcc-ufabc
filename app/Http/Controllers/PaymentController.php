@@ -70,13 +70,17 @@ class PaymentController extends Controller
             })
             ->find($request->report);
 
-        if ($request->company && !$report) {
-            
-        }
+        $unresolved = $this->payment->whereNotNull('process')
+        ->where(function($query) {
+            $query->where('status', '!=', 'Solucionado')
+                  ->orWhereNull('status');
+        })
+        ->get();
+
 
         return view(
             "dashboard.payments.index",
-            compact("companies", "filters", "payments", "report")
+            compact("companies", "filters", "payments", "report", "unresolved")
         );
     }
 
@@ -195,7 +199,7 @@ class PaymentController extends Controller
      */
     public function pending()
     {
-        $period = CarbonPeriod::create(now()->startOfYear(), "1 month", now()->subMonth()->endOfMonth());
+        $period = CarbonPeriod::create(now()->startOfYear(), "1 month", now()->endOfMonth());
 
         $pendingPayments = [];
 
@@ -219,12 +223,35 @@ class PaymentController extends Controller
             $pendingPayments[$date->translatedFormat('F/Y')] = $filteredReports;
         }
 
-        return view('dashboard.payments.pending', compact('pendingPayments'));
+        $unresolved = $this->payment->whereNotNull('process')
+        ->where(function($query) {
+            $query->where('status', '!=', 'Solucionado')
+                  ->orWhereNull('status');
+        })
+        ->get();
+
+        return view('dashboard.payments.pending', compact('pendingPayments', 'unresolved'));
+    }
+
+    public function unresolved(){
+        $unresolved = $this->payment->with([
+            'report' => [
+                'location', 
+                'company', 
+                'note'
+            ],
+        ])->whereNotNull('process')
+        ->where(function($query) {
+            $query->where('status', '!=', 'Solucionado')
+                  ->orWhereNull('status');
+        })
+        ->get();
+        return view('dashboard.payments.unresolved', compact('unresolved'));
     }
 
     public function pendingsTotal()
     {
-        $period = CarbonPeriod::create(now()->startOfYear(), "1 month", now()->subMonth()->endOfMonth());
+        $period = CarbonPeriod::create(now()->startOfYear(), "1 month", now()->endOfMonth());
 
         $pendingPayments = [];
 

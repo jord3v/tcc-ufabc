@@ -12,7 +12,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
             <div class="page-pretitle"> </div>
             <h2 class="page-title">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-wallet"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"></path><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4"></path></svg>
-               Pendências
+               Pendências de {{now()->startOfYear()->translatedFormat('F/Y')}} até {{now()->endOfMonth()->translatedFormat('F/Y')}}
             </h2>
          </div>
          <div class="col-auto ms-auto d-print-none">
@@ -44,30 +44,13 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
          </div>
          <div class="col-md-3">
             <div class="w-100 sticky-top">
-               <div class="form-label">Situação</div>
-               <div class="mb-4">
-               <div class="form-selectgroup w-100">
-                  <a href="{{route('payments.index')}}?active=1" class="form-selectgroup-item w-100 btn text-default">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" /><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" /><path d="M10 12l4 0" /></svg>
-                      Ativo</span>
-                  </a>
-                  <a href="{{route('payments.index')}}?active=0" class="form-selectgroup-item w-100 btn text-default">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive-off" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 4h11a2 2 0 1 1 0 4h-7m-4 0h-3a2 2 0 0 1 -.826 -3.822" /><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 1.824 -1.18m.176 -3.82v-7" /><path d="M10 12h2" /><path d="M3 3l18 18" /></svg>
-                      Arquivados
-                  </a>
-                  <a href="{{route('payments.pending')}}" class="form-selectgroup-item w-100 btn fw-bold active" id="pendings-button">
-                     carregando
-                  </a>
-               </div>
-               </div>
-               @if ($_GET['company'] || $_GET['report'])
-                  <div class="mt-5">
-                     <a href="{{route('payments.index')}}" class="btn btn-outline-info w-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter-off" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 4h12v2.172a2 2 0 0 1 -.586 1.414l-3.914 3.914m-.5 3.5v4l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227" /><path d="M3 3l18 18" /></svg> Remover filtro
-                     </a>
-                  </div>
-               @endif
-               </div>
+               <a href="{{route('payments.pending')}}" class="form-selectgroup-item w-100 btn text-primary fw-bold mb-2 active" id="pendings-button">
+                  carregando
+               </a>
+               <a href="{{route('payments.unresolved')}}" class="form-selectgroup-item w-100 btn text-muted fw-bold">
+                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-barcode"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M8 13h1v3h-1z" /><path d="M12 13v3" /><path d="M15 13h1v3h-1z" /></svg>{{$unresolved ? $unresolved->count().' protocolos não resolvidos' : 'Não há protocolos pendentes'}}
+               </a>
+            </div>
          </div>
          <div class="col-md-9">
             <div class="row row-cards">

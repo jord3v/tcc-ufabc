@@ -1,6 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\{
+    Route,
+    Artisan
+};
 use App\Http\Controllers\{
     CompanyController,
     DashboardController,
@@ -13,9 +16,7 @@ use App\Http\Controllers\{
     UserController,
     RoleAndPermissionController
 };
-use App\Models\Report;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
+use Psy\Readline\Hoa\Protocol;
 
 Route::get('/', function () {
     return to_route('dashboard');
@@ -29,6 +30,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => ['auth', 'prevent-demo-a
     Route::post('/reports/download', [ReportController::class, 'download'])->name('reports.download');
     Route::get('/payments/pending', [PaymentController::class, 'pending'])->name('payments.pending');
     Route::get('/payments/pending/total', [PaymentController::class, 'pendingsTotal'])->name('payments.pendings.total');
+    Route::get('/payments/unresolved-protocols', [PaymentController::class, 'unresolved'])->name('payments.unresolved');
     Route::resources([
         'companies' => CompanyController::class,
         'files' => FileController::class,
@@ -48,4 +50,8 @@ Route::group(['prefix' => 'dashboard',  'middleware' => ['auth', 'prevent-demo-a
     Route::post('/payments/last', [PaymentController::class, 'last'])->name('payments.last');
     Route::put('/update-profile', [UserController::class, 'updateProfile'])->name('users.update-profile'); 
     Route::post('protocols/attachment', [ProtocolController::class, 'attachment'])->name('protocols.attachment');
+    Route::get('/protocols/update/status', function () {
+        Artisan::call('app:update-status-protocols');
+        return back()->with('success', 'Situações verificadas com sucesso!');
+    })->name('protocols.update');
 });

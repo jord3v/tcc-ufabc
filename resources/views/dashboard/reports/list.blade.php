@@ -153,7 +153,7 @@ $_GET['end'] = $_GET['end'] ?? now()->endOfWeek()->format('Y-m-d');
                            </td>
                            <td>
                               @if ($item->process)
-                                 ADM-{{$item->process}}
+                              ADM-{{$item->process}}<br> {{$item->status}}
                               @else
                                  <a href="{{route('protocols.show', $item->uuid)}}" class="btn btn-outline-success">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-databricks"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 17l9 5l9 -5v-3l-9 5l-9 -5v-3l9 5l9 -5v-3l-9 5l-9 -5l9 -5l5.418 3.01"></path></svg>Gerar protocolo

@@ -43,26 +43,6 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
          </div>
          <div class="col-md-3">
             <form method="get" autocomplete="off" novalidate="" class="w-100 sticky-top">
-               <div class="form-label">Situação</div>
-               <div class="mb-4">
-               <div class="form-selectgroup w-100">
-                  <label class="form-selectgroup-item w-100">
-                    <input type="radio" name="active" value="1" class="form-selectgroup-input" onchange='this.form.submit()' {{$_GET['active'] == '1' ? 'checked' : ''}}>
-                    <span class="form-selectgroup-label fw-bold"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" /><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" /><path d="M10 12l4 0" /></svg>
-                      Ativo</span>
-                  </label>
-                  <label class="form-selectgroup-item w-100">
-                    <input type="radio" name="active" value="0" class="form-selectgroup-input" onchange='this.form.submit()' {{$_GET['active'] == '0' ? 'checked' : ''}}>
-                    <span class="form-selectgroup-label fw-bold"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive-off" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 4h11a2 2 0 1 1 0 4h-7m-4 0h-3a2 2 0 0 1 -.826 -3.822" /><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 1.824 -1.18m.176 -3.82v-7" /><path d="M10 12h2" /><path d="M3 3l18 18" /></svg>
-                      Arquivados</span>
-                  </label>
-                  <a href="{{route('payments.pending')}}" class="form-selectgroup-item w-100 btn text-muted fw-bold" id="pendings-button">
-                     carregando
-                  </a>
-               </div>
-               </div>
                <div class="form-label">Empresa</div>
                <div class="mb-4">
                   <select class="form-select dynamic-select" name="company" onchange='this.form.submit()' data-span-id="company"> 
@@ -89,13 +69,23 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                      @endforelse
                   </select>
                </div>
-               @if ($_GET['company'] || $_GET['report'])
-                  <div class="mt-5">
-                     <a href="{{route('payments.index')}}" class="btn btn-outline-info w-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter-off" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 4h12v2.172a2 2 0 0 1 -.586 1.414l-3.914 3.914m-.5 3.5v4l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227" /><path d="M3 3l18 18" /></svg> Remover filtro
-                     </a>
+               <div class="form-label">Situação</div>
+               <div class="mb-4">
+                  <div class="form-selectgroup w-100">
+                     <label class="form-selectgroup-item w-100">
+                     <input type="radio" name="active" value="1" class="form-selectgroup-input" onchange='this.form.submit()' {{$_GET['active'] == '1' ? 'checked' : ''}}>
+                     <span class="form-selectgroup-label fw-bold"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" /><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" /><path d="M10 12l4 0" /></svg>
+                        Ativo</span>
+                     </label>
+                     <label class="form-selectgroup-item w-100">
+                     <input type="radio" name="active" value="0" class="form-selectgroup-input" onchange='this.form.submit()' {{$_GET['active'] == '0' ? 'checked' : ''}}>
+                     <span class="form-selectgroup-label fw-bold"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive-off" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 4h11a2 2 0 1 1 0 4h-7m-4 0h-3a2 2 0 0 1 -.826 -3.822" /><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 1.824 -1.18m.176 -3.82v-7" /><path d="M10 12h2" /><path d="M3 3l18 18" /></svg>
+                        Arquivados</span>
+                     </label>
                   </div>
-               @endif
+               </div>
             </form>
          </div>
          <div class="col-md-9">
@@ -151,7 +141,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                  @forelse ($payments as $payment)
                                  @php $saldo_acumulado -= convertFloat($payment->price) @endphp
                                  <tr>
-                                    <td><strong>{{reference($payment->reference)}}</strong><br><small class="text-warning">{{$payment->process ? 'ADM-'.$payment->process:'SEM PROTOCOLO'}}</small></td>
+                                    <td><strong>{{reference($payment->reference)}}</strong><br><small class="text-warning">{{$payment->process ? 'ADM-'.$payment->process:'SEM PROTOCOLO'}}</small><br><small>{{$payment->status}} </small></td>
                                     <td>{{$payment->invoice}}</td>
                                     <td class="w-1 fw-bold">{{getPrice($payment->price)}}</td>
                                     <td>{{$payment->due_date->format('d/m/Y')}}</td>

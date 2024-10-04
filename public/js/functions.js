@@ -424,6 +424,12 @@ document.addEventListener('DOMContentLoaded', function() {
     updateButtonContent();
 });
 
+function checkStatus() {
+    var btn = document.getElementById('status-btn');
+    btn.innerHTML = "Verificando situação...";
+    btn.classList.add('disabled');
+}
+
 reloadPageOnClose('hidden.bs.modal', ignoreModalToReload);
 handleCheckboxGroup('.group-checkbox-reports', '5');
 handleCheckboxGroup('.group-checkbox-reports-downloads', '3');

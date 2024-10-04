@@ -21,6 +21,7 @@ class Payment extends Model
         'report_id',
         'invoice',
         'process',
+        'status',
         'reference',	
         'occurrences',
         'price',	

@@ -52,19 +52,34 @@ class ProtocolController extends Controller
             "nomeImagem" => $request->arquivo->getClientOriginalName(),
             "arquivo"  => $base64File,
         ];
-        $protocol = $this->erp->post('SPW/API_spw/SPR/protocolo/AnexarDocumento', $data);
+        $protocol = $this->erp->post('AnexarDocumento', $data);
         return back()->with('success', $protocol);
+    }
+
+    public function update($uuid)
+    {
+        $payment = $this->payment->where('uuid', $uuid)->firstOrFail();
+        $data = [
+            "tipoProtocolo" => "ADM",
+            "numeroProtocolo" => $payment->process,
+        ];
+        $string = $this->erp->post('ObterProtocolo', $data);
+        preg_match('/situacao:\s*([^,]+)/', $string, $matches);
+        $payment->update(['status' => $matches[1]]);
+        return back()->with('success', $matches[1]);
     }
 
     private function generateDescription($payments, $payment): string
     {
         $prices = $payments->pluck('price')->map(fn ($price) => getPrice($price));
 
-        return $prices->implode(" + ") . " - " .
-            $payment->report->note->service . " - " .
-            $payment->report->company->name . " - " .
-            $payment->report->location->name . " - REF: " .
-            str()->upper(reference($payment->reference));
+        return $prices->implode(" + ") . "\n" .
+            $payment->report->company->name . "\n" .
+            $payment->report->location->name . "\n" .
+            "REF: " . str()->upper(reference($payment->reference) . " - Com vencimento para: " .
+            $payment->due_date->format("d/m/Y") . "\n" .
+            $payment->report->note->service
+        );
     }
 
     private function createProtocol($description, $payment)
@@ -83,7 +98,7 @@ class ProtocolController extends Controller
             "CodigoSituacao"  => 6
         ];
 
-        return $this->erp->post('SPW/API_spw/SPR/protocolo/IncluirProtocolo', $data);
+        return $this->erp->post('IncluirProtocolo', $data);
     }
 
 

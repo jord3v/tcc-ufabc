@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('report_id')->constrained();
             $table->string('invoice');
             $table->string('process')->nullable();
+            $table->string('status')->nullable();
             $table->date('reference');
             $table->json('occurrences')->nullable();
             $table->decimal('price', 10, 2);

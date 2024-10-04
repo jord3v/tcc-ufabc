@@ -115,11 +115,21 @@
                      </li>
                      @endcanany
                      @can('payment-list')
-                     <li class="nav-item {{request()->routeIs('payments.index') ? 'active': ''}}">
+                     <li class="nav-item {{request()->routeIs(['payments.index']) ? 'active': ''}}">
                         <a class="nav-link" href="{{route('payments.index')}}">
                            <span class="nav-link-title">
                               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-wallet"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12" /><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" /></svg>
                               Pagamentos lançados
+                           </span>
+                        </a>
+                     </li>
+                     @endcan
+                     @can('payment-list')
+                     <li class="nav-item {{request()->routeIs(['payments.pending', 'payments.unresolved']) ? 'active': ''}}">
+                        <a class="nav-link" href="{{route('payments.pending')}}">
+                           <span class="nav-link-title">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-urgent"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M8 16v-4a4 4 0 0 1 8 0v4"></path><path d="M3 12h1m8 -9v1m8 8h1m-15.4 -6.4l.7 .7m12.1 -.7l-.7 .7"></path><path d="M6 16m0 1a1 1 0 0 1 1 -1h10a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-10a1 1 0 0 1 -1 -1z"></path></svg>
+                              Pendências
                            </span>
                         </a>
                      </li>
@@ -337,14 +347,14 @@
                 </div>
                 <div class="col-lg-3">
                   <label class="form-selectgroup-item">
-                    <input type="radio" name="tipo" value="48" class="form-selectgroup-input" required>
+                    <input type="radio" name="tipo" value="188" class="form-selectgroup-input" required>
                     <span class="form-selectgroup-label d-flex align-items-center p-3">
                       <span class="me-3">
                         <span class="form-selectgroup-check"></span>
                       </span>
                       <span class="form-selectgroup-label-content">
-                        <span class="form-selectgroup-title strong mb-1">Boleto</span>
-                        <span class="d-block text-secondary">48</span>
+                        <span class="form-selectgroup-title strong mb-1">Boletos</span>
+                        <span class="d-block text-secondary">188</span>
                       </span>
                     </span>
                   </label>

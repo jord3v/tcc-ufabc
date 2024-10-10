@@ -19,7 +19,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                </a>
                @can('report-create')
                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#report-create">
-               Novo relatório circunstanciados
+               Novo relatório circunstanciado
                </a>
                @endcan
             </div>
@@ -121,7 +121,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
          <form action="{{route('reports.store')}}" method="POST" class="needs-validation" novalidate>
             @csrf
             <div class="modal-header">
-               <h5 class="modal-title">Novo relatório circunstanciados</h5>
+               <h5 class="modal-title">Novo relatório circunstanciado</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -141,8 +141,8 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                   <div class="col-lg-4">
                      <div class="mb-3">
                         <label class="form-label">Unidade operacional</label>
-                        <select class="form-select" name="location_id" required>
-                           <option value="" selected>Selecione a unidade</option>
+                        <select class="form-select" name="locations[]" multiple required> 
+                           <option selected disabled>Selecione a unidade</option>
                            @forelse ($locations as $location)
                            <option value="{{$location->id}}">{{$location->name}}</option>
                            @empty
@@ -201,7 +201,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                Cancelar
                </a>
                <button type="submit" class="btn btn-primary ms-auto">
-               Novo relatório circunstanciados
+               Novo relatório circunstanciado
                </button>
             </div>
          </form>

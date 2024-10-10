@@ -59,8 +59,12 @@ class ReportController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $report = auth()->user()->reports()->create($request->all());
-        return back()->with('success', 'Relatório adicionado com sucesso!');
+        foreach ($request->locations as $location_id) {
+            $data = $request->all();
+            $data['location_id'] = $location_id;
+            auth()->user()->reports()->create($data);
+        }
+        return back()->with('success', 'Relatório(s) adicionado(s) com sucesso!');
     }
 
     /**

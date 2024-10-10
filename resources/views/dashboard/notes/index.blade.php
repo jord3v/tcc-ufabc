@@ -50,7 +50,7 @@
                   <tr>
                      <td class="td-truncate">
                         <div class="font-weight-medium text-truncate">{{$note->number}}/{{$note->year}} - {{$note->service}}</div>
-                        <div class="text-truncate text-muted">
+                        <div class="text-truncate text-muted text-uppercase">
                            {{$note->comments ? $note->comments : 'N/A'}}
                         </div>
                         @foreach ($note->reports as $report)
@@ -60,7 +60,7 @@
                             @endphp
                         @endforeach
                         <div class="progress progress-xs">
-                           <div class="progress-bar bg-info" style="width: {{$percentage ?? 0}}%"></div>
+                           <div class="progress-bar bg-info" style="width: {{ $total != 0 ? $percentage : 0 }}%"></div>
                         </div>
                      </td>
                      <td>

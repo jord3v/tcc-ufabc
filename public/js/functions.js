@@ -430,6 +430,17 @@ function checkStatus() {
     btn.classList.add('disabled');
 }
 
+function updateProgressBars() {
+    const progressBars = document.querySelectorAll('.progress-bar');
+    progressBars.forEach(function(bar) {
+        let width = parseFloat(bar.style.width); 
+        if (width > 75) {
+            bar.classList.remove('bg-info');
+            bar.classList.add('bg-danger');
+        }
+    });
+}
+document.addEventListener('DOMContentLoaded', updateProgressBars);
 reloadPageOnClose('hidden.bs.modal', ignoreModalToReload);
 handleCheckboxGroup('.group-checkbox-reports', '5');
 handleCheckboxGroup('.group-checkbox-reports-downloads', '3');

@@ -109,7 +109,7 @@
          @endcan
       </div>
       @can('note-list')
-      <div class="row row-deck row-cards">
+      <div class="row row-deck row-cards" id="cardContainer">
         <div class="col-12 p-3">
           <h2 class="page-title">
             <a href="{{route('notes.index')}}">Notas de empenho em vigor</a>
@@ -123,7 +123,7 @@
               <div class="row align-items-center">
                 <div class="col text-truncate">
                   <h3 class="card-title mb-1">{{$note->number}}/{{$note->year}} - {{$note->modality}}</h3>
-                  <small class="text-truncate text-muted">{{$note->service}}</small>
+                  <small class="text-truncate text-muted text-uppercase">{{$note->service}}</small>
                   <div class="mt-3">
                     <div class="row g-2 align-items-center">
                       <div class="col">
@@ -134,10 +134,10 @@
                               $percentage = round(($total / $note->amount) * 100);
                             @endphp
                           @endforeach
-                          <div>Valor usado: {{getPrice($total)}}</div>
+                          <span class="fw-bold text-primary text-center text-uppercase text-center">{{ $total != 0 ? 'Valor usado: '.getPrice($total) : 'Nenhum boleto lançado' }}</span>
                         </div>
                         <div class="progress progress-xs">
-                          <div class="progress-bar bg-info" style="width: {{$percentage ?? 0}}%"></div>
+                          <div class="progress-bar bg-info" style="width: {{ $total != 0 ? $percentage : 0 }}%"></div>
                        </div>
                       </div>
                     </div>

@@ -88,7 +88,7 @@
              <div class="card-header border-0">
                <div>
                  <h3 class="card-title">
-                  Pagamentos lançados
+                  Histórico de pagamentos
                  </h3>
                  <p class="card-subtitle">
                    Últimos {{count($data['months'])}} meses

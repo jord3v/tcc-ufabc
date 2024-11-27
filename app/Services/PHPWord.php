@@ -33,7 +33,7 @@ class PHPWord
         // Preencher os valores estáticos no template
         $this->fillTemplateValues($templateProcessor, $object);
 
-        // Preencher o histórico de pagamentos no template
+        // Preencher o Histórico de pagamentos no template
         $this->fillPaymentHistory($templateProcessor, $object);
 
         // Salvar o documento gerado
@@ -103,7 +103,7 @@ class PHPWord
         TemplateProcessor $templateProcessor,
         $object
     ) {
-        // Preencher o histórico de pagamentos no template
+        // Preencher o Histórico de pagamentos no template
         $payments = $this->getPaymentsHistory($object);
 
         $this->cloneBlockInTemplate($templateProcessor, $payments);

@@ -39,10 +39,10 @@ class ReportController extends Controller
         ->get()
         ->groupBy('company.name');
 
-        $locations = $this->location->where('active', true)->get();
+        $locations = $this->location->where('active', true)->orderBy('name')->get();
         $notes = $this->note->where('active', true)->get();
         $files = $this->file->where('active', true)->get();
-        $companies = $this->company->get();
+        $companies = $this->company->orderBy('name')->get();
         return view('dashboard.reports.index', compact('locations', 'reports', 'notes', 'files', 'companies'));
     }
 
@@ -57,14 +57,19 @@ class ReportController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)//: RedirectResponse
     {
-        foreach ($request->locations as $location_id) {
-            $data = $request->all();
-            $data['location_id'] = $location_id;
-            auth()->user()->reports()->create($data);
+        $exist = $this->report->whereIn('location_id', $request->locations)->where('note_id', $request->note_id)->exists();
+        if(!$exist){
+            foreach ($request->locations as $location_id) {
+                $data = $request->all();
+                $data['location_id'] = $location_id;
+                auth()->user()->reports()->create($data);
+            }
+            return to_route('reports.index')->with(['success' => 'Relatório(s) adicionado(s) com sucesso!']);
+        }else{
+            return back()->with('error', 'Já existe um relatório com a mesma nota de empenho, localização e prestador de serviço.');
         }
-        return back()->with('success', 'Relatório(s) adicionado(s) com sucesso!');
     }
 
     /**

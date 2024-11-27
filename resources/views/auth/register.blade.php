@@ -6,7 +6,7 @@
       <div class="col-lg">
         <div class="container-tight">
           <div class="text-center mb-4">
-            <a href="{{route('dashboard')}}" class="navbar-brand navbar-brand-autodark"><img src="{{ asset('img/2Z6qNZ-LogoMakr.png') }}" height="36" alt=""></a>
+            <a href="{{route('dashboard')}}" class="navbar-brand navbar-brand-autodark"><img src="{{ asset('img/logo.svg') }}" height="36" alt=""></a>
           </div>
           <div class="card card-md">
             <div class="card-body">

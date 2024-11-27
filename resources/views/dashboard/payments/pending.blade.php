@@ -72,7 +72,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                               <thead>
                                   <tr>
                                       <th>Referência</th>
-                                      <th>Rel. circunstanciados</th>
+                                      <th>Relatórios circunstanciados</th>
                                   </tr>
                               </thead>
                               <tbody>

@@ -9,7 +9,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
          <div class="col">
             <div class="page-pretitle"> </div>
             <h2 class="page-title">
-               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M14 3v4a1 1 0 0 0 1 1h4"></path><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path><path d="M9 17h6"></path><path d="M9 13h6"></path></svg> Rel. circunstanciados - Preencher
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M14 3v4a1 1 0 0 0 1 1h4"></path><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path><path d="M9 17h6"></path><path d="M9 13h6"></path></svg> Relatórios circunstanciados - Preencher
             </h2>
          </div>
          <div class="col-auto ms-auto d-print-none">
@@ -140,7 +140,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                   </div>
                   <div class="col-lg-4">
                      <div class="mb-3">
-                        <label class="form-label">Unidade operacional</label>
+                        <label class="form-label">Unidades operacionais</label>
                         <select class="form-select" name="locations[]" multiple required> 
                            <option selected disabled>Selecione a unidade</option>
                            @forelse ($locations as $location)
@@ -160,7 +160,7 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
                         <select class="form-select" name="note_id" required>
                            <option value="" selected>Selecione a nota</option>
                            @forelse ($notes as $note)
-                           <option value="{{$note->id}}">{{$note->number}}/{{$note->year}} - {{$note->process}} - {{$note->modality}} - {{$note->service}}</option>
+                           <option value="{{$note->id}}">{{$note->number}}/{{$note->year}} - {{$note->process}} - {{$note->modality}} - {{(strlen($note->service) > 30 ? substr($note->service, 0, 30) . "..." : $note->service)}}</option>
                            @empty
                            @endforelse
                         </select>

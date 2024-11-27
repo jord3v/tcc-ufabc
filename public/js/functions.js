@@ -9,7 +9,8 @@ function reloadPageOnClose(eventType, ignoreModalToReload) {
 
 var ignoreModalToReload = [
     document.querySelector('#occurrences'),
-    document.querySelector('#bulk-fill')
+    document.querySelector('#bulk-fill'),
+    document.querySelector('#report-create')
 ];
 
 function add(event) {
@@ -441,6 +442,30 @@ function updateProgressBars() {
     });
 }
 document.addEventListener('DOMContentLoaded', updateProgressBars);
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Obtém os parâmetros da URL atual
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Verifica se existe algum parâmetro 'modal' na URL
+    const modalId = urlParams.get('modal');
+
+    if (modalId) {
+        // Seleciona o modal dinamicamente pelo ID extraído do parâmetro
+        const modalElement = document.getElementById(modalId);
+
+        // Verifica se o modal com o ID existe
+        if (modalElement) {
+            // Usa o Bootstrap para abrir o modal
+            const bootstrapModal = new bootstrap.Modal(modalElement);
+            bootstrapModal.show();
+        } else {
+            console.error(`Modal com ID '${modalId}' não encontrado.`);
+        }
+    }
+});
+
+
 reloadPageOnClose('hidden.bs.modal', ignoreModalToReload);
 handleCheckboxGroup('.group-checkbox-reports', '5');
 handleCheckboxGroup('.group-checkbox-reports-downloads', '3');

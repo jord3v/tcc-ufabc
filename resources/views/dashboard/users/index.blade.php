@@ -35,7 +35,8 @@
             <table class="table card-table table-vcenter text-nowrap datatable">
                <thead>
                   <tr>
-                     <th class="w-75">Usuário</th>
+                     <th class="w-50">Usuário</th>
+                     <th class="w-25">Departamento > Setor</th>
                      <th class="w-25">Funções</th>
                      @canany(['user-edit', 'user-delete'])<th></th>@endcanany
                   </tr>
@@ -51,6 +52,9 @@
                             <div class="text-secondary"><a href="mailto:{{$user->email}}" class="text-reset">{{$user->email}}</a></div>
                           </div>
                         </div>
+                     </td>
+                     <td>
+                        {{ $user->sectors->pluck('name')->implode(', ') }}
                      </td>
                      <td>
                         {{ $user->roles->pluck('name')->implode(', ') }}
@@ -155,6 +159,25 @@
                  </div>
                </div>
              </div>
+             <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-12 mb-3">
+                     <label class="form-label">Departamento > Setor</label>
+                     <small class="form-hint">O colaborador poderá cadastrar itens nos respectivos setores</small>
+                  </div>
+                  @foreach ($departments as $key => $department)
+                  <div class="col-lg-6 mb-3">
+                     <label class="form-label">{{$department->name}}</label>
+                     @foreach ($department->sectors as $sector)
+                     <label class="form-check">
+                     <input type="checkbox" name="sectors[]" class="form-check-input" value="{{$sector->id}}">
+                     <span class="form-check-label">{{$sector->name}}</span>
+                     </label>
+                     @endforeach
+                  </div>
+                  @endforeach
+               </div>
+            </div>
             <div class="modal-body">
                <div class="row">
                   <div class="col-lg-12">
@@ -163,13 +186,14 @@
                   @foreach ($roles as $role)
                   <div class="col-lg-3 mb-3">
                      <label class="form-check">
-                        <input type="checkbox" name="roles[]" class="form-check-input" value="{{$role->name}}">
+                        <input type="checkbox" name="roles[]" class="form-check-input" value="{{$role->id}}">
                         <span class="form-check-label">{{$role->name}}</span>
                      </label>
                   </div>
                   @endforeach
                </div>
             </div>
+            
             <div class="modal-footer">
                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                Cancelar
@@ -233,6 +257,25 @@
                  </div>
                </div>
              </div>
+             <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-12 mb-3">
+                     <label class="form-label">Departamento > Setor</label>
+                     <small class="form-hint">O colaborador poderá cadastrar itens nos respectivos setores</small>
+                  </div>
+                  @foreach ($departments as $key => $department)
+                  <div class="col-lg-6 mb-3">
+                     <label class="form-label">{{$department->name}}</label>
+                     @foreach ($department->sectors as $sector)
+                     <label class="form-check">
+                     <input type="checkbox" name="sectors[]" class="form-check-input" value="{{$sector->id}}">
+                     <span class="form-check-label">{{$sector->name}}</span>
+                     </label>
+                     @endforeach
+                  </div>
+                  @endforeach
+               </div>
+            </div>
             <div class="modal-body">
                <div class="row">
                   <div class="col-lg-12">
@@ -241,7 +284,7 @@
                   @foreach ($roles as $role)
                   <div class="col-lg-3 mb-3">
                      <label class="form-check">
-                        <input type="checkbox" name="roles[]" class="form-check-input" value="{{$role->name}}">
+                        <input type="checkbox" name="roles[]" class="form-check-input" value="{{$role->id}}">
                         <span class="form-check-label">{{$role->name}}</span>
                      </label>
                   </div>

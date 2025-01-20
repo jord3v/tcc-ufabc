@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
     ];
@@ -51,6 +52,16 @@ class User extends Authenticatable
         return 'https://picsum.photos/300/300';
     }
 
+    // No modelo User
+    public function getSectorsGroupedByDepartment()
+    {
+        return $this->sectors()
+            ->with('department')
+            ->get()
+            ->groupBy(fn($sector) => $sector->department->name);
+    }
+
+
     public function files()
     {
        return $this->hasMany(File::class);
@@ -69,5 +80,10 @@ class User extends Authenticatable
     public function reports()
     {
        return $this->hasMany(Report::class);
+    }
+
+    public function sectors()
+    {
+        return $this->belongsToMany(Sector::class);
     }
 }

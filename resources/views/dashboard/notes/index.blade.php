@@ -37,6 +37,8 @@
                   <tr>
                      <th class="w-25">Objeto</th>
                      <th class="w-25">Modalidade</th>
+                     <th class="w-25">Localidade<br> do gestor do contrato
+                     </th>
                      <th>Valor total</th>
                      <th>Valor mensal</th>
                      <th>Período</th>
@@ -71,6 +73,7 @@
                          </div>
                        </div>
                      </td>
+                     <td>{{$note->sector->department->name}}<br>{{$note->sector->name}}</td>
                      <td>{{getPrice($note->amount)}}</td>
                      <td>{{getPrice($note->monthly_payment)}}</td>
                      <td>{{formatPeriod($note->start, $note->end)}}</td>
@@ -226,6 +229,25 @@
                   </div>
                </div>
             </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-12">
+                     <div class="mb-3">
+                        <label class="form-label">Localidade do gestor do contrato</label>
+                        <select class="form-select" name="sector_id" required>
+                           @forelse ($groupedSectors as $department => $item)
+                              <optgroup label="{{$department}}">
+                                 @foreach ($item as $sector)
+                                    <option value="{{$sector->id}}">{{$sector->name}}</option>
+                                 @endforeach
+                              </optgroup>
+                           @empty
+                           @endforelse
+                         </select>                         
+                     </div>
+                  </div>
+               </div>
+            </div>
             <div class="modal-footer">
                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                Cancelar
@@ -316,6 +338,25 @@
                      <div class="mb-3">
                         <label class="form-label">Valor mensal</label>
                         <input type="text" class="money form-control" name="monthly_payment" required>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-12">
+                     <div class="mb-3">
+                        <label class="form-label">Localidade do gestor do contrato</label>
+                        <select class="form-select" name="sector_name" required>
+                           @forelse ($groupedSectors as $department => $item)
+                              <optgroup label="{{$department}}">
+                                 @foreach ($item as $sector)
+                                    <option value="{{$sector->name}}">{{$sector->name}}</option>
+                                 @endforeach
+                              </optgroup>
+                           @empty
+                           @endforelse
+                         </select>                         
                      </div>
                   </div>
                </div>

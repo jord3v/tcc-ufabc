@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\{JsonResponse,RedirectResponse};
 use Illuminate\View\View;
@@ -27,9 +28,10 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        $users = $this->user->with('roles')->paginate(10);
+        $users = $this->user->with(['roles', 'sectors'])->paginate(10);
         $roles = $this->role->get();
-        return view('dashboard.users.index', compact('users', 'roles'));
+        $departments = Department::with('sectors')->get();
+        return view('dashboard.users.index', compact('users', 'roles', 'departments'));
     }
 
     /**
@@ -46,7 +48,8 @@ class UserController extends Controller
     public function store(UserRequest $request): RedirectResponse
     {
         $user = $this->user->create($request->all());
-        $user->syncRoles($request->roles);
+        $user->roles()->sync($request->roles);
+        $user->sectors()->sync($request->sectors);
         return back()->with('success', 'Usuário adicionado com sucesso!');
     }
 
@@ -63,7 +66,7 @@ class UserController extends Controller
      */
     public function edit(string $id): JsonResponse
     {
-        $user = $this->user->with('roles')->findOrFail($id);
+        $user = $this->user->with(['roles', 'sectors'])->findOrFail($id);
         return response()->json($user);
     }
 
@@ -76,7 +79,8 @@ class UserController extends Controller
         $input = $request->all();
         if (empty($input['password'])) {unset($input['password']);}
         $user->update($input);
-        $user->syncRoles($request->roles);
+        $user->roles()->sync($request->roles);
+        $user->sectors()->sync($request->sectors);
         return back()->with('success', 'Usuário atualizado com sucesso!');
     }
 

@@ -59,16 +59,29 @@ class PaymentController extends Controller
             })
             ->whereHas('report.note', function ($query) use ($request) {
                 $query->where('active', $request->active);
+                $query->whereIn('sector_id', auth()->user()->sectors->pluck('id'));
             })
             ->orderBy("signature_date", "asc")
             ->get();
 
-        $report = $this->report
-            ->with('note')
-            ->whereHas("company", function ($query) use ($request) {
+
+            $report = $this->report
+            ->with([
+                'note' => function ($query) {
+                    // Adicionar filtro para garantir que as notas estejam vinculadas aos setores permitidos
+                    $query->whereIn('sector_id', auth()->user()->sectors->pluck('id'));
+                }
+            ])
+            ->whereHas('note', function ($query) {
+                // Certificar-se de que o filtro seja aplicado também no whereHas
+                $query->whereIn('sector_id', auth()->user()->sectors->pluck('id'));
+            })
+            ->whereHas('company', function ($query) use ($request) {
                 return $query->where("company_id", "=", $request->company);
             })
             ->find($request->report);
+        
+
 
         $unresolved = $this->payment->whereNotNull('process')
         ->where(function($query) {
@@ -123,9 +136,10 @@ class PaymentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id): JsonResponse
+    public function edit(Payment $payment): JsonResponse
     {
-        $payment = $this->payment->whereUuid($id)->firstOrFail();
+        $this->authorize('edit', $payment);
+        $payment = $payment->whereUuid($payment->uuid)->firstOrFail();
         $paymentArray = $payment->toArray();
 
         if (isset($paymentArray['reference']) && is_string($paymentArray['reference'])) {
@@ -137,9 +151,10 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(Request $request, Payment $payment): RedirectResponse
     {
-        $payment = $this->payment->whereUuid($id)->firstOrFail();
+        $this->authorize('update', $payment);
+        $payment = $payment->whereUuid($payment->uuid)->firstOrFail();
         $payment->update($request->all());
         return back()->with('success', 'Pagamento atualizado com sucesso!');
     }
@@ -147,9 +162,10 @@ class PaymentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): RedirectResponse
+    public function destroy(Payment $payment): RedirectResponse
     {
-        $payment = $this->payment->whereUuid($id)->firstOrFail();
+        $this->authorize('edit', $payment);
+        $payment = $payment->whereUuid($payment->uuid)->firstOrFail();
         $payment->delete();
         return back()->with('success', 'Pagamento removído com sucesso!');
     }
@@ -244,6 +260,8 @@ class PaymentController extends Controller
         ->where(function($query) {
             $query->where('status', '!=', 'Solucionado')
                   ->orWhereNull('status');
+        })->whereHas('report.note', function ($query) {
+            $query->whereIn('sector_id', auth()->user()->sectors->pluck('id'));
         })
         ->get();
         return view('dashboard.payments.unresolved', compact('unresolved'));

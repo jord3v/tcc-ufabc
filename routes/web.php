@@ -14,7 +14,8 @@ use App\Http\Controllers\{
     ProtocolController,
     ReportController,
     UserController,
-    RoleAndPermissionController
+    RoleAndPermissionController,
+    ActivityController
 };
 use Psy\Readline\Hoa\Protocol;
 
@@ -41,6 +42,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => ['auth', 'prevent-demo-a
         'reports' => ReportController::class,
         'roles-and-permissions' => RoleAndPermissionController::class,
         'users' => UserController::class,
+        'activities' => ActivityController::class
     ]);
     Route::get('/payments/{payment:uuid}', [PaymentController::class, 'show'])->name('payments.show');
     Route::put('/payments/{payment:uuid}', [PaymentController::class, 'update'])->name('payments.update');

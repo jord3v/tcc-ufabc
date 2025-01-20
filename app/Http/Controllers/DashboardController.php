@@ -16,6 +16,9 @@ class DashboardController extends Controller
     public function index(): View
     {
         $payments = $this->payment
+            ->whereHas('report.note', function ($query) {
+                $query->whereIn('sector_id', auth()->user()->sectors->pluck('id'));
+            })
             ->whereBetween('reference', [now()->subMonths(11)->startOfMonth(), now()->endOfMonth()])
             ->get();
 

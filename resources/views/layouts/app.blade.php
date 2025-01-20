@@ -169,6 +169,16 @@
                         </a>
                      </li>
                      @endcan
+                     @can('company-list')
+                     <li class="nav-item {{request()->routeIs('activities.index') ? 'active': ''}}">
+                        <a class="nav-link" href="{{route('activities.index')}}">
+                           <span class="nav-link-title">
+                              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-history"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 8l0 4l2 2" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" /></svg>
+                              Registro de atividades
+                           </span>
+                        </a>
+                     </li>
+                     @endcan
                      @canany(['user-list', 'role-list', 'location-list', 'file-list'])
                      <li class="nav-item {{request()->routeIs(['users.index', 'roles-and-permissions.index', 'locations.index', 'files.index']) ? 'active': ''}} dropdown">
                         <a class="nav-link dropdown-toggle" href="#settings" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
@@ -213,6 +223,24 @@
                <span class="navbar-toggler-icon"></span>
                </button>
                <div class="navbar-nav flex-row order-md-last">
+                  <div class="nav-item d-none d-md-flex me-3">
+                     <form action="">
+                        <div class="form-floating">
+                           <select class="form-select" style="width: 200px;">
+                              @forelse ($groupedSectors as $department => $item)
+                                 <optgroup label="{{$department}}">
+                                    @foreach ($item as $sector)
+                                       <option>{{$sector->name}}</option>
+                                    @endforeach
+                                 </optgroup>
+                              @empty
+                                 
+                              @endforelse
+                           </select>
+                           <label >Departamento > Setor</label>
+                         </div>
+                     </form>                 
+                   </div>
                   <div class="nav-item dropdown">
                      <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
                         <span class="avatar avatar-sm" style="background-image: url('{{avatar()}}')"></span>

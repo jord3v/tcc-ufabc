@@ -83,18 +83,19 @@ class ReportController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id): JsonResponse
+    public function edit(Report $report): JsonResponse
     {
-        $report = $this->report->findOrFail($id);
+        $this->authorize('edit', $report);
         return response()->json($report);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(Request $request, Report $report): RedirectResponse
     {
-        $report = $this->report->find($id);
+        $this->authorize('update', $report);
+        $report = $report->findOrFail($report->id);
         $report->update($request->all());
         return back()->with('success', 'Relatório circunstanciado atualizado com sucesso!');
     }
@@ -125,9 +126,10 @@ class ReportController extends Controller
                 'note'
             ],
         ])
-        /*->whereHas('report.note', function ($query) use ($request) {
-            $query->where('year', $request->year ?? now()->format('Y'));
-        })*/
+        ->whereHas('report.note', function ($query) {
+            // Filtrar setores com base nos setores permitidos do usuário autenticado
+            $query->whereIn('sector_id', auth()->user()->sectors->pluck('id'));
+        })
         ->whereHas('report.company', function ($query) use ($request) {
             $query->when($request->filled('company'), function ($query) use ($request) {
                 $query->where('id', $request->company);

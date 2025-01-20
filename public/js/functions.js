@@ -176,7 +176,7 @@ if (edit) {
             for (const key in data) {
                 if (Array.isArray(data[key])) {
                     data[key].forEach(item => {
-                        const checkbox = edit.querySelector(`input[value="${item.name}"]`);
+                        const checkbox = edit.querySelector(`input[name="${key}[]"][value="${item.id}"]`);
                         if (checkbox) {
                             checkbox.checked = true;
                         }

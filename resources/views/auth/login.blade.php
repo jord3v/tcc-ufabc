@@ -53,7 +53,7 @@
         </div>
       </div>
       <div class="col-lg d-none d-lg-block">
-        <img src="{{asset('img/undraw_secure_login_pdn4.svg')}}" height="300" class="d-block mx-auto" alt="">
+        <img src="{{asset('img/undraw_contract_upwc.svg')}}" height="550" class="d-block mx-auto" alt="">
       </div>
     </div>
 </div>

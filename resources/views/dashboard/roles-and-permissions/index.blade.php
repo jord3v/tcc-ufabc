@@ -123,7 +123,7 @@
                      <label class="form-label">{{trans('system.'.$key)}}</label>
                      @foreach ($permission as $item)
                      <label class="form-check">
-                     <input type="checkbox" name="permissions[]" class="form-check-input" value="{{$item->name}}">
+                     <input type="checkbox" name="permissions[]" class="form-check-input" value="{{$item->id}}">
                      <span class="form-check-label">{{trans('system.'.$item->name)}}</span>
                      </label>
                      @endforeach
@@ -172,7 +172,7 @@
                      <label class="form-label">{{trans('system.'.$key)}}</label>
                      @foreach ($permission as $item)
                      <label class="form-check">
-                     <input type="checkbox" name="permissions[]" class="form-check-input" value="{{$item->name}}">
+                     <input type="checkbox" name="permissions[]" class="form-check-input" value="{{$item->id}}">
                      <span class="form-check-label">{{trans('system.'.$item->name)}}</span>
                      </label>
                      @endforeach

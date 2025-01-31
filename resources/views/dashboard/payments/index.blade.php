@@ -101,9 +101,9 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                            <p class="card-subtitle">
                               {{$report->note->service}} - <strong>{{$report->location->name}}</strong>
                            </p>
-                           @php $amount = $report->note->amount - $report->payments->sum('price') @endphp
+                           @php $amount = $report->note->amount - $report->payments->filter(fn($payment) => $payment->status !== 'Cancelado')->sum('price') @endphp
                            <p class="card-subtitle fw-bold">
-                              Saldo a realizar: {{getPrice($amount)}} {{$item->note->end->diffForHumans()}}
+                              Saldo a realizar: {{getPrice($amount)}}  {{-- --}} {{$item->note->end->diffForHumans()}}
                            </p>
                            @endif
                         </div>
@@ -139,11 +139,11 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                  $saldo_acumulado = $report->note->amount
                                  @endphp
                                  @forelse ($payments as $payment)
-                                 @php $saldo_acumulado -= convertFloat($payment->price) @endphp
-                                 <tr>
-                                    <td><strong>{{reference($payment->reference)}}</strong><br><small class="text-warning">{{$payment->process ? 'ADM-'.$payment->process:'SEM PROTOCOLO'}}</small><br><small>{{$payment->status}} </small></td>
+                                 @php $saldo_acumulado -= convertFloat($payment->status === 'Cancelado' ? 0 : $payment->price) @endphp
+                                 <tr class="{{$payment->status === 'Cancelado' ? 'table-secondary':''}}">
+                                    <td><span>{{reference($payment->reference)}}<br>{{$payment->process ? 'ADM-'.$payment->process:'SEM PROTOCOLO'}}<br><span class="{{$payment->status === 'Cancelado' ? 'text-danger fw-bold':''}}">{{$payment->status}}</span></td>
                                     <td>{{$payment->invoice}}</td>
-                                    <td class="w-1 fw-bold">{{getPrice($payment->price)}}</td>
+                                    <td class="w-1 fw-bold">{{$payment->status === 'Cancelado' ? getPrice(0) : getPrice($payment->price)}}</td>
                                     <td>{{$payment->due_date->format('d/m/Y')}}</td>
                                     <td>{{$payment->signature_date->format('d/m/Y')}}</td>
                                     <td class="w-1 fw-bold {{$saldo_acumulado < 0 ? 'text-danger':''}}">{{getPrice($saldo_acumulado)}}</td>
@@ -156,7 +156,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                              </button>
                                              <div class="dropdown-menu dropdown-menu-end">
                                                 @can('file-download')
-                                                <a class="dropdown-item" href="{{route('payments.show', $payment->uuid)}}">
+                                                <a class="dropdown-item {{$payment->status === 'Cancelado' ? 'disabled' : ''}}" href="{{route('payments.show', $payment->uuid)}}">
                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-type-docx" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                       <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
@@ -178,6 +178,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                                                       <path d="M16 5l3 3"></path>
                                                    </svg>  Editar
                                                 </a>
+                                                <a onclick='window.open("{{ generateMailtoLink($payment) }}","_blank","width=800,height=600"),this.classList.add("active")' class="dropdown-item {{$payment->status === 'Cancelado' ? 'disabled' : ''}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-mail-forward"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 18h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v7.5"/><path d="M3 6l9 6l9 -6"/><path d="M15 18h6"/><path d="M18 15l3 3l-3 3"/></svg>  Enviar e-mail</a>
                                                 @endcan
                                                 @can('payment-delete')
                                                 <a class="dropdown-item text-danger" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete" data-bs-id="{{$payment->uuid}}">
@@ -329,7 +330,7 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                   <path d="M12 16h.01" />
                </svg>
                <h3>Tem certeza?</h3>
-               <div class="text-secondary">Você realmente deseja excluir esse localidade? O que você fizer não poderá ser desfeito.</div>
+               <div class="text-secondary">Você realmente deseja excluir esse pagamento? O que você fizer não poderá ser desfeito.</div>
             </div>
             <div class="modal-footer">
                <div class="w-100">

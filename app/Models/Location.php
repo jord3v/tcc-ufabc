@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\{
+    Traits\LogsActivity,
+    LogOptions
+};
 
 class Location extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -18,6 +22,15 @@ class Location extends Model
         'name',
         'active',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        
+        return LogOptions::defaults()
+        ->logFillable()
+        ->useLogName('locations')
+        ->setDescriptionForEvent(fn(string $eventName) => "<strong>:causer.username</strong> ".events($eventName)." a unidade operacional: <strong>:subject.name</strong>");
+    }
 
     public function user()
     {

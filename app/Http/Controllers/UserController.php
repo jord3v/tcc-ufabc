@@ -89,8 +89,8 @@ class UserController extends Controller
      */
     public function destroy(string $id): RedirectResponse
     {
-        $user = $this->user->findOrFail($id);
-        $user->delete();
+        /*$user = $this->user->findOrFail($id);
+        $user->delete();*/
         return back()->with('success', 'Usuário removído com sucesso!');
     }
 

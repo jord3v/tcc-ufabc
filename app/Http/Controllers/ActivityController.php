@@ -3,15 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
 
 class ActivityController extends Controller
 {
+    public function __construct(private Activity $activity) {
+        $this->middleware('role:admin');
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $activities = $this->activity->with('causer')->orderBy('created_at', 'desc')->paginate(10);
+        return view('dashboard.activities.index', compact('activities'));
     }
 
     /**
@@ -33,9 +38,9 @@ class ActivityController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Activity $activity)
     {
-        //
+        return response()->json($activity);
     }
 
     /**

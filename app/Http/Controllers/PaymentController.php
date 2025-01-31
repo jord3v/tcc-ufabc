@@ -53,6 +53,7 @@ class PaymentController extends Controller
             });
 
         $payments = $this->payment
+            ->with('report')
             ->where("report_id", $request->report)
             ->whereHas("report", function ($query) use ($request) {
                 return $query->where("company_id", "=", $request->company);
@@ -128,6 +129,7 @@ class PaymentController extends Controller
                 'note'
             ]
         ])->where("uuid", $uuid)->first();
+        $payment->logDownload();
         return response()
             ->download($this->word->makeWord($payment))
             ->deleteFileAfterSend(true);
@@ -243,6 +245,9 @@ class PaymentController extends Controller
         ->where(function($query) {
             $query->where('status', '!=', 'Solucionado')
                   ->orWhereNull('status');
+        })
+        ->whereHas('report.note', function ($query) {
+            $query->whereIn('sector_id', auth()->user()->sectors->pluck('id'));
         })
         ->get();
 

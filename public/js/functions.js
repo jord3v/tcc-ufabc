@@ -10,7 +10,8 @@ function reloadPageOnClose(eventType, ignoreModalToReload) {
 var ignoreModalToReload = [
     document.querySelector('#occurrences'),
     document.querySelector('#bulk-fill'),
-    document.querySelector('#report-create')
+    document.querySelector('#report-create'),
+    document.querySelector('#activities'),
 ];
 
 function add(event) {
@@ -464,6 +465,133 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.view-activity');
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            const activityId = this.getAttribute('data-id');
+            const modalContent = document.getElementById('modalContent');
+
+            // Limpa o conteúdo do modal
+            modalContent.innerHTML = '<p>Carregando...</p>';
+
+            // Faz a requisição
+            const url = `/dashboard/activities/${activityId}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        modalContent.innerHTML = `<p>${data.error}</p>`;
+                        return;
+                    }
+
+                    // Monta a descrição básica
+                    let content = `<p><strong>Descrição:</strong> ${data.description}</p>`;
+                    content += `<p><strong>Tipo:</strong> ${data.log_name}</p>`;
+                    content += `<p><strong>Evento:</strong> ${data.event}</p>`;
+                    content += `<p><strong>Criado em:</strong> ${new Date(data.created_at).toLocaleString()}</p>`;
+
+                    // Monta a tabela
+                    content += '<table class="table">';
+                    content += '<thead><tr><th>Campo</th>';
+
+                    // Adiciona cabeçalhos condicionais
+                    if (data.event === 'deleted') {
+                        content += '<th>Antes</th>';
+                    } else if (data.properties.old) {
+                        content += '<th>Antes</th><th>Depois</th>';
+                    } else {
+                        content += '<th>Valor</th>';
+                    }
+
+                    content += '</tr></thead><tbody>';
+
+                    if (data.event === 'deleted') {
+                        // Caso "deleted", exibe apenas os valores de "old"
+                        const oldValues = data.properties.old;
+                        for (const key in oldValues) {
+                            if (typeof oldValues[key] === 'object') {
+                                // Renderiza objetos internos (como occurrences) de forma detalhada
+                                for (const subKey in oldValues[key]) {
+                                    content += `<tr>
+                                        <td>${key}.${subKey}</td>
+                                        <td>${oldValues[key][subKey] || '-'}</td>
+                                    </tr>`;
+                                }
+                            } else {
+                                content += `<tr>
+                                    <td>${key}</td>
+                                    <td>${oldValues[key]}</td>
+                                </tr>`;
+                            }
+                        }
+                    } else if (data.properties.old) {
+                        // Caso "updated", exibe "old" e "attributes"
+                        const oldValues = data.properties.old;
+                        const newValues = data.properties.attributes;
+                        const keys = new Set([...Object.keys(oldValues), ...Object.keys(newValues)]);
+
+                        keys.forEach(key => {
+                            if (typeof oldValues[key] === 'object' || typeof newValues[key] === 'object') {
+                                // Renderiza objetos internos
+                                const subKeys = new Set([
+                                    ...(oldValues[key] ? Object.keys(oldValues[key]) : []),
+                                    ...(newValues[key] ? Object.keys(newValues[key]) : [])
+                                ]);
+
+                                subKeys.forEach(subKey => {
+                                    content += `<tr>
+                                        <td>${key}.${subKey}</td>
+                                        <td>${oldValues[key]?.[subKey] || '-'}</td>
+                                        <td class="${(oldValues[key]?.[subKey] !== newValues[key]?.[subKey]) ? 'text-success' : ''}">
+                                            ${newValues[key]?.[subKey] || '-'}
+                                        </td>
+                                    </tr>`;
+                                });
+                            } else {
+                                const oldValue = oldValues[key] || '-';
+                                const newValue = newValues[key] || '-';
+                                const changedClass = oldValue !== newValue ? 'text-success' : ''; // Classe para destacar alterações
+                                content += `<tr>
+                                    <td>${key}</td>
+                                    <td>${oldValue}</td>
+                                    <td class="${changedClass}">${newValue}</td>
+                                </tr>`;
+                            }
+                        });
+                    } else {
+                        // Caso sem "old", exibe apenas os atributos
+                        const attributes = data.properties.attributes;
+                        for (const key in attributes) {
+                            if (typeof attributes[key] === 'object') {
+                                // Renderiza objetos internos
+                                for (const subKey in attributes[key]) {
+                                    content += `<tr>
+                                        <td>${key}.${subKey}</td>
+                                        <td>${attributes[key][subKey]}</td>
+                                    </tr>`;
+                                }
+                            } else {
+                                content += `<tr>
+                                    <td>${key}</td>
+                                    <td>${attributes[key]}</td>
+                                </tr>`;
+                            }
+                        }
+                    }
+
+                    content += '</tbody></table>';
+                    modalContent.innerHTML = content;
+                })
+                .catch(error => {
+                    modalContent.innerHTML = '<p>Erro ao carregar os dados.</p>';
+                    console.error(error);
+                });
+        });
+    });
+});
+
 
 
 reloadPageOnClose('hidden.bs.modal', ignoreModalToReload);

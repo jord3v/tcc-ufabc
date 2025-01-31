@@ -157,6 +157,7 @@ class ReportController extends Controller
         $payments = $this->payment::whereIn('uuid', $request->payments)->get();
 
         foreach ($payments as $key => $payment) {
+            $payment->logDownload();
             $files[] = $this->word->makeWord($payment);
         }
         $zipname = now()->timestamp.".rar";

@@ -37,7 +37,7 @@
                   <tr>
                      <th class="w-75">Razão social/cnpj</th>
                      <th class="w-25">Nome comercial</th>
-                     <th class="w-25">Responsável</th>
+                     <th class="w-25">Cadastrado por:</th>
                      @can('company-edit')
                      <th></th>
                      @endcan

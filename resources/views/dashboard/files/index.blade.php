@@ -45,7 +45,7 @@
                <thead>
                   <tr>
                      <th class="w-75">Nome do arquivo</th>
-                     <th class="w-25">Responsável</th>
+                     <th class="w-25">Cadastrado por:</th>
                      <th class="w-25">Situação</th>
                      @can('file-edit')
                      <th></th>

@@ -145,15 +145,15 @@ $_GET['end'] = $_GET['end'] ?? now()->endOfWeek()->format('Y-m-d');
                            </td>
                         </tr>
                         @foreach ($payment as $item)
-                        <tr data-company="{{$item->report->company->id}}" data-reference="{{$item->reference->format('Y-m-d')}}" data-location="{{$item->report->location->id}}" data-signature="{{$date}}">
+                        <tr data-company="{{$item->report->company->id}}" data-reference="{{$item->reference->format('Y-m-d')}}" data-location="{{$item->report->location->id}}" data-signature="{{$date}}"> 
                            <td><input type="checkbox" name="payments[]" class="form-check-input" value="{{$item->uuid}}"></td>
                            <td>
-                              {{$item->report->company->name}}<br>
+                              {{$item->report->company->name}} - <span class="badge badge-sm bg-blue-lt text-uppercase ms-auto">EMPENHO: {{$item->report->note->number}}/{{$item->report->note->year}}</span><br>
                               {{getPrice($item->price)}} - {{(strlen($item->report->note->service) > 50 ? substr($item->report->note->service, 0, 50) . "..." : $item->report->note->service)}} - {{$item->report->location->name}} - {{str()->upper(reference($item->reference))}}
                            </td>
                            <td>
                               @if ($item->process)
-                              ADM-{{$item->process}}<br> {{$item->status}}
+                              <span class="{{$item->status === 'Cancelado' ? 'text-danger fw-bold':''}}">ADM-{{$item->process}}<br> {{$item->status}}</span>
                               @else
                                  <a href="{{route('protocols.show', $item->uuid)}}" class="btn btn-outline-success">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-databricks"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 17l9 5l9 -5v-3l-9 5l-9 -5v-3l9 5l9 -5v-3l-9 5l-9 -5l9 -5l5.418 3.01"></path></svg>Gerar protocolo
@@ -166,6 +166,7 @@ $_GET['end'] = $_GET['end'] ?? now()->endOfWeek()->format('Y-m-d');
                                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-paperclip"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" /></svg>
                                  Incluir anexo
                               </a>
+                              <a onclick='window.open("{{ generateMailtoLink($item) }}","_blank","width=800,height=600"),this.classList.add("active")' class="btn btn-outline-secondary btn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-mail-forward"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 18h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v7.5"/><path d="M3 6l9 6l9 -6"/><path d="M15 18h6"/><path d="M18 15l3 3l-3 3"/></svg></a>
                               @endif
                            </td>
                         </tr>

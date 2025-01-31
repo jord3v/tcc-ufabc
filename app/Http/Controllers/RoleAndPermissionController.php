@@ -46,7 +46,7 @@ class RoleAndPermissionController extends Controller
     public function store(RoleAndPermissionRequest $request): RedirectResponse
     {
         $role = $this->role->create(['name' => $request->name]);
-        $role->syncPermissions($request->permissions);
+        $role->permissions()->sync($request->permissions);
         return back()->with('success', 'Função adicionada com sucesso!');
     }
 
@@ -74,7 +74,7 @@ class RoleAndPermissionController extends Controller
     {
         $role = $this->role->findOrFail($id);
         $role->update($request->all());
-        $role->syncPermissions($request->permissions);
+        $role->permissions()->sync($request->permissions);
         return back()->with('success', 'Função atualizada com sucesso!');
     }
 

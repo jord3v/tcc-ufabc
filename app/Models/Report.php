@@ -4,10 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\{
+    Traits\LogsActivity,
+    LogOptions
+};
 
 class Report extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        
+        return LogOptions::defaults()
+        ->logFillable()
+        ->useLogName('reports')
+        ->setDescriptionForEvent(fn(string $eventName) => "<strong>:causer.username</strong> ".events($eventName)." o relatório circunstanciado do fornecedor: <strong>:subject.company.name prestação de serviço em: :subject.location.name - Empenho: :subject.note.number/:subject.note.year</strong>");
+    }
 
     /**
      * The attributes that are mass assignable.

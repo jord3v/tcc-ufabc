@@ -7,10 +7,23 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\{
+    Traits\LogsActivity,
+    LogOptions
+};
 
 class Note extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        
+        return LogOptions::defaults()
+        ->logFillable()
+        ->useLogName('notes')
+        ->setDescriptionForEvent(fn(string $eventName) => "<strong>:causer.username</strong> ".events($eventName)." a nota de empenho: <strong>:subject.number / :subject.year -  :subject.service</strong>");
+    }
 
     protected static function booted()
     {

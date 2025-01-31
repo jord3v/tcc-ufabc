@@ -7,10 +7,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Activitylog\{
+    Traits\LogsActivity,
+    LogOptions
+};
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        
+        return LogOptions::defaults()
+        ->logFillable()
+        ->useLogName('users')
+        ->setDescriptionForEvent(fn(string $eventName) => "<strong>:causer.username</strong> ".events($eventName)." o usuário: <strong>:subject.name</strong>");
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -45,11 +58,6 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-    
-    public static function avatar()
-    {
-        return 'https://picsum.photos/300/300';
     }
 
     // No modelo User

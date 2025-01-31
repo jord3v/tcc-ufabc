@@ -11,7 +11,7 @@
       <title>{{ config('app.name', 'Laravel') }}</title>
       <!-- Fonts -->
       <link rel="dns-prefetch" href="//fonts.bunny.net">
-      <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+      {{--<link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">--}}
       <!-- Scripts -->
       <link rel="stylesheet" href="{{ asset('css/app.css') }}">
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -169,7 +169,7 @@
                         </a>
                      </li>
                      @endcan
-                     @can('company-list')
+                     @role('admin')
                      <li class="nav-item {{request()->routeIs('activities.index') ? 'active': ''}}">
                         <a class="nav-link" href="{{route('activities.index')}}">
                            <span class="nav-link-title">
@@ -178,7 +178,7 @@
                            </span>
                         </a>
                      </li>
-                     @endcan
+                     @endrole
                      @canany(['user-list', 'role-list', 'location-list', 'file-list'])
                      <li class="nav-item {{request()->routeIs(['users.index', 'roles-and-permissions.index', 'locations.index', 'files.index']) ? 'active': ''}} dropdown">
                         <a class="nav-link dropdown-toggle" href="#settings" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
@@ -350,7 +350,7 @@
              <input type="hidden" name="uuid">
              <div class="modal-body">
                <div class="form-selectgroup-boxes row mb-3">
-                 <div class="col-lg-3">
+                 <div class="col-lg-4">
                    <label class="form-selectgroup-item">
                      <input type="radio" name="tipo" value="148" class="form-selectgroup-input" required>
                      <span class="form-selectgroup-label d-flex align-items-center p-3">
@@ -364,7 +364,7 @@
                      </span>
                    </label>
                  </div>
-                 <div class="col-lg-3">
+                 <div class="col-lg-4">
                   <label class="form-selectgroup-item">
                     <input type="radio" name="tipo" value="147" class="form-selectgroup-input" required>
                     <span class="form-selectgroup-label d-flex align-items-center p-3">
@@ -372,13 +372,13 @@
                         <span class="form-selectgroup-check"></span>
                       </span>
                       <span class="form-selectgroup-label-content">
-                        <span class="form-selectgroup-title strong mb-1">N. Fiscal</span>
+                        <span class="form-selectgroup-title strong mb-1">Nota fiscal</span>
                         <span class="d-block text-secondary">147</span>
                       </span>
                     </span>
                   </label>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                   <label class="form-selectgroup-item">
                     <input type="radio" name="tipo" value="188" class="form-selectgroup-input" required>
                     <span class="form-selectgroup-label d-flex align-items-center p-3">
@@ -392,16 +392,34 @@
                     </span>
                   </label>
                 </div>
-                <div class="col-lg-3">
+               </div>
+             </div>
+             <div class="modal-body">
+               <div class="form-selectgroup-boxes row mb-3">
+                  <div class="col-lg-4">
+                     <label class="form-selectgroup-item">
+                       <input type="radio" name="tipo" value="150" class="form-selectgroup-input" required>
+                       <span class="form-selectgroup-label d-flex align-items-center p-3">
+                         <span class="me-3">
+                           <span class="form-selectgroup-check"></span>
+                         </span>
+                         <span class="form-selectgroup-label-content">
+                           <span class="form-selectgroup-title strong mb-1">SICAF</span>
+                           <span class="d-block text-secondary">150</span>
+                         </span>
+                       </span>
+                     </label>
+                   </div>
+                 <div class="col-lg-4">
                   <label class="form-selectgroup-item">
-                    <input type="radio" name="tipo" value="150" class="form-selectgroup-input" required>
+                    <input type="radio" name="tipo" value="112" class="form-selectgroup-input" required>
                     <span class="form-selectgroup-label d-flex align-items-center p-3">
                       <span class="me-3">
                         <span class="form-selectgroup-check"></span>
                       </span>
                       <span class="form-selectgroup-label-content">
-                        <span class="form-selectgroup-title strong mb-1">SICAF</span>
-                        <span class="d-block text-secondary">150</span>
+                        <span class="form-selectgroup-title strong mb-1">E-mail recebido</span>
+                        <span class="d-block text-secondary">112</span>
                       </span>
                     </span>
                   </label>

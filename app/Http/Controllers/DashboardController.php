@@ -20,6 +20,7 @@ class DashboardController extends Controller
                 $query->whereIn('sector_id', auth()->user()->sectors->pluck('id'));
             })
             ->whereBetween('reference', [now()->subMonths(11)->startOfMonth(), now()->endOfMonth()])
+            ->where("status", "!=", "Cancelado")
             ->get();
 
         $data = [
@@ -44,9 +45,12 @@ class DashboardController extends Controller
             $query->where('active', true);
         })
         ->get();
+        
         $notes = $this->note->with([
             'reports' => function ($query) {
-                $query->withSum('payments', 'price');
+                $query->withSum(['payments' => function ($query) {
+                    $query->where('status', '!=', 'Cancelado');
+                }], 'price');
             }
         ])
         ->where('active', true)

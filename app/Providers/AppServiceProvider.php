@@ -27,13 +27,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
         Model::preventLazyLoading();
-        $departments = Department::with('sectors')->get();
-
-        //$user = \App\Models\User::with('sectors')->find(1);
-        //dd($user);
-        //View::share('departments', $departments);
-
-
         View::composer('*', function ($view) {
             if (auth()->check()) {
                 $view->with('groupedSectors', auth()->user()->getSectorsGroupedByDepartment());

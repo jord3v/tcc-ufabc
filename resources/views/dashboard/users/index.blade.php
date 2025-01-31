@@ -46,7 +46,7 @@
                   <tr>
                      <td>
                         <div class="d-flex py-1 align-items-center">
-                          <span class="avatar me-2" style="background-image: url({{avatar($user)}})"></span>
+                          <span class="avatar me-2" style="background-image: url({{avatar($user->name)}})"></span>
                           <div class="flex-fill">
                             <div class="font-weight-medium">{{$user->name}}</div>
                             <div class="text-secondary"><a href="mailto:{{$user->email}}" class="text-reset">{{$user->email}}</a></div>

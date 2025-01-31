@@ -126,10 +126,11 @@ class PHPWord
     {
         $query = $this->payment
             ->where("report_id", $object->report_id)
-            ->whereDate("reference", "<=", $object->reference)
+            //->whereDate("reference", "<=", $object->reference)
             ->whereDate("signature_date", "<=", $object->signature_date)
+	        ->where("id", "<=", $object->id)
+            ->where("status", "!=", "Cancelado")
             ->orderBy("signature_date", "asc");
-
         if ($sum) {
             // Calcular a soma dos preços dos pagamentos
             $paymentsSum = $query->sum('price');

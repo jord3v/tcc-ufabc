@@ -7,7 +7,7 @@ if (! function_exists('avatar')) {
         if(!$user)
             return 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&background=6c7a91&color=ffffff'; // Exemplo: adicione '&size=200' para definir o tamanho do avatar como 200x200 pixels
         
-        return 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=6c7a91&color=ffffff'; // Exemplo: adicione '&size=200' para definir o tamanho do avatar como 200x200 pixels
+        return 'https://ui-avatars.com/api/?name=' . urlencode($user) . '&background=6c7a91&color=ffffff'; // Exemplo: adicione '&size=200' para definir o tamanho do avatar como 200x200 pixels
     }
 }
 
@@ -32,7 +32,7 @@ if (!function_exists("friendly")) {
 if (!function_exists("setMonthAndYear")) {
     function setMonthAndYear($input)
     {
-        return Carbon::createFromFormat('Y-m', $input)->firstOfMonth()->format('Y-m-d');
+        return Carbon::createFromFormat('Y-m-d', $input .'-01')->format('Y-m-d');
     }
 }
 
@@ -110,3 +110,38 @@ if (!function_exists("replaceTag")) {
     }
 }
 
+if (!function_exists("events")) {
+    function events($option)
+    {
+        $events = ['created' => 'cadastrou', 'updated' => 'atualizou', 'deleted' => 'excluiu'];
+        return $events[$option];
+    }
+}
+
+
+if (!function_exists("generateMailtoLink")) {
+    function generateMailtoLink($payment)
+    {
+        $email = "pagamento@crecisp.gov.br";
+
+        $subject = implode(' - ', [
+            $payment->report->company->name,
+            $payment->report->location->name,
+            $payment->reference->format('m/Y'),
+        ]);
+
+        $greeting = now()->hour < 12 ? 'Prezado(a)s, bom dia!' : 'Prezado(a)s, boa tarde!';
+
+        $body = sprintf(
+            "%s\n\nPelo protocolo ADM - %s segue para providências, solicitação para pagamento referente: %s\nValor: %s\nVencimento: %s",
+            $greeting,
+            $payment->process,
+            //$payment->report->note->service,
+            $subject,
+            getPrice($payment->price),
+            $payment->due_date->format('d/m/Y')
+        );
+
+        return "mailto:$email?subject=" . urlencode($payment->process.' - '.$subject) . "&body=" . urlencode($body);
+    }
+}

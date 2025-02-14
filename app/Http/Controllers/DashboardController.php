@@ -47,6 +47,7 @@ class DashboardController extends Controller
         ->get();
         
         $notes = $this->note->with([
+            'reports.company',
             'reports' => function ($query) {
                 $query->withSum(['payments' => function ($query) {
                     $query->where('status', '!=', 'Cancelado');

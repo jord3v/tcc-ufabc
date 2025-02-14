@@ -31,6 +31,7 @@ return [
     ],
     "GESTOR" => [
         "autor" => "Gestor do relatório",
+        "cargo" => "Cargo",
         "departamento" => "Departamento"
     ],
     "LOCALIZAÇÃO" => [

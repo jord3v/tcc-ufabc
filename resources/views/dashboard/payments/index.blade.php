@@ -282,19 +282,41 @@ $_GET['active'] = isset($_GET['active']) ? $_GET['active'] : "1";
                   <div class="col-lg-12">
                      <div class="mb-3">
                         <label class="form-label">Eventuais ocorrências detectadas</label>
-                        <textarea name="occurrences[occurrence]" class="form-control" cols="30" rows="3"></textarea>
+                        <textarea name="occurrences[occurrence]" class="form-control" rows="2"></textarea>
                      </div>
                   </div>
                   <div class="col-lg-12">
                      <div class="mb-3">
                         <label class="form-label">Eventuais ocorrências/Falhas na execução do contrato</label>
-                        <textarea name="occurrences[failures]" class="form-control" cols="30" rows="3"></textarea>
+                        <textarea name="occurrences[failures]" class="form-control" rows="2"></textarea>
                      </div>
                   </div>
                   <div class="col-lg-12">
                      <div class="mb-3">
                         <label class="form-label">Sugestões de medidas a serem implementadas</label>
-                        <textarea name="occurrences[suggestions]" class="form-control" cols="30" rows="3"></textarea>
+                        <textarea name="occurrences[suggestions]" class="form-control" rows="2"></textarea>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-lg-6">
+                     <div class="mb-3">
+                        <label class="form-label">Assinado por:</label>
+                        <textarea name="manager[name]" class="form-control" rows="1" required></textarea>
+                     </div>
+                  </div>
+                  <div class="col-lg-3">
+                     <div class="mb-3">
+                        <label class="form-label">Cargo</label>
+                        <textarea name="manager[position]" class="form-control" rows="1" required></textarea>
+                     </div>
+                  </div>
+                  <div class="col-lg-3">
+                     <div class="mb-3">
+                        <label class="form-label">Departamento</label>
+                        <textarea name="manager[current_department]" class="form-control" rows="1" required></textarea>
                      </div>
                   </div>
                </div>

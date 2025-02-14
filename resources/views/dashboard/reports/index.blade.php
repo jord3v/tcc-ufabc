@@ -170,18 +170,6 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
             </div>
             <div class="modal-body">
                <div class="row">
-                  <div class="col-lg-6">
-                     <div class="mb-3">
-                        <label class="form-label">Gestor do relatório</label>
-                        <input type="text" class="form-control" name="manager" required>
-                     </div>
-                  </div>
-                  <div class="col-lg-6">
-                     <div class="mb-3">
-                        <label class="form-label">Departamento</label>
-                        <input type="text" class="form-control" name="department" required>
-                     </div>
-                  </div>
                   <div class="col-lg-12">
                      <div class="mb-3">
                         <label class="form-label">Modelo word</label>
@@ -222,18 +210,6 @@ $_GET['year'] = isset($_GET['year']) ? $_GET['year'] : now()->format('Y');
             </div>
             <div class="modal-body">
                <div class="row">
-                  <div class="col-lg-6">
-                     <div class="mb-3">
-                        <label class="form-label">Gestor do relatório</label>
-                        <input type="text" class="form-control" name="manager" required>
-                     </div>
-                  </div>
-                  <div class="col-lg-6">
-                     <div class="mb-3">
-                        <label class="form-label">Departamento</label>
-                        <input type="text" class="form-control" name="department" required>
-                     </div>
-                  </div>
                   <div class="col-lg-12">
                      <div class="mb-3">
                         <label class="form-label">Modelo word</label>

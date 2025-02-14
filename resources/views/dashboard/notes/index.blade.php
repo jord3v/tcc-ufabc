@@ -51,8 +51,8 @@
                   @php $total = 0 @endphp
                   <tr>
                      <td class="td-truncate">
-                        <div class="font-weight-medium text-truncate">{{$note->number}}/{{$note->year}} - {{$note->service}}</div>
-                        <div class="text-truncate text-muted text-uppercase">
+                        <div class="font-weight-medium text-truncate" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="{{$note->service}}">{{$note->number}}/{{$note->year}} - {{$note->service}}</div>
+                        <div class="text-truncate text-muted text-uppercase" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="{{$note->comments}}">
                            {{$note->comments ? $note->comments : 'N/A'}}
                         </div>
                         @foreach ($note->reports as $report)
@@ -145,13 +145,7 @@
                         <label class="form-label">Número da nota/ANO</label>
                         <div class="input-group">
                            <input type="number" name="number" class="form-control">
-                           <select name="year" class="form-control">
-                              <option value="">Selecione</option>
-                              <option value="2022">2022</option>
-                              <option value="2023">2023</option>
-                              <option value="2024" selected>2024</option>
-                              <option value="2025">2025</option>
-                           </select>
+                           <input type="number" name="year" class="form-control" class="form-control" min="1900" max="2099" step="1" value="{{now()->year}}">
                         </div>
                      </div>
                   </div>
@@ -236,6 +230,7 @@
                         <label class="form-label">Localidade do gestor do contrato</label>
                         <select class="form-select" name="sector_id" required>
                            @forelse ($groupedSectors as $department => $item)
+                              <option value="" disabled selected>Selecione</option>
                               <optgroup label="{{$department}}">
                                  @foreach ($item as $sector)
                                     <option value="{{$sector->id}}">{{$sector->name}}</option>
@@ -280,13 +275,7 @@
                         <label class="form-label">Número da nota/ANO</label>
                         <div class="input-group">
                            <input type="number" name="number" class="form-control">
-                           <select name="year" class="form-control">
-                              <option value="">Selecione</option>
-                              <option value="2022">2022</option>
-                              <option value="2023">2023</option>
-                              <option value="2024">2024</option>
-                              <option value="2025">2025</option>
-                           </select>
+                           <input type="number" name="year" class="form-control" class="form-control" min="1900" max="2099" step="1">
                         </div>
                      </div>
                   </div>
@@ -349,6 +338,7 @@
                         <label class="form-label">Localidade do gestor do contrato</label>
                         <select class="form-select" name="sector_name" required>
                            @forelse ($groupedSectors as $department => $item)
+                              <option value="" disabled selected>Selecione</option>
                               <optgroup label="{{$department}}">
                                  @foreach ($item as $sector)
                                     <option value="{{$sector->name}}">{{$sector->name}}</option>

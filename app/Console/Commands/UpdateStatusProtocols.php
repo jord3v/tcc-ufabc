@@ -33,7 +33,13 @@ class UpdateStatusProtocols extends Command
      */
     public function handle()
     {
-        $payments = Payment::whereNotNull('process')
+        $payments = Payment::with([
+            'report' => [
+                'location', 
+                'company', 
+                'note'
+            ],
+        ])->whereNotNull('process')
         ->where(function($query) {
             $query->where('status', '!=', 'Solucionado')
                   ->orWhereNull('status');

@@ -93,8 +93,9 @@ class PHPWord
             "sugestoes" => $object->occurrences['suggestions'] ?? null,
             "fatura" => $object->invoice,
             //relatório elaborado por:
-            "autor" => $object->report->manager,
-            "departamento" => $object->report->department,
+            "autor" => $object->manager['name'] ?? $object->report->manager,
+            "cargo" => $object->manager['position'] ?? null,
+            "departamento" => $object->manager['current_department'] ?? $object->report->department,
         ]);
 
     }

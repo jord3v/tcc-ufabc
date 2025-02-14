@@ -53,6 +53,7 @@ class Payment extends Model
         'report_id',
         'invoice',
         'process',
+        'manager',
         'status',
         'reference',	
         'occurrences',
@@ -79,6 +80,7 @@ class Payment extends Model
         return [
             'reference' => 'datetime:Y-m-d',
             'occurrences' => 'array',
+            'manager' => 'array',
             'due_date'  => 'datetime:Y-m-d',
             'signature_date' => 'datetime:Y-m-d'
         ];
@@ -90,6 +92,17 @@ class Payment extends Model
         
         static::creating(function ($model) {
             $model->uuid = str()->uuid();
+            $model->status = 'Para Recebimento';
+            if ($model->manager) {
+                $user = User::find($model->manager);
+                if ($user) {
+                    $model->manager = [
+                        'name' => $user->name,
+                        'position' => $user->position,
+                        'current_department' => $user->current_department
+                    ];
+                }
+            }
         });
     }
 

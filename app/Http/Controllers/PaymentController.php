@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Company, Note, Payment, Report};
+use App\Models\{Company, Note, Payment, Report, User};
 use App\Services\PHPWord;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request, Response};
@@ -10,10 +10,11 @@ use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
 
+use function Ramsey\Uuid\v1;
 
 class PaymentController extends Controller
 {
-    public function __construct(private Payment $payment, private Report $report, private Company $company, private Note $note, private PHPWord $word, private ZipArchive $zip)
+    public function __construct(private Payment $payment, private Report $report, private Company $company, private Note $note, private PHPWord $word, private ZipArchive $zip, private User $user)
     {
         $this->middleware('permission:payment-list', ['only' => ['index','show', 'pending', 'pendingsTotal']]);
         $this->middleware('permission:payment-create', ['only' => ['create','store', 'fill']]);
@@ -184,7 +185,15 @@ class PaymentController extends Controller
             'file', 
             'user'
         ])->whereKey($request->reports)->get()->groupBy('company.name');
-        return view('dashboard.payments.fill', compact('reports'));
+           
+        $sectors = auth()->user()->getSectorsGroupedByDepartment()->flatten()->pluck('id');
+        
+
+        $managers = User::whereHas('sectors', function ($query) use ($sectors) {
+            $query->whereIn('sectors.id', $sectors);
+        })->get();
+
+        return view('dashboard.payments.fill', compact('reports', 'managers'));
     }
 
     public function download($zipname): BinaryFileResponse
@@ -193,20 +202,6 @@ class PaymentController extends Controller
         return response()
             ->download($zipname)
             ->deleteFileAfterSend(true);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Payment  $payment
-     * @return \Illuminate\Http\Response
-     */
-    public function last(Request $request)
-    {
-        $query = $this->payment->where('report_id', $request->id)->get()->groupBy('invoice')->keys();
-        if($query->count() == 1) 
-            return response()->json(['last_invoice' => $query->first()]);
-        return response()->json(['error' => 'Ocorreu um erro interno no servidor'], 500);
     }
 
     /**

@@ -91,10 +91,10 @@ class ProtocolController extends Controller
             "CodigoAssunto" => 555,
             "Responsavel" => auth()->user()->username,
             "CodigoCategoria"  => 0,
-            "CodigoOrigem"  => 23,
+            "CodigoOrigem"  => $payment->report->note->sector->department_id,
             "CodigoIdentOrigem"  => 5689,
             "Discriminacao"  => $description,
-            "LocalizacaoAtual"  => 23,
+            "LocalizacaoAtual"  => $payment->report->note->sector->department_id,
             "CodigoSituacao"  => 6
         ];
 

@@ -47,7 +47,7 @@
                <div class="navbar-nav flex-row d-lg-none">
                   <div class="nav-item dropdown">
                      <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                        <span class="avatar avatar-sm" style="background-image: url('{{avatar()}}')"></span>
+                        <span class="avatar" style="background-image: url('{{avatar()}}')"></span>
                      </a>
                      <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                         <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-profile">
@@ -223,7 +223,7 @@
                <span class="navbar-toggler-icon"></span>
                </button>
                <div class="navbar-nav flex-row order-md-last">
-                  <div class="nav-item d-none d-md-flex me-3">
+                  {{--<div class="nav-item d-none d-md-flex me-3">
                      <form action="">
                         <div class="form-floating">
                            <select class="form-select" style="width: 200px;">
@@ -240,13 +240,13 @@
                            <label >Departamento > Setor</label>
                          </div>
                      </form>                 
-                   </div>
+                   </div>--}}
                   <div class="nav-item dropdown">
                      <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                        <span class="avatar avatar-sm" style="background-image: url('{{avatar()}}')"></span>
+                        <span class="avatar" style="background-image: url('{{avatar()}}')"></span>
                         <div class="d-none d-xl-block ps-2">
                            <div>{{$user->name}}</div>
-                           <div class="mt-1 small text-secondary">{{ $user->roles->pluck('name')->implode(', ') }}</div>
+                           <div class="mt-1 small text-secondary">{{ $user->position ?? 'Cargo não informado' }}<br><span class="fw-bold">{{$user->current_department}}</span></div>
                         </div>
                      </a>
                      <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -300,13 +300,23 @@
                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                     <div class="mb-3">
-                        <label class="form-label">Nome</label>
-                        <input type="text" class="form-control" name="name" value="{{$user->name}}" required>
+                     <div class="row">
+                        <div class="col-7">
+                           <div class="mb-3">
+                              <label class="form-label">Nome</label>
+                              <input type="text" class="form-control" name="name" value="{{$user->name}}" required>
+                           </div>
+                        </div>
+                        <div class="col-5">
+                           <div class="mb-3">
+                              <label class="form-label">Cargo</label>
+                              <input type="text" class="form-control" value="{{$user->position}}" placeholder="Chefe de setor" required disabled>
+                           </div>
+                        </div>
                      </div>
                      <div class="mb-3">
                         <label class="form-label">Endereço de e-mail</label>
-                        <input type="email" class="form-control" name="email" value="{{$user->email}}" required>
+                        <input type="email" class="form-control" value="{{$user->email}}" required disabled>
                      </div>
                   </div>
                   <div class="modal-body">

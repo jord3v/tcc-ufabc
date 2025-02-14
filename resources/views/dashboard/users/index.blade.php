@@ -36,7 +36,7 @@
                <thead>
                   <tr>
                      <th class="w-50">Usuário</th>
-                     <th class="w-25">Departamento > Setor</th>
+                     <th class="w-25">Cargo<br>Departamento > Setor</th>
                      <th class="w-25">Funções</th>
                      @canany(['user-edit', 'user-delete'])<th></th>@endcanany
                   </tr>
@@ -54,10 +54,21 @@
                         </div>
                      </td>
                      <td>
-                        {{ $user->sectors->pluck('name')->implode(', ') }}
+                        {{$user->position ?? 'Cargo não informado'}}
+                        <br>
+                        <div class="datagrid-content">
+                           <div class="avatar-list avatar-list-stacked">
+                                 @if ($user->sectors->count() > 0)
+                                    <small class="fw-bold">{{$user->current_department}}</small>
+                                    <span class="avatar avatar-xs rounded" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Acesso a outros setores: {{ $user->sectors->pluck('name')->reject(fn($name) => $name === $user->current_department)->implode(', ') ?: 'Setor não informado' }}">+{{$user->sectors->count()}}</span>
+                                 @else
+                                 <small class="fw-bold">{{$user->current_department}}</small>
+                                 @endif
+                              </div>
+                           </div>
                      </td>
                      <td>
-                        {{ $user->roles->pluck('name')->implode(', ') }}
+                        {{ $user->roles->pluck('name')->implode(', ') ?: 'Função não informada' }}
                      </td>
                      @canany(['user-edit', 'user-delete'])
                      <td>
@@ -129,6 +140,12 @@
                         <input type="text" class="form-control" name="name" placeholder="Administrator" required>
                      </div>
                   </div>
+                  {{--<div class="col-lg-5">
+                     <div class="mb-3">
+                        <label class="form-label">Cargo</label>
+                        <input type="text" class="form-control" name="position" placeholder="Chefe de setor" required>
+                     </div>
+                  </div>--}}
                   <div class="col-lg-8">
                      <div class="mb-3">
                         <label class="form-label">Endereço de e-mail</label>
@@ -161,21 +178,34 @@
              </div>
              <div class="modal-body">
                <div class="row">
+                  <div class="col-lg-12">
+                     <div class="mb-3">
+                        <label class="form-label">Cargo e departamento alocado</label>
+                        <div class="input-group">
+                           <input type="text" class="form-control" name="position" placeholder="Chefe de setor" required>
+                           <select name="current_department" class="form-select" required>
+                              <option value="" disabled selected>Selecione</option>
+                              @foreach ($departments as $department)
+                              <option value="{{$department->name}}">{{$department->name}}</option>
+                              @endforeach
+                           </select>
+                        </div>
+                        <small class="form-hint">Essas informações serão registradas no rodapé do relatório circunstanciado.</small>
+                     </div>
+                  </div>
                   <div class="col-lg-12 mb-3">
-                     <label class="form-label">Departamento > Setor</label>
+                     <label class="form-label">Acesso a outros setores</label>
+                     <select name="sectors[]" class="form-select" multiple required>
+                        @foreach ($departments as $department)
+                           <optgroup label="{{$department->id}} - {{$department->name}}">
+                              @foreach ($department->sectors as $sector)
+                                 <option value="{{$sector->id}}">{{$sector->name}}</option>
+                              @endforeach
+                           </optgroup>
+                        @endforeach
+                     </select>
                      <small class="form-hint">O colaborador poderá cadastrar itens nos respectivos setores</small>
                   </div>
-                  @foreach ($departments as $key => $department)
-                  <div class="col-lg-6 mb-3">
-                     <label class="form-label">{{$department->name}}</label>
-                     @foreach ($department->sectors as $sector)
-                     <label class="form-check">
-                     <input type="checkbox" name="sectors[]" class="form-check-input" value="{{$sector->id}}">
-                     <span class="form-check-label">{{$sector->name}}</span>
-                     </label>
-                     @endforeach
-                  </div>
-                  @endforeach
                </div>
             </div>
             <div class="modal-body">
@@ -184,7 +214,7 @@
                      <label class="form-label">Funções</label>
                   </div>
                   @foreach ($roles as $role)
-                  <div class="col-lg-3 mb-3">
+                  <div class="col-lg-3">
                      <label class="form-check">
                         <input type="checkbox" name="roles[]" class="form-check-input" value="{{$role->id}}">
                         <span class="form-check-label">{{$role->name}}</span>
@@ -193,7 +223,6 @@
                   @endforeach
                </div>
             </div>
-            
             <div class="modal-footer">
                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                Cancelar
@@ -259,21 +288,34 @@
              </div>
              <div class="modal-body">
                <div class="row">
+                  <div class="col-lg-12">
+                     <div class="mb-3">
+                        <label class="form-label">Cargo e departamento alocado</label>
+                        <div class="input-group">
+                           <input type="text" class="form-control" name="position" placeholder="Chefe de setor" required>
+                           <select name="current_department" class="form-select" required>
+                              <option value="" disabled selected>Selecione</option>
+                              @foreach ($departments as $department)
+                              <option value="{{$department->name}}">{{$department->name}}</option>
+                              @endforeach
+                           </select>
+                        </div>
+                        <small class="form-hint">Essas informações serão registradas no rodapé do relatório circunstanciado.</small>
+                     </div>
+                  </div>
                   <div class="col-lg-12 mb-3">
-                     <label class="form-label">Departamento > Setor</label>
+                     <label class="form-label">Acesso a outros setores</label>
+                     <select name="sectors[]" class="form-select" multiple required>
+                        @foreach ($departments as $department)
+                           <optgroup label="{{$department->id}} - {{$department->name}}">
+                              @foreach ($department->sectors as $sector)
+                                 <option value="{{$sector->id}}">{{$sector->name}}</option>
+                              @endforeach
+                           </optgroup>
+                        @endforeach
+                     </select>
                      <small class="form-hint">O colaborador poderá cadastrar itens nos respectivos setores</small>
                   </div>
-                  @foreach ($departments as $key => $department)
-                  <div class="col-lg-6 mb-3">
-                     <label class="form-label">{{$department->name}}</label>
-                     @foreach ($department->sectors as $sector)
-                     <label class="form-check">
-                     <input type="checkbox" name="sectors[]" class="form-check-input" value="{{$sector->id}}">
-                     <span class="form-check-label">{{$sector->name}}</span>
-                     </label>
-                     @endforeach
-                  </div>
-                  @endforeach
                </div>
             </div>
             <div class="modal-body">
@@ -282,7 +324,7 @@
                      <label class="form-label">Funções</label>
                   </div>
                   @foreach ($roles as $role)
-                  <div class="col-lg-3 mb-3">
+                  <div class="col-lg-3">
                      <label class="form-check">
                         <input type="checkbox" name="roles[]" class="form-check-input" value="{{$role->id}}">
                         <span class="form-check-label">{{$role->name}}</span>

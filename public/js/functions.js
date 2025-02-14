@@ -47,15 +47,26 @@ function remove(botao) {
 
 function put() {
     function putValue(nomeCampo) {
-        var valorCampo = document.querySelector('input[name="' + nomeCampo + '"]').value;
-        var camposCorrespondentes = document.querySelectorAll('.' + nomeCampo);
-        camposCorrespondentes.forEach(function(campo) {
-            campo.value = valorCampo;
+        var campoOrigem = document.querySelector('[name="' + nomeCampo + '"]');
+        if (!campoOrigem) return; // Evita erro se o campo não existir
+
+        var valorCampo = campoOrigem.value; // Funciona tanto para input quanto select
+
+        document.querySelectorAll('.' + nomeCampo).forEach(function(campo) {
+            if (campo.tagName === 'SELECT') {
+                if ([...campo.options].some(option => option.value === valorCampo)) {
+                    campo.value = valorCampo;
+                }
+            } else {
+                campo.value = valorCampo;
+            }
         });
     }
+
     putValue('reference');
     putValue('due_date');
     putValue('signature_date');
+    putValue('manager');
 }
 
 function lastInvoice(id) {
@@ -176,12 +187,22 @@ if (edit) {
             editForm.action = route.replace('/edit', '');
             for (const key in data) {
                 if (Array.isArray(data[key])) {
+                    console.log(key);
                     data[key].forEach(item => {
                         const checkbox = edit.querySelector(`input[name="${key}[]"][value="${item.id}"]`);
                         if (checkbox) {
                             checkbox.checked = true;
+                        } else {
+                            const select = edit.querySelector(`select[name="${key}[]"]`);
+                            if (select && select.multiple) {
+                                for (let option of select.options) {
+                                    if (option.value == item.id) {
+                                        option.selected = true;
+                                    }
+                                }
+                            }
                         }
-                    });
+                    });                    
                 } else if (isObject(data[key])) {
                     var array = data[key];
                     for (const item in array) {

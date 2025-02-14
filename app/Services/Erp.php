@@ -20,6 +20,25 @@ class Erp
     public function post($endpoint, $data)
     {
         $response = $this->client->post($endpoint, $data);
-        return $response->ok() ? str_replace('"', '', $response->getBody()->getContents()) : abort($response->status());
+        $process =  str_replace('"', '', $response->getBody()->getContents());
+        if($endpoint === 'IncluirProtocolo')
+            $this->processing($process);
+        return $response->ok() ? $process : abort($response->status());
+    }
+
+    public function processing($process){
+        $data = [
+            "tipoProtocolo" => "ADM",
+            "numeroProtocolo" => $process,
+            "localizacao" => 13,
+            "destinatario" => "",
+            "remetente" => auth()->user()->username,
+            "situacao"  => 6,
+            "dataFinal"  => "",
+            "observacao"  => "teste obs ANDAMENTO",
+            "complemento"  => "TESTE COMPLEMENTO",
+        ];
+
+        $this->client->post('tramitarProtocolo', $data);
     }
 }

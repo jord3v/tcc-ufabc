@@ -105,8 +105,18 @@
                                                       <div class="datagrid-content">{{$item->note->modality}} - {{$item->note->modality_process}}</div>
                                                    </div>
                                                    <div class="datagrid-item">
-                                                      <div class="datagrid-title">Elaborado por:</div>
-                                                      <div class="datagrid-content">{{$item->manager}} - {{$item->department}}</div>
+                                                      <div class="datagrid-title">Assinado por:</div>
+                                                      {{--<div class="datagrid-content">{{$item->manager}} - {{$item->department}}</div>--}}
+                                                      <div class="datagrid-content">
+                                                         <select name="payments[{{$item->id}}][manager]" class="manager form-select w-75" required>
+                                                            <option value="" selected disabled>Selecione o gestor</option>
+                                                            @forelse ($managers as $manager)
+                                                                <option value="{{$manager->id}}">{{$manager->name}}</option>
+                                                            @empty
+                                                                
+                                                            @endforelse
+                                                         </select>
+                                                      </div>
                                                    </div>
                                                    <div class="datagrid-item">
                                                       <div class="datagrid-title">Valor total</div>
@@ -140,9 +150,7 @@
                               <table class="table table-hover table-bordered card-table table-vcenter text-nowrap datatable" id="myTable_{{$item->id}}">
                                  <thead>
                                     <tr>
-                                       <th>Número da Nota Fiscal/Fatura <a href="javascript:void(0)" onclick="lastInvoice({{$item->id}})" data-bs-trigger="hover" data-bs-toggle="popover"
-                                          title="Repetir o número da fatura anterior" data-bs-content="Só é útil em casos de boletos com o mesmo número de conta. Exemplo: Faturas da Vivo"
-                                        ><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-placeholder" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 20.415a8 8 0 1 0 3 -15.415h-3" /><path d="M13 8l-3 -3l3 -3" /><path d="M7 17l4 -4l-4 -4l-4 4z" /></svg></a></th>
+                                       <th>Número da Nota Fiscal/Fatura </th>
                                        <th>Período de execução</th>
                                        <th>Valor da Nota Fiscal/Fatura – R$</th>
                                        <th>Vencimento</th>
@@ -259,7 +267,7 @@
       </div>
    </div>
 </div>
-<div class="modal modal-blur fade" id="bulk-fill" tabindex="-1" role="dialog" aria-hidden="true">
+{{--<div class="modal modal-blur fade" id="bulk-fill" tabindex="-1" role="dialog" aria-hidden="true">
    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
      <form>
      <div class="modal-content">
@@ -269,15 +277,15 @@
        </div>
        <div class="modal-body">
          <div class="row mb-3">
-           <div class="col-lg-4">
+           <div class="col-lg-3">
             <label class="form-label">Período de execução</label>
             <input type="month" class="form-control" name="reference">
            </div>
-           <div class="col-lg-4">
+           <div class="col-lg-3">
             <label class="form-label">Vencimento</label>
             <input type="date" class="form-control" name="due_date">
            </div>
-           <div class="col-lg-4">
+           <div class="col-lg-3">
             <label class="form-label">Data de elaboração</label>
             <input type="date" class="form-control" name="signature_date" value="{{now()->format('Y-m-d')}}">
            </div>
@@ -289,6 +297,49 @@
        </div>
      </div>
      </form>
+   </div>
+</div>--}}
+<div class="modal modal-blur fade" id="bulk-fill" tabindex="-1" role="dialog" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <form>
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title">Preencher em massa</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               <div class="row mb-3">
+                  <div class="col-lg-3">
+                   <label class="form-label">Período de execução</label>
+                   <input type="month" class="form-control" name="reference">
+                  </div>
+                  <div class="col-lg-3">
+                   <label class="form-label">Vencimento</label>
+                   <input type="date" class="form-control" name="due_date">
+                  </div>
+                  <div class="col-lg-3">
+                   <label class="form-label">Data de elaboração</label>
+                   <input type="date" class="form-control" name="signature_date" value="{{now()->format('Y-m-d')}}">
+                  </div>
+                  <div class="col-lg-3">
+                     <label class="form-label">Assinado por</label>
+                     <select name="manager" id="manager" class="form-select" required>
+                           <option value="" selected disabled>Selecione o gestor</option>
+                        @forelse ($managers as $manager)
+                            <option value="{{$manager->id}}">{{$manager->name}}</option>
+                        @empty
+                            
+                        @endforelse
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cancelar</button>
+               <button type="button" class="btn btn-primary" onclick="put()" data-bs-dismiss="modal">Aplicar</button>
+            </div>
+         </div>
+      </form>
    </div>
 </div>
 @endcan

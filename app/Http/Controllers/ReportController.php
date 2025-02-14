@@ -85,6 +85,7 @@ class ReportController extends Controller
      */
     public function edit(Report $report): JsonResponse
     {
+        dd($report);
         $this->authorize('edit', $report);
         return response()->json($report);
     }

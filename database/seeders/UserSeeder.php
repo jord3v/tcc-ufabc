@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
         $this->user->create([
             'name'  => 'Administrador',
             'email' => 'admin@admin.com',
+            'position' => 'Administrative assistant',
             'password' => bcrypt('123456') 
         ]);
     }
